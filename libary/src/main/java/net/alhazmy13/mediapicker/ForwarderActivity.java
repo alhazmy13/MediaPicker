@@ -45,6 +45,7 @@ public class ForwarderActivity extends Activity {
                 Log.d("PP", " bitmap factory==========" + destination.getAbsolutePath());
                 CameraPicker.onImagePicked.OnImagePicked(destination.getAbsolutePath().toString());
                 Bitmap user_picture_bmp = BitmapFactory.decodeStream(in, null, options);
+                finish();
                 //  userImage.setImageBitmap(user_picture_bmp);
             } catch (Exception e) {
                 e.printStackTrace();
