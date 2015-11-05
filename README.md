@@ -1,7 +1,6 @@
 # Media Picker
 ------ 
-This library for Android allowing the selection of multiple images, video or voice  for Android 4.1 (API 16) +.
-
+Media Picker is an Android Libary that lets you to select multiple images, video or voice for Android 4.1 (API 16) +.
 You can report any issue on issues page. **Note: If you speak Arabic, you can submit issues with Arabic language and I will check them. :)**
 
 
@@ -61,11 +60,11 @@ cameraPicker.setExtension(CameraPicker.PNG);
 
 ## Video
 ------ 
-comming Soon,,,
+**comming Soon,,,**
 
 ## Voice 
 ------ 
-Comming Soon,,,
+**Comming Soon,,,**
 
 # Comming Fetaures
 ------ 
