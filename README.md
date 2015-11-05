@@ -9,7 +9,7 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 **Maven**
 ```xml
 <dependency>
-<groupId>net.alhazmy13.mediapicker</groupId>
+<groupId>net.alhazmy13.MediaPicker</groupId>
 <artifactId>libary</artifactId>
 <version>1.0.3-beta</version>
 </dependency>
@@ -18,7 +18,7 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 ```gradle
 
 dependencies {
-	compile 'net.alhazmy13.mediapicker:libary:1.0.3-beta'
+	compile 'net.alhazmy13.MediaPicker:libary:1.0.3-beta'
 }
 ```
 
