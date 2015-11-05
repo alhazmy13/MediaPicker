@@ -63,11 +63,7 @@ public class CameraActivity extends AppCompatActivity {
                 FileInputStream in = new FileInputStream(destination);
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 //  options.inSampleSize = 10; //Downsample 10x
-                Log.d("PP", " bitmap factory==========" + destination.getAbsolutePath());
                 CameraPicker.onImagePicked.OnImageSet(destination.getAbsolutePath().toString());
-                Bitmap user_picture_bmp = BitmapFactory.decodeStream(in, null, options);
-
-                //  userImage.setImageBitmap(user_picture_bmp);
             } catch (Exception e) {
                 e.printStackTrace();
             }
