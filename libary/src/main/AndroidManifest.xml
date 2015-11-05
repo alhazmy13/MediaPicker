@@ -5,7 +5,7 @@
 
     <application android:allowBackup="true" android:label="@string/app_name"
         android:supportsRtl="true">
-        <activity android:name="net.alhazmy13.mediapicker.ForwarderActivity"/>
+        <activity android:name="net.alhazmy13.mediapicker.CameraActivity"/>
     </application>
 
 </manifest>

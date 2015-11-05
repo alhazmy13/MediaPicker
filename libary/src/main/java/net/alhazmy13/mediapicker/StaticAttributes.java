@@ -3,7 +3,7 @@ package net.alhazmy13.mediapicker;
 /**
  * Created by Alhazmy13 on 10/27/15.
  */
-public class Img {
+interface StaticAttributes {
     public static String PNG=".png";
     public static String JPG=".jpg";
 
