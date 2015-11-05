@@ -13,7 +13,7 @@ import net.alhazmy13.mediapicker.CameraPicker;
 
 import java.io.File;
 
-public class MainActivity extends AppCompatActivity implements CameraPicker.OnImagePicked {
+public class MainActivity extends AppCompatActivity implements CameraPicker.OnImageSetListener {
     private TextView textView;
     private Button pickButton;
     private ImageView imageView;
@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements CameraPicker.OnIm
             @Override
             public void onClick(View view) {
                 CameraPicker cameraPicker = new CameraPicker(MainActivity.this);
-                cameraPicker.setOnImagePicked(MainActivity.this);
+                cameraPicker.setOnImageSetListener(MainActivity.this);
                 cameraPicker.setExtension(CameraPicker.JPG);
                 cameraPicker.pick();
             }
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements CameraPicker.OnIm
     }
 
     @Override
-    public void OnImagePicked(String path) {
+    public void OnImageSet(String path) {
         textView.setText("PATH: "+path);
         imageView.setImageBitmap(BitmapFactory.decodeFile(path));
        // Toast.makeText(MainActivity.this,path+"",Toast.LENGTH_SHORT).show();

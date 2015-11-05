@@ -31,9 +31,7 @@ import java.util.UUID;
  */
 public class CameraActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
-    String path;
-
-    File destination;
+    private File destination;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
 
 
@@ -66,7 +64,7 @@ public class CameraActivity extends AppCompatActivity {
                 BitmapFactory.Options options = new BitmapFactory.Options();
                 //  options.inSampleSize = 10; //Downsample 10x
                 Log.d("PP", " bitmap factory==========" + destination.getAbsolutePath());
-                CameraPicker.onImagePicked.OnImagePicked(destination.getAbsolutePath().toString());
+                CameraPicker.onImagePicked.OnImageSet(destination.getAbsolutePath().toString());
                 Bitmap user_picture_bmp = BitmapFactory.decodeStream(in, null, options);
 
                 //  userImage.setImageBitmap(user_picture_bmp);

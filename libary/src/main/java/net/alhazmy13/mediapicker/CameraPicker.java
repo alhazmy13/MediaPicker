@@ -16,16 +16,12 @@ import java.util.List;
  * Created by Alhazmy13 on 10/26/15.
  */
 public class CameraPicker extends AbstractClass{
-    //private ImageView imageView;
-    private String path;
     private Activity context;
-    public static OnImagePicked onImagePicked;
+    public static OnImageSetListener onImagePicked;
     private String extension;
     private int sizeType;
     private int size=1024;
     private boolean isSizeChanged=false;
-    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
-
 
     public CameraPicker(Activity context){
         this.context=context;
@@ -36,10 +32,10 @@ public class CameraPicker extends AbstractClass{
 
 
 
-    public interface OnImagePicked{
-        void OnImagePicked(String path);
+    public interface OnImageSetListener{
+        void OnImageSet(String path);
     }
-    public void setOnImagePicked(OnImagePicked listen) {
+    public void setOnImageSetListener(OnImageSetListener listen) {
         onImagePicked = listen;
     }
 
