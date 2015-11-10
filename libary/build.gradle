@@ -27,13 +27,21 @@ ext {
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
-
+    sourceSets {
+        main {
+            jni.srcDirs = []
+        }
+    }
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        ndk {
+            moduleName "libary"
+        }
     }
+
     buildTypes {
         release {
             minifyEnabled false

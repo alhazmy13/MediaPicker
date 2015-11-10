@@ -19,15 +19,14 @@ public class CameraPicker extends AbstractClass{
     private Activity context;
     public static OnImageSetListener onImagePicked;
     private String extension;
-    private int sizeType;
-    private int size=1024;
+    private int sizeType,filterType;
+    private int compressLevel=0;
     private boolean isSizeChanged=false;
-
+    private boolean isCompressed=false;
+    private boolean isFilterd=false;
     public CameraPicker(Activity context){
         this.context=context;
         extension= StaticAttributes.PNG;
-        sizeType= StaticAttributes.KB;
-        size=1024;
     }
 
 
@@ -43,27 +42,38 @@ public class CameraPicker extends AbstractClass{
     public void setExtension(String extension){
         this.extension=extension;
     }
-
-    public void setSize(int type,int size){
+    public void setCompressLevel(int level){
+        isCompressed=true;
+        compressLevel=level;
+    }
+    //TODO setSize deepened on user
+ /*   public void setSize(int type,int size){
         if(type== ORIGINAL) {
             isSizeChanged = false;
         }else if(type== KB || type== MB){
             isSizeChanged = true;
             this.size = size * (this.sizeType == MB ? 1024 : 1);
         }
-    }
+    }*/
 
 
 
     public void pick(){
         Intent intent=new Intent(context,CameraActivity.class);
         intent.putExtra("extension",extension);
-        if(isSizeChanged)intent.putExtra("size",size);
+        //if(isSizeChanged)intent.putExtra("size",size);
+        if(isCompressed)intent.putExtra("level",compressLevel);
+        if(isFilterd)intent.putExtra("filter",filterType);
         context.startActivity(intent);
 
     }
-
-
+    //TODO setFilter
+    /*
+    public void setFilter(int filterType){
+        this.isFilterd=true;
+        this.filterType=filterType;
+    }
+*/
 
 
 }

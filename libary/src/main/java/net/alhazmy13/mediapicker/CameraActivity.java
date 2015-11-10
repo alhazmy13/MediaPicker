@@ -18,8 +18,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import net.alhazmy13.mediapicker.Filters.BitmapFilter;
+import net.alhazmy13.mediapicker.Filters.Filter;
+
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,13 +39,16 @@ public class CameraActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
     private File destination;
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
-
+    private int compressLevel,filterType;
 
     //// TODO: 10/28/15  fix the bug on pick multi image
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pickImageWrapper();
+        compressLevel=getIntent().getIntExtra("level",100);
+        filterType=getIntent().getIntExtra("filter", Filter.DEFAULT);
+        Log.d("GG",filterType+"");
     }
 
     private String getRandonString(){
@@ -60,10 +69,13 @@ public class CameraActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             try {
-                FileInputStream in = new FileInputStream(destination);
-                BitmapFactory.Options options = new BitmapFactory.Options();
-                //  options.inSampleSize = 10; //Downsample 10x
+                Bitmap bitmap=BitmapFactory.decodeFile(destination.getAbsolutePath().toString());
+                bitmap=BitmapFilter.applyStyle(bitmap,filterType);
+                OutputStream os = new BufferedOutputStream(new FileOutputStream(destination));
+                bitmap.compress(Bitmap.CompressFormat.JPEG, compressLevel, os);
                 CameraPicker.onImagePicked.OnImageSet(destination.getAbsolutePath().toString());
+                Log.d("GG", new File(destination.getAbsolutePath().toString()).length() + "");
+                os.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }

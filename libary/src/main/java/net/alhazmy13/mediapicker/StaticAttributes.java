@@ -3,11 +3,17 @@ package net.alhazmy13.mediapicker;
 /**
  * Created by Alhazmy13 on 10/27/15.
  */
-interface StaticAttributes {
-    String PNG=".png";
-    String JPG=".jpg";
+public interface StaticAttributes {
+    //Extension Types
+    String PNG = ".png";
+    String JPG = ".jpg";
 
-    int MB=0;
-    int KB=1;
-    int ORIGINAL=-1;
+    //Comperes Levels
+    int HARD = 20;
+    int MEDIAM = 50;
+    int SOFT = 100;
+
 }
+
+
+

@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.alhazmy13.mediapicker.CameraPicker;
+import net.alhazmy13.mediapicker.Filters.Filter;
 
 import java.io.File;
 
