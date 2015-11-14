@@ -1,0 +1,70 @@
+package net.alhazmy13.mediapicker.Image;
+
+import android.app.Activity;
+import android.content.Intent;
+
+/**
+ * Created by Alhazmy13 on 10/26/15.
+ */
+public class ImagePicker {
+
+
+    //Extension Types
+    public static final String PNG = ".png";
+    public static final String JPG = ".jpg";
+
+    //Comperes Levels
+    public static final int HARD = 20;
+    public static final int MEDIUM = 50;
+    public static final int SOFT = 100;
+
+    private Activity context;
+    public static OnImageSetListener onImagePicked;
+    private String extension=PNG;
+    private int compressLevel=0;
+    private boolean isCompressed=false;
+    //private boolean isFiltered =false;
+
+
+    public ImagePicker(Activity context){
+        this.context=context;
+        extension= PNG;
+    }
+
+
+
+    public interface OnImageSetListener{
+        void OnImageSet(String path);
+    }
+    public void setOnImageSetListener(OnImageSetListener listen) {
+        onImagePicked = listen;
+    }
+
+
+    public void setExtension(String extension){
+        this.extension=extension;
+    }
+    public void setCompressLevel(int level){
+        isCompressed=true;
+        compressLevel=level;
+    }
+
+
+    public void pick(){
+        Intent intent=new Intent(context,ImageActivity.class);
+        intent.putExtra("extension",extension);
+        if(isCompressed)intent.putExtra("level",compressLevel);
+        //if(isFiltered)intent.putExtra("filter",filterType);
+        context.startActivity(intent);
+
+    }
+    //TODO setFilter
+    /*
+    public void setFilter(int filterType){
+        this.isFiltered=true;
+        this.filterType=filterType;
+    }
+*/
+
+
+}
