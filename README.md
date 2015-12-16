@@ -11,7 +11,7 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 <dependency>
 <groupId>net.alhazmy13.MediaPicker</groupId>
 <artifactId>libary</artifactId>
-<version>1.1.0-beta</version>
+<version>1.1.1-beta</version>
 </dependency>
 ```
 
@@ -20,7 +20,7 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 ```gradle
 
 dependencies {
-	compile 'net.alhazmy13.MediaPicker:libary:1.1.0-beta'
+	compile 'net.alhazmy13.MediaPicker:libary:1.1.1-beta'
 }
 ```
 
@@ -43,7 +43,7 @@ In order to receive the path of image, you will need to implement the `OnImageSe
     }
 ```
 
-### Create a `ImagePicker`
+### Create an `ImagePicker`
 You will need to create a new instance of `ImagePicker`. Once the instance are configured, you can call `pick()`.
 ```java
          ImagePicker imagePicker=new ImagePicker(this);
@@ -62,6 +62,15 @@ imagePicker.setExtension(ImagePicker.PNG);
 imagePicker.setCompressLevel(ImagePicker.MEDIUM);
 ```
 
+* `setDirectory` You can pass the storage path, or You can select `ImagePicker.DEFAULT_DIR` to keep the default path.
+```java
+imagePicker.setDirectory(ImagePicker.DEFAULT_DIR);
+
+//OR
+
+imagePicker.setDirectory(Environment.getExternalStorageDirectory()+"/myFolder");
+
+```
 ------ 
 
 ## Video
@@ -95,7 +104,15 @@ You will need to create a new instance of `VideoPicker`. Once the instance are c
 ```java
     videoPicker.setExtension(VideoPicker._MP4);
 ```
+* `setDirectory` You can pass the storage path, or You can select `VideoPicker.DEFAULT_DIR` to keep the default path.
+```java
+videoPicker.setDirectory(VideoPicker.DEFAULT_DIR);
 
+//OR
+
+videoPicker.setDirectory(Environment.getExternalStorageDirectory()+"/myFolder");
+
+```
 
 
 ## Voice 
