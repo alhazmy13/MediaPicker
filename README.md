@@ -11,7 +11,7 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 <dependency>
 <groupId>net.alhazmy13.MediaPicker</groupId>
 <artifactId>libary</artifactId>
-<version>1.0.3-beta</version>
+<version>1.1.0-beta</version>
 </dependency>
 ```
 
@@ -20,7 +20,7 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 ```gradle
 
 dependencies {
-	compile 'net.alhazmy13.MediaPicker:libary:1.0.3-beta'
+	compile 'net.alhazmy13.MediaPicker:libary:1.1.0-beta'
 }
 ```
 
@@ -30,7 +30,7 @@ dependencies {
 After adding the library, you need to:
 
 1. Implement an `OnImageSetListener`
-2. Create an object from `CameraPicker` 
+2. Create an object from `ImagePicker` 
 
 
 ### Implement an `OnImageSetListener`
@@ -43,26 +43,60 @@ In order to receive the path of image, you will need to implement the `OnImageSe
     }
 ```
 
-### Create a `CameraPicker`
-You will need to create a new instance of `CameraPicker`. Once the instance are configured, you can call `pick()`.
+### Create a `ImagePicker`
+You will need to create a new instance of `ImagePicker`. Once the instance are configured, you can call `pick()`.
 ```java
-        CameraPicker cameraPicker=new CameraPicker(this);
-        cameraPicker.setOnImagePicked(this);
-        cameraPicker.pick();
+         ImagePicker imagePicker=new ImagePicker(this);
+        imagePicker.setOnImageSetListener(this);
+        imagePicker.pick();
 ```
 
 
 ### Additional Options
-* `SetExtanion` You can change the extanion of iamge to `PNG` or `JPG`
+* `SetExtanion` You can change the extanion of image to `PNG` or `JPG`
 ```java
-cameraPicker.setExtension(CameraPicker.PNG);
+imagePicker.setExtension(ImagePicker.PNG);
+```
+* `setCompressLevel` You can change the quality of image with three different levels `HARD`,`MEDIUM` or `SOFT`
+```java
+imagePicker.setCompressLevel(ImagePicker.MEDIUM);
 ```
 
 ------ 
 
 ## Video
 ------ 
-**comming Soon,,,**
+After adding the library, you need to:
+
+1. Implement an `OnVideoSetListener`
+2. Create an object from `VideoPicker` 
+
+
+### Implement an `OnVideoSetListener`
+In order to receive the path of video, you will need to implement the `OnVideoSetListener`  interfaces. Typically this will  call camera activity and return the path of video.
+```java
+ @Override
+    public void OnVideoSet(String path) {
+        
+    }
+```
+
+### Create a `VideoPicker`
+You will need to create a new instance of `VideoPicker`. Once the instance are configured, you can call `pick()`.
+```java
+        VideoPicker videoPicker=new VideoPicker(this);
+        videoPicker.setOnVideoSetListener(this);
+        videoPicker.pick();
+```
+
+
+### Additional Options
+* `SetExtanion` You can change the extanion of video to `Mp4`,`3gp` or `mkv`
+```java
+    videoPicker.setExtension(VideoPicker._MP4);
+```
+
+
 
 ## Voice 
 ------ 
