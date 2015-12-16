@@ -14,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/alhzmy13/MediaPicker'
     gitUrl = 'https://github.com/alhzmy13/MediaPicker.git'
 
-    libraryVersion = '1.1.0-beta'
+    libraryVersion = '1.1.1-beta'
 
     developerId = 'alhazmy13'
     developerName = 'Abdullah Alhazmy'
@@ -27,20 +27,26 @@ ext {
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
-    sourceSets {
-        main {
-            jni.srcDirs = []
-        }
-    }
+
+
+
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
         ndk {
-            moduleName "libary"
+            moduleName = "hello-jni"
+
         }
     }
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['native-libs']
+            jni.srcDirs = [] //disable automatic ndk-build
+        }
+    }
+
 
     buildTypes {
         release {
@@ -49,6 +55,7 @@ android {
         }
     }
 }
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])

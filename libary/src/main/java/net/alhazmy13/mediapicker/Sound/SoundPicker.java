@@ -6,7 +6,7 @@ import android.content.Intent;
 /**
  * Created by Alhazmy13 on 11/14/15.
  */
-class SoundPicker {
+public class SoundPicker {
     private Activity context;
     public static OnVideoSetListener onVideoPicked;
     private String extension;
@@ -30,8 +30,12 @@ class SoundPicker {
 
 
     public void pick(){
-        Intent intent=new Intent(context,SoundActivity.class);
-        context.startActivity(intent);
+       // Intent intent=new Intent(context,SoundActivity.class);
+     //   context.startActivity(intent);
 
     }
+    static {
+        System.loadLibrary("hello-jni");
+    }
+
 }

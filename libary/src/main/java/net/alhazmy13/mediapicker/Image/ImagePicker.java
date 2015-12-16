@@ -2,6 +2,7 @@ package net.alhazmy13.mediapicker.Image;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Environment;
 
 /**
  * Created by Alhazmy13 on 10/26/15.
@@ -23,12 +24,16 @@ public class ImagePicker {
     private String extension=PNG;
     private int compressLevel=0;
     private boolean isCompressed=false;
+    public static final String DEFAULT_DIR=Environment.getExternalStorageDirectory()+"/mediapicker/image/";
+    protected static String directory;
+
     //private boolean isFiltered =false;
 
 
     public ImagePicker(Activity context){
         this.context=context;
         extension= PNG;
+        directory=DEFAULT_DIR;
     }
 
 
@@ -57,6 +62,10 @@ public class ImagePicker {
         //if(isFiltered)intent.putExtra("filter",filterType);
         context.startActivity(intent);
 
+    }
+
+    public void setDirectory(String directory){
+        this.directory=directory;
     }
     //TODO setFilter
     /*

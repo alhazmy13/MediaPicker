@@ -2,6 +2,7 @@ package net.alhazmy13.mediapicker.Video;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Environment;
 
 
 /**
@@ -16,7 +17,8 @@ public class VideoPicker {
     private Activity context;
     public static OnVideoSetListener onVideoPicked;
     private String extension;
-
+    public static final String DEFAULT_DIR= Environment.getExternalStorageDirectory()+"/mediapicker/video/";
+    protected static String directory;
 
 
 
@@ -46,7 +48,9 @@ public class VideoPicker {
         context.startActivity(intent);
 
     }
-
+    public void setDirectory(String directory){
+        this.directory=directory;
+    }
 
 
 }

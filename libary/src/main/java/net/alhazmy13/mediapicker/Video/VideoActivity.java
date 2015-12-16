@@ -53,8 +53,8 @@ public class VideoActivity extends AppCompatActivity {
 
 
     private void pickImage(){
-        Utility.createFolder(Environment.getExternalStorageDirectory() + "/mediapicker/video/");
-        destination = new   File(Environment.getExternalStorageDirectory()+ "/mediapicker/video/",getRandomString()+extension);
+        Utility.createFolder(VideoPicker.directory);
+        destination = new   File(VideoPicker.directory,getRandomString()+extension);
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(destination));
         startActivityForResult(intent, CAMERA_REQUEST);

@@ -14,6 +14,8 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 <version>1.0.3-beta</version>
 </dependency>
 ```
+
+
 **Gradle**
 ```gradle
 
@@ -71,7 +73,9 @@ cameraPicker.setExtension(CameraPicker.PNG);
 * Resize, compress, filter and optimize image.
 * Pick/Select Image from Gallery.
 * Record video and voice.
-* etc...
+* etc...           
+```
+
 
 ## License
 ------ 
