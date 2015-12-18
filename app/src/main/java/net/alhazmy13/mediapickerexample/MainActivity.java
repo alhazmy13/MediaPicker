@@ -44,7 +44,8 @@ public class MainActivity extends AppCompatActivity implements ImagePicker.OnIma
         imagePicker.setCompressLevel(ImagePicker.SOFT);
         imagePicker.setExtension(ImagePicker.JPG);
         imagePicker.setOnImageSetListener(this);
-        imagePicker.setDirectory(Environment.getExternalStorageDirectory()+"/test");
+        imagePicker.setDirectory(Environment.getExternalStorageDirectory()+"/myFolder");
+
         imagePicker.pick();
     }
 

@@ -14,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/alhzmy13/MediaPicker'
     gitUrl = 'https://github.com/alhzmy13/MediaPicker.git'
 
-    libraryVersion = '1.1.1-beta'
+    libraryVersion = '1.1.2-beta'
 
     developerId = 'alhazmy13'
     developerName = 'Abdullah Alhazmy'
@@ -26,7 +26,7 @@ ext {
 }
 android {
     compileSdkVersion 23
-    buildToolsVersion "23.0.1"
+    buildToolsVersion "23.0.2"
 
 
 
@@ -60,7 +60,9 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.1.0'
+    compile 'com.android.support:appcompat-v7:23.1.1'
+    compile 'net.alhazmy13.Gota:libary:1.0.0-beta'
+
 }
 apply from: './bintrayv1.gradle'
 apply from: './installv1.gradle'
