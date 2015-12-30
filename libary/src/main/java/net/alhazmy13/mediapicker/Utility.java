@@ -32,10 +32,15 @@ public class Utility {
     }
 
     public static void createFolder(String path){
-        File folder=new File(path);
-        if (!folder.exists()) {
-            folder.mkdirs();
+        try {
+            File folder=new File(path.toString());
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+        }catch (Exception ex){
+
         }
+
     }
 
 }

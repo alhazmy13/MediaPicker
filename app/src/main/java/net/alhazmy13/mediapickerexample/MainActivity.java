@@ -1,5 +1,6 @@
 package net.alhazmy13.mediapickerexample;
 
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -13,6 +14,8 @@ import android.widget.Toast;
 import net.alhazmy13.mediapicker.Image.ImagePicker;
 import net.alhazmy13.mediapicker.Sound.SoundPicker;
 import net.alhazmy13.mediapicker.Video.VideoPicker;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements ImagePicker.OnImageSetListener {
     private TextView textView;
@@ -40,12 +43,16 @@ public class MainActivity extends AppCompatActivity implements ImagePicker.OnIma
 
 
     private void pickImage(){
-        ImagePicker imagePicker=new ImagePicker(this);
-        imagePicker.setCompressLevel(ImagePicker.SOFT);
-        imagePicker.setExtension(ImagePicker.JPG);
-        imagePicker.setOnImageSetListener(this);
-        imagePicker.setDirectory(Environment.getExternalStorageDirectory()+"/myFolder");
+        File saveFolder = null;
+            saveFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/myFolder/images");
+             saveFolder.mkdirs();
+             if (!saveFolder.isDirectory())
+              throw new RuntimeException("");
 
+        ImagePicker imagePicker = new ImagePicker(this);
+        imagePicker.setOnImageSetListener(this);
+        imagePicker.setDirectory(saveFolder != null ? saveFolder.getAbsolutePath() : ImagePicker.DEFAULT_DIR);
+        imagePicker.setCompressLevel(ImagePicker.MEDIUM);
         imagePicker.pick();
     }
 
