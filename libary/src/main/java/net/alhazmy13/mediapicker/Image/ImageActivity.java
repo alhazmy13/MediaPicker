@@ -41,38 +41,63 @@ public class ImageActivity extends AppCompatActivity {
     final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     private int compressLevel,filterType;
     private String extension;
+    private static final String TAG = "ImageActivity";
+    private Uri mImageUri;
     //// TODO: 10/28/15  fix the bug on pick multi image
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(TAG, "onCreate() called with: " + "savedInstanceState = [" + savedInstanceState + "]");
         compressLevel=getIntent().getIntExtra("level", 100);
         filterType=getIntent().getIntExtra("filter", Filter.DEFAULT);
         extension=getIntent().getStringExtra("extension");
         pickImageWrapper();
+        Log.d(TAG, "onCreate() returned: " );
 
     }
 
 
     private void pickImage(){
+        Log.d(TAG, "pickImage() called with: " + "");
         Utility.createFolder(ImagePicker.directory);
         destination = new  File(ImagePicker.directory,Utility.getRandomString()+extension);
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(destination));
+        mImageUri = Uri.fromFile(destination);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
         startActivityForResult(intent, CAMERA_REQUEST);
+        Log.d(TAG, "pickImage() returned: " );
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (mImageUri != null) {
+            outState.putString("cameraImageUri", mImageUri.toString());
+        }
+    }
 
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState.containsKey("cameraImageUri")) {
+            mImageUri = Uri.parse(savedInstanceState.getString("cameraImageUri"));
+        }
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
             try {
-                Bitmap bitmap=BitmapFactory.decodeFile(destination.getAbsolutePath().toString());
+                Log.d(TAG, "onActivityResult() called with: " + "requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
+
+                Bitmap bitmap=BitmapFactory.decodeFile(destination.getAbsolutePath());
                 bitmap=BitmapFilter.applyStyle(bitmap,filterType);
                 OutputStream os = new BufferedOutputStream(new FileOutputStream(destination));
+                Log.d(TAG, "Bitmap");
                 bitmap.compress(Bitmap.CompressFormat.JPEG, compressLevel, os);
-                ImagePicker.onImagePicked.OnImageSet(destination.getAbsolutePath().toString());
+                ImagePicker.onImagePicked.OnImageSet(destination.getAbsolutePath());
                 os.close();
+                Log.d(TAG, "onActivityResult() returned: ");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -83,6 +108,7 @@ public class ImageActivity extends AppCompatActivity {
 
 
     private void pickImageWrapper() {
+        Log.d(TAG, "pickImageWrapper() called with: " + "");
         if (Build.VERSION.SDK_INT >= 23) {
             List<String> permissionsNeeded = new ArrayList<String>();
 

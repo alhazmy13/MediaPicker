@@ -14,12 +14,12 @@ ext {
     siteUrl = 'https://github.com/alhzmy13/MediaPicker'
     gitUrl = 'https://github.com/alhzmy13/MediaPicker.git'
 
-    libraryVersion = '1.1.2-beta'
+    libraryVersion = '1.1.4-beta'
 
     developerId = 'alhazmy13'
     developerName = 'Abdullah Alhazmy'
     developerEmail = 'me@alhazmy13.net'
-
+2
     licenseName = 'The Apache Software License, Version 2.0'
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
     allLicenses = ["Apache-2.0"]

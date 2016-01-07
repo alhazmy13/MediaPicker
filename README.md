@@ -11,7 +11,7 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 <dependency>
 <groupId>net.alhazmy13.MediaPicker</groupId>
 <artifactId>libary</artifactId>
-<version>1.1.2-beta</version>
+<version>1.1.4-beta</version>
 </dependency>
 ```
 
@@ -20,7 +20,7 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 ```gradle
 
 dependencies {
-	compile 'net.alhazmy13.MediaPicker:libary:1.1.2-beta'
+	compile 'net.alhazmy13.MediaPicker:libary:1.1.4-beta'
 }
 ```
 
