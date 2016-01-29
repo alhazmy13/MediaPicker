@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements ImagePicker.OnIma
         ImagePicker imagePicker = new ImagePicker(this);
         imagePicker.setOnImageSetListener(this);
         imagePicker.setDirectory(saveFolder != null ? saveFolder.getAbsolutePath() : ImagePicker.DEFAULT_DIR);
+        imagePicker.setMode(ImagePicker.CAMERA_AND_GALERY);
         imagePicker.setCompressLevel(ImagePicker.MEDIUM);
         imagePicker.pick();
     }

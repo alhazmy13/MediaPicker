@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import net.alhazmy13.camerapicker.R;
 import net.alhazmy13.mediapicker.Image.Filters.BitmapFilter;
 import net.alhazmy13.mediapicker.Image.Filters.Filter;
 import net.alhazmy13.mediapicker.Utility;
@@ -25,6 +26,7 @@ import net.alhazmy13.mediapicker.Utility;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,35 +39,71 @@ import java.util.UUID;
  */
 public class ImageActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1888;
+    private static final int REQUEST_CODE_ASK_PERMISSIONS = 123;
+    private static final int SELECT_PHOTO = 43;
+
     private File destination;
-    final private int REQUEST_CODE_ASK_PERMISSIONS = 123;
     private int compressLevel,filterType;
     private String extension;
     private static final String TAG = "ImageActivity";
     private Uri mImageUri;
+    private int mode;
     //// TODO: 10/28/15  fix the bug on pick multi image
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, "onCreate() called with: " + "savedInstanceState = [" + savedInstanceState + "]");
         compressLevel=getIntent().getIntExtra("level", 100);
         filterType=getIntent().getIntExtra("filter", Filter.DEFAULT);
         extension=getIntent().getStringExtra("extension");
+        mode = getIntent().getIntExtra("mode",0);
         pickImageWrapper();
-        Log.d(TAG, "onCreate() returned: " );
 
     }
 
 
     private void pickImage(){
-        Log.d(TAG, "pickImage() called with: " + "");
         Utility.createFolder(ImagePicker.directory);
         destination = new  File(ImagePicker.directory,Utility.getRandomString()+extension);
+        switch (mode){
+            case ImagePicker.CAMERA:
+                startActivityFromCamera();
+                break;
+            case ImagePicker.GALERY:
+                startActivityFromGallery();
+                break;
+            default:
+                showFromCameraOrGalleryAlert();
+        }
+    }
+
+    private void showFromCameraOrGalleryAlert() {
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.media_picker_select_from))
+                .setPositiveButton(getString(R.string.media_picker_camera), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startActivityFromCamera();
+                    }
+                })
+                .setNegativeButton(getString(R.string.media_picker_gallery), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        startActivityFromGallery();
+                    }
+                }).show();
+    }
+
+    private void startActivityFromGallery() {
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+    }
+
+    private void startActivityFromCamera() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         mImageUri = Uri.fromFile(destination);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
         startActivityForResult(intent, CAMERA_REQUEST);
-        Log.d(TAG, "pickImage() returned: " );
     }
 
     @Override
@@ -86,22 +124,33 @@ public class ImageActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == CAMERA_REQUEST && resultCode == Activity.RESULT_OK) {
-            try {
-                Log.d(TAG, "onActivityResult() called with: " + "requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
-
-                Bitmap bitmap=BitmapFactory.decodeFile(destination.getAbsolutePath());
-                bitmap=BitmapFilter.applyStyle(bitmap,filterType);
-                OutputStream os = new BufferedOutputStream(new FileOutputStream(destination));
-                Log.d(TAG, "Bitmap");
-                bitmap.compress(Bitmap.CompressFormat.JPEG, compressLevel, os);
-                ImagePicker.onImagePicked.OnImageSet(destination.getAbsolutePath());
-                os.close();
-                Log.d(TAG, "onActivityResult() returned: ");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        switch (requestCode){
+            case CAMERA_REQUEST:
+                if (resultCode == Activity.RESULT_OK) {
+                    try {
+                        Bitmap bitmap=BitmapFactory.decodeFile(destination.getAbsolutePath());
+                        bitmap=BitmapFilter.applyStyle(bitmap,filterType);
+                        OutputStream os = new BufferedOutputStream(new FileOutputStream(destination));
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, compressLevel, os);
+                        ImagePicker.onImagePicked.OnImageSet(destination.getAbsolutePath());
+                        os.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case SELECT_PHOTO:
+                if(resultCode == RESULT_OK){
+                    try {
+                        Uri selectedImage = data.getData();
+                        String selectedImagePath = Utility.getRealPathFromURI(this,selectedImage);
+                        ImagePicker.onImagePicked.OnImageSet(selectedImagePath);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
         }
+
         finish();
     }
 

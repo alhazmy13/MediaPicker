@@ -11,16 +11,15 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 <dependency>
 <groupId>net.alhazmy13.MediaPicker</groupId>
 <artifactId>libary</artifactId>
-<version>1.1.4-beta</version>
+<version>1.2.0</version>
 </dependency>
 ```
 
 
 **Gradle**
 ```gradle
-
 dependencies {
-	compile 'net.alhazmy13.MediaPicker:libary:1.1.4-beta'
+	compile 'net.alhazmy13.MediaPicker:libary:1.2.0'
 }
 ```
 
@@ -39,10 +38,8 @@ In order to receive the path of image, you will need to implement the `OnImageSe
   @Override
     public void onImageSet(String path) {
        //imageView.setImageBitmap(BitmapFactory.decodeFile(path));
-
     }
 ```
-
 ### Create an `ImagePicker`
 You will need to create a new instance of `ImagePicker`. Once the instance are configured, you can call `pick()`.
 ```java
@@ -53,6 +50,11 @@ You will need to create a new instance of `ImagePicker`. Once the instance are c
 
 
 ### Additional Options
+* `setMode` to select the mode, you can chose one ot these `CAMERA`,`GALLERY` or `CAMERA_AND_GALLERY`
+```java
+imagePicker.setMode(ImagePicker.GALLERY);
+```
+ 
 * `SetExtanion` You can change the extanion of image to `PNG` or `JPG`
 ```java
 imagePicker.setExtension(ImagePicker.PNG);
@@ -63,6 +65,7 @@ imagePicker.setCompressLevel(ImagePicker.MEDIUM);
 ```
 
 * `setDirectory` You can pass the storage path, or You can select `ImagePicker.DEFAULT_DIR` to keep the default path.
+
 ```java
 imagePicker.setDirectory(ImagePicker.DEFAULT_DIR);
 
@@ -86,7 +89,7 @@ In order to receive the path of video, you will need to implement the `OnVideoSe
 ```java
  @Override
     public void OnVideoSet(String path) {
-        
+        //
     }
 ```
 
@@ -105,6 +108,7 @@ You will need to create a new instance of `VideoPicker`. Once the instance are c
     videoPicker.setExtension(VideoPicker._MP4);
 ```
 * `setDirectory` You can pass the storage path, or You can select `VideoPicker.DEFAULT_DIR` to keep the default path.
+
 ```java
 videoPicker.setDirectory(VideoPicker.DEFAULT_DIR);
 
@@ -118,6 +122,18 @@ videoPicker.setDirectory(Environment.getExternalStorageDirectory()+"/myFolder");
 ## Voice 
 ------ 
 **Comming Soon,,,**
+
+## Theme the pickers
+
+You can change the strings be overwriting below resources in your project.
+
+```xml
+
+    <string name="media_picker_select_from">Select From:</string>
+    <string name="media_picker_camera">Camera</string>
+    <string name="media_picker_gallery">Gallery</string>
+```
+
 
 # Comming Fetaures
 ------ 

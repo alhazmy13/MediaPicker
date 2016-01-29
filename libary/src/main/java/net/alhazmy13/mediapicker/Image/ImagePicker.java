@@ -19,11 +19,17 @@ public class ImagePicker {
     public static final int MEDIUM = 50;
     public static final int SOFT = 100;
 
+    //Mode
+    public static final int CAMERA = 0;
+    public static final int GALERY = 1;
+    public static final int CAMERA_AND_GALERY = 2;
+
     private Activity context;
     public static OnImageSetListener onImagePicked;
     private String extension=PNG;
     private int compressLevel=0;
     private boolean isCompressed=false;
+    private int mode = CAMERA;
     public static final String DEFAULT_DIR=Environment.getExternalStorageDirectory()+"/mediapicker/image/";
     protected static String directory;
 
@@ -59,7 +65,7 @@ public class ImagePicker {
         Intent intent=new Intent(context,ImageActivity.class);
         intent.putExtra("extension",extension);
         if(isCompressed)intent.putExtra("level",compressLevel);
-        //if(isFiltered)intent.putExtra("filter",filterType);
+        intent.putExtra("mode",mode);
         context.startActivity(intent);
 
     }
@@ -74,6 +80,10 @@ public class ImagePicker {
         this.filterType=filterType;
     }
 */
+
+    public void setMode(int mode){
+        this.mode = mode;
+    }
 
 
 }
