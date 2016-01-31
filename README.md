@@ -1,5 +1,6 @@
-![selfie-6](https://cloud.githubusercontent.com/assets/4659608/12700198/c7aa42a8-c7e9-11e5-8f68-66e4a0f4440a.png)
-
+<p align="left">
+  <img src="https://cloud.githubusercontent.com/assets/4659608/12700198/c7aa42a8-c7e9-11e5-8f68-66e4a0f4440a.png" width="600">
+</p>
 # Media Picker
 ------ 
 Media Picker is an Android Libary that lets you to select multiple images, video or voice for Android 4.1 (API 16) +.
