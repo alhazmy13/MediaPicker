@@ -1,3 +1,5 @@
+![selfie-6](https://cloud.githubusercontent.com/assets/4659608/12700198/c7aa42a8-c7e9-11e5-8f68-66e4a0f4440a.png)
+
 # Media Picker
 ------ 
 Media Picker is an Android Libary that lets you to select multiple images, video or voice for Android 4.1 (API 16) +.
@@ -119,9 +121,6 @@ videoPicker.setDirectory(Environment.getExternalStorageDirectory()+"/myFolder");
 ```
 
 
-## Voice 
------- 
-**Comming Soon,,,**
 
 ## Theme the pickers
 
@@ -134,14 +133,6 @@ You can change the strings be overwriting below resources in your project.
     <string name="media_picker_gallery">Gallery</string>
 ```
 
-
-# Comming Fetaures
------- 
-* Resize, compress, filter and optimize image.
-* Pick/Select Image from Gallery.
-* Record video and voice.
-* etc...           
-```
 
 
 ## License
