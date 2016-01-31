@@ -1,5 +1,5 @@
 <p align="left">
-  <img src="https://cloud.githubusercontent.com/assets/4659608/12700198/c7aa42a8-c7e9-11e5-8f68-66e4a0f4440a.png" width="600">
+  <img src="https://cloud.githubusercontent.com/assets/4659608/12700433/4276edc0-c7f3-11e5-9f2c-de6bcbb9416d.png" width="600">
 </p>
 # Media Picker
 ------ 
