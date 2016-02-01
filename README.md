@@ -2,6 +2,7 @@
   <img src="https://cloud.githubusercontent.com/assets/4659608/12700433/4276edc0-c7f3-11e5-9f2c-de6bcbb9416d.png" width="600">
 </p>
 # Media Picker
+![](https://img.shields.io/badge/Platform-Android-brightgreen.svg)
 ------ 
 Media Picker is an Android Libary that lets you to select multiple images, video or voice for Android 4.1 (API 16) +.
 You can report any issue on issues page. **Note: If you speak Arabic, you can submit issues with Arabic language and I will check them. :)**
