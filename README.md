@@ -1,4 +1,11 @@
+<p align="left">
+  <img src="https://cloud.githubusercontent.com/assets/4659608/12700433/4276edc0-c7f3-11e5-9f2c-de6bcbb9416d.png" width="600">
+</p>
 # Media Picker
+![](https://img.shields.io/badge/Platform-Android-brightgreen.svg)
+![](https://img.shields.io/crates/l/rustc-serialize.svg)
+![](https://img.shields.io/badge/version-1.2.0-blue.svg)
+
 ------ 
 Media Picker is an Android Libary that lets you to select multiple images, video or voice for Android 4.1 (API 16) +.
 You can report any issue on issues page. **Note: If you speak Arabic, you can submit issues with Arabic language and I will check them. :)**
@@ -119,9 +126,6 @@ videoPicker.setDirectory(Environment.getExternalStorageDirectory()+"/myFolder");
 ```
 
 
-## Voice 
------- 
-**Comming Soon,,,**
 
 ## Theme the pickers
 
@@ -134,14 +138,6 @@ You can change the strings be overwriting below resources in your project.
     <string name="media_picker_gallery">Gallery</string>
 ```
 
-
-# Comming Fetaures
------- 
-* Resize, compress, filter and optimize image.
-* Pick/Select Image from Gallery.
-* Record video and voice.
-* etc...           
-```
 
 
 ## License
