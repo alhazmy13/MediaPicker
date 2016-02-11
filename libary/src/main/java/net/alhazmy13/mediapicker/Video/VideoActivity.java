@@ -18,8 +18,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import net.alhazmy13.mediapicker.Image.Filters.BitmapFilter;
-import net.alhazmy13.mediapicker.Image.Filters.Filter;
 import net.alhazmy13.mediapicker.Utility;
 
 import java.io.BufferedOutputStream;
@@ -34,6 +32,7 @@ import java.util.UUID;
 
 /**
  * Created by Alhazmy13 on 10/26/15.
+ * MediaPicker
  */
 public class VideoActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST = 1232;

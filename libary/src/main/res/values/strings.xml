@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">CameraPicker</string>
     <string name="media_picker_select_from">Select From:</string>
     <string name="media_picker_camera">Camera</string>
     <string name="media_picker_gallery">Gallery</string>
+    <string name="media_picker_ok">Ok</string>
+    <string name="media_picker_cancel">Cancel</string>
+    <string name="media_picker_some_permission_is_denied">Some Permission is Denied</string>
+    <string name="media_picker_you_need_to_grant_access_to">You need to grant access to</string>
+    <string name="media_picker_read_Write_external_storage"><![CDATA[Read & Write External Storage]]></string>
 </resources>

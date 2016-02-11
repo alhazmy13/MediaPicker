@@ -3,87 +3,113 @@ package net.alhazmy13.mediapicker.Image;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Environment;
+import java.io.Serializable;
 
 /**
  * Created by Alhazmy13 on 10/26/15.
+ * MediaPicker
  */
-public class ImagePicker {
-
-
-    //Extension Types
-    public static final String PNG = ".png";
-    public static final String JPG = ".jpg";
-
-    //Comperes Levels
-    public static final int HARD = 20;
-    public static final int MEDIUM = 50;
-    public static final int SOFT = 100;
-
-    //Mode
-    public static final int CAMERA = 0;
-    public static final int GALERY = 1;
-    public static final int CAMERA_AND_GALERY = 2;
+public class ImagePicker{
 
     private Activity context;
-    public static OnImageSetListener onImagePicked;
-    private String extension=PNG;
-    private int compressLevel=0;
-    private boolean isCompressed=false;
-    private int mode = CAMERA;
-    public static final String DEFAULT_DIR=Environment.getExternalStorageDirectory()+"/mediapicker/image/";
-    protected static String directory;
-
-    //private boolean isFiltered =false;
+    private Extension extension;
+    private ComperesLevel compressLevel;
+    private Mode mode;
+    private String directory;
+    protected static OnImageSetListener onImagePicked;
 
 
-    public ImagePicker(Activity context){
-        this.context=context;
-        extension= PNG;
-        directory=DEFAULT_DIR;
-    }
-
-
-
-    public interface OnImageSetListener{
+    public interface OnImageSetListener {
         void OnImageSet(String path);
-    }
-    public void setOnImageSetListener(OnImageSetListener listen) {
-        onImagePicked = listen;
+
     }
 
-
-    public void setExtension(String extension){
-        this.extension=extension;
+    public enum Extension{
+        PNG(".png"),JPG(".jpg");
+        private final String value;
+        Extension(String value){
+            this.value = value;
+        }
+        public String getValue() {
+            return value;
+        }
     }
-    public void setCompressLevel(int level){
-        isCompressed=true;
-        compressLevel=level;
+
+    public enum ComperesLevel{
+        HARD(20),MEDIUM(50),SOFT(80),NONE(100);
+        private final int value;
+        ComperesLevel(int value){
+            this.value = value;
+        }
+        public int getValue() {
+            return value;
+        }
+    }
+
+    public enum Mode{
+        CAMERA(0),GALLERY(1),CAMERA_AND_GALLERY(2);
+        private final int value;
+        Mode(int value){
+            this.value = value;
+        }
+        public int getValue() {
+            return value;
+        }
+    }
+
+    public enum Directory{
+        DEFAULT(0);
+        private final int value;
+        Directory(int value){
+            this.value = value;
+        }
+        public int getValue() {
+            return value;
+        }
+    }
+    public ImagePicker(Activity context){
+        this.context = context;
+        this.extension = Extension.PNG;
+        this.directory = Environment.getExternalStorageDirectory()+"/mediapicker/image/";
+        this.mode = Mode.CAMERA;
+        this.compressLevel = ComperesLevel.NONE;
     }
 
 
     public void pick(){
         Intent intent=new Intent(context,ImageActivity.class);
-        intent.putExtra("extension",extension);
-        if(isCompressed)intent.putExtra("level",compressLevel);
-        intent.putExtra("mode",mode);
+        intent.putExtra(ImageTags.EXTENSION,extension);
+        intent.putExtra(ImageTags.LEVEL,compressLevel);
+        intent.putExtra(ImageTags.MODE,mode);
+        intent.putExtra(ImageTags.DIRECTORY,directory);
         context.startActivity(intent);
 
     }
 
-    public void setDirectory(String directory){
-        this.directory=directory;
+    public void setCompressLevel(ComperesLevel compressLevel) {
+        this.compressLevel = compressLevel;
     }
-    //TODO setFilter
-    /*
-    public void setFilter(int filterType){
-        this.isFiltered=true;
-        this.filterType=filterType;
-    }
-*/
 
-    public void setMode(int mode){
+    public void setMode(Mode mode) {
         this.mode = mode;
     }
 
+    public void setDirectory(String directory) {
+        this.directory = directory;
+    }
+    public void setDirectory(Directory directory){
+        switch (directory){
+            case DEFAULT:
+                this.directory = Environment.getExternalStorageDirectory()+"/mediapicker/image/";
+                break;
+        }
+    }
 
+    public void setOnImageSetListener(OnImageSetListener onImagePicked) {
+        ImagePicker.onImagePicked = onImagePicked;
+    }
+
+    public void setExtension(Extension extension) {
+        this.extension = extension;
+    }
 }

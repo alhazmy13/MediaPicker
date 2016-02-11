@@ -1,32 +1,30 @@
 package net.alhazmy13.mediapickerexample;
 
-import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
-import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.squareup.leakcanary.RefWatcher;
 
 import net.alhazmy13.mediapicker.Image.ImagePicker;
-import net.alhazmy13.mediapicker.Sound.SoundPicker;
-import net.alhazmy13.mediapicker.Video.VideoPicker;
-
-import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements ImagePicker.OnImageSetListener {
+    private static final String TAG = "MainActivity";
     private TextView textView;
-    private Button pickButton;
     private ImageView imageView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+       // RefWatcher refWatcher = App.getRefWatcher(this);
+
         textView=(TextView)findViewById(R.id.tv_path);
-        pickButton=(Button)findViewById(R.id.bt_pick);
+        Button pickButton = (Button) findViewById(R.id.bt_pick);
         imageView=(ImageView)findViewById(R.id.iv_image);
         imageView.setRotation(90);
 
@@ -43,17 +41,12 @@ public class MainActivity extends AppCompatActivity implements ImagePicker.OnIma
 
 
     private void pickImage(){
-        File saveFolder = null;
-            saveFolder = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), "/myFolder/images");
-             saveFolder.mkdirs();
-             if (!saveFolder.isDirectory())
-              throw new RuntimeException("");
-
         ImagePicker imagePicker = new ImagePicker(this);
         imagePicker.setOnImageSetListener(this);
-        imagePicker.setDirectory(saveFolder != null ? saveFolder.getAbsolutePath() : ImagePicker.DEFAULT_DIR);
-        imagePicker.setMode(ImagePicker.CAMERA_AND_GALERY);
-        imagePicker.setCompressLevel(ImagePicker.MEDIUM);
+        imagePicker.setDirectory(ImagePicker.Directory.DEFAULT);
+        imagePicker.setMode(ImagePicker.Mode.CAMERA);
+        imagePicker.setExtension(ImagePicker.Extension.PNG);
+        imagePicker.setCompressLevel(ImagePicker.ComperesLevel.NONE);
         imagePicker.pick();
     }
 
@@ -62,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements ImagePicker.OnIma
     @Override
     public void OnImageSet(String path) {
         textView.setText("PATH: "+path);
+        Log.d(TAG, "OnImageSet() called with: " + "path = [" + path + "]");
         imageView.setImageBitmap(BitmapFactory.decodeFile(path));
         // Toast.makeText(MainActivity.this,path+"",Toast.LENGTH_SHORT).show();
     }

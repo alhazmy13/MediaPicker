@@ -14,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/alhzmy13/MediaPicker'
     gitUrl = 'https://github.com/alhzmy13/MediaPicker.git'
 
-    libraryVersion = '1.2.0'
+    libraryVersion = '1.2.1'
 
     developerId = 'alhazmy13'
     developerName = 'Abdullah Alhazmy'
@@ -35,24 +35,14 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-        ndk {
-            moduleName = "hello-jni"
-
-        }
     }
-    sourceSets {
-        main {
-            jniLibs.srcDirs = ['native-libs']
-            jni.srcDirs = [] //disable automatic ndk-build
-        }
-    }
-
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
     }
 }
 
