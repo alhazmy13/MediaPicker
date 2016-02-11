@@ -11,7 +11,7 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 <dependency>
 <groupId>net.alhazmy13.MediaPicker</groupId>
 <artifactId>libary</artifactId>
-<version>1.2.0</version>
+<version>1.2.1</version>
 </dependency>
 ```
 
@@ -19,7 +19,7 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 **Gradle**
 ```gradle
 dependencies {
-	compile 'net.alhazmy13.MediaPicker:libary:1.2.0'
+	compile 'net.alhazmy13.MediaPicker:libary:1.2.1'
 }
 ```
 
@@ -43,7 +43,7 @@ In order to receive the path of image, you will need to implement the `OnImageSe
 ### Create an `ImagePicker`
 You will need to create a new instance of `ImagePicker`. Once the instance are configured, you can call `pick()`.
 ```java
-         ImagePicker imagePicker=new ImagePicker(this);
+        ImagePicker imagePicker=new ImagePicker(this);
         imagePicker.setOnImageSetListener(this);
         imagePicker.pick();
 ```
@@ -52,22 +52,22 @@ You will need to create a new instance of `ImagePicker`. Once the instance are c
 ### Additional Options
 * `setMode` to select the mode, you can chose one ot these `CAMERA`,`GALLERY` or `CAMERA_AND_GALLERY`
 ```java
-imagePicker.setMode(ImagePicker.GALLERY);
+imagePicker.setMode(ImagePicker.Mode.GALLERY);
 ```
  
-* `SetExtanion` You can change the extanion of image to `PNG` or `JPG`
+* `setExtanion` You can change the extanion of image to `PNG` or `JPG`
 ```java
-imagePicker.setExtension(ImagePicker.PNG);
+imagePicker.setExtension(ImagePicker.Extension.PNG);
 ```
-* `setCompressLevel` You can change the quality of image with three different levels `HARD`,`MEDIUM` or `SOFT`
+* `setCompressLevel` You can change the quality of image with three different levels `HARD`,`MEDIUM`, `SOFT` or `NONE`
 ```java
-imagePicker.setCompressLevel(ImagePicker.MEDIUM);
+imagePicker.setCompressLevel(ImagePicker.ComperesLevel.MEDIUM);
 ```
 
-* `setDirectory` You can pass the storage path, or You can select `ImagePicker.DEFAULT_DIR` to keep the default path.
+* `setDirectory` You can pass the storage path, or You can select `Directory.DEFAULT_DIR` to keep the default path.
 
 ```java
-imagePicker.setDirectory(ImagePicker.DEFAULT_DIR);
+imagePicker.setDirectory(ImagePicker.Directory.DEFAULT);
 
 //OR
 
