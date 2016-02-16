@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,7 +16,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import net.alhazmy13.camerapicker.R;
-import net.alhazmy13.mediapicker.Image.ImagePicker.*;
+import net.alhazmy13.mediapicker.Image.ImagePicker.ComperesLevel;
+import net.alhazmy13.mediapicker.Image.ImagePicker.Extension;
+import net.alhazmy13.mediapicker.Image.ImagePicker.Mode;
 import net.alhazmy13.mediapicker.Utility;
 
 import java.io.BufferedOutputStream;
@@ -43,6 +44,8 @@ public class ImageActivity extends AppCompatActivity {
     private Uri mImageUri;
     private ImagePicker.Mode mode;
     private String directory;
+    private ImagePicker receiver;
+
    // private OnImageSetListener onImageSetListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +59,7 @@ public class ImageActivity extends AppCompatActivity {
           //  onImageSetListener = ImagePicker.onImagePicked;
         }
         pickImageWrapper();
+
 
     }
 
@@ -129,7 +133,9 @@ public class ImageActivity extends AppCompatActivity {
             case CAMERA_REQUEST:
                 if (resultCode == Activity.RESULT_OK) {
                     try {
-                        Bitmap bitmap=BitmapFactory.decodeFile(destination.getAbsolutePath());
+                        File file = new File(destination.getAbsolutePath());
+                        Uri uri = Uri.fromFile(file);
+                        Bitmap bitmap=MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                         OutputStream os = new BufferedOutputStream(new FileOutputStream(destination));
                         bitmap.compress(Bitmap.CompressFormat.JPEG, compressLevel.getValue(), os);
                         ImagePicker.onImagePicked.OnImageSet(destination.getAbsolutePath());

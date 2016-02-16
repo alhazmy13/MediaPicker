@@ -18,7 +18,7 @@ public class App extends Application{
 
         @Override public void onCreate() {
             super.onCreate();
-            LeakCanary.install(this);
+            refWatcher = LeakCanary.install(this);
         }
     public static RefWatcher getRefWatcher(Context context) {
         App application = (App) context.getApplicationContext();

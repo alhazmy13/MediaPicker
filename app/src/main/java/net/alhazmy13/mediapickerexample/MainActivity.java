@@ -1,8 +1,8 @@
 package net.alhazmy13.mediapickerexample;
 
 import android.graphics.BitmapFactory;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -21,14 +21,12 @@ public class MainActivity extends AppCompatActivity implements ImagePicker.OnIma
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       // RefWatcher refWatcher = App.getRefWatcher(this);
-
+        RefWatcher refWatcher = App.getRefWatcher(this);
+        refWatcher.watch(this);
         textView=(TextView)findViewById(R.id.tv_path);
         Button pickButton = (Button) findViewById(R.id.bt_pick);
         imageView=(ImageView)findViewById(R.id.iv_image);
         imageView.setRotation(90);
-
-
         pickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -41,13 +39,14 @@ public class MainActivity extends AppCompatActivity implements ImagePicker.OnIma
 
 
     private void pickImage(){
-        ImagePicker imagePicker = new ImagePicker(this);
-        imagePicker.setOnImageSetListener(this);
-        imagePicker.setDirectory(ImagePicker.Directory.DEFAULT);
-        imagePicker.setMode(ImagePicker.Mode.CAMERA);
-        imagePicker.setExtension(ImagePicker.Extension.PNG);
-        imagePicker.setCompressLevel(ImagePicker.ComperesLevel.MEDIUM);
-        imagePicker.pick();
+        new ImagePicker.Builder(MainActivity.this)
+                .setOnImageSetListener(this)
+                .setDirectory(ImagePicker.Directory.DEFAULT)
+                .setMode(ImagePicker.Mode.CAMERA)
+                .setExtension(ImagePicker.Extension.PNG)
+                .setCompressLevel(ImagePicker.ComperesLevel.MEDIUM)
+                .pick();
+
     }
 
 

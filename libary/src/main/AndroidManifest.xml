@@ -8,6 +8,7 @@
     <application >
         <activity android:name="net.alhazmy13.mediapicker.Image.ImageActivity"/>
         <activity android:name="net.alhazmy13.mediapicker.Video.VideoActivity"/>
+
     </application>
 
 </manifest>

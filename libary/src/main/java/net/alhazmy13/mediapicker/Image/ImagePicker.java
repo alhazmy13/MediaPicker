@@ -3,13 +3,12 @@ package net.alhazmy13.mediapicker.Image;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Environment;
-import java.io.Serializable;
 
 /**
  * Created by Alhazmy13 on 10/26/15.
  * MediaPicker
  */
-public class ImagePicker{
+public class ImagePicker {
 
     private Activity context;
     private Extension extension;
@@ -23,6 +22,53 @@ public class ImagePicker{
         void OnImageSet(String path);
 
     }
+
+
+
+    public static class Builder{
+        private ImagePicker imagePicker;
+        public  Builder(Activity context){
+            imagePicker = new ImagePicker(context);
+        }
+        public ImagePicker.Builder setCompressLevel(ComperesLevel compressLevel) {
+            imagePicker.compressLevel = compressLevel;
+            return this;
+        }
+        public ImagePicker.Builder setMode(Mode mode) {
+            imagePicker.mode = mode;
+            return this;
+        }
+        public ImagePicker.Builder setDirectory(String directory) {
+            imagePicker.directory = directory;
+            return this;
+        }
+        public ImagePicker.Builder setDirectory(Directory directory){
+            switch (directory){
+                case DEFAULT:
+                    imagePicker.directory = Environment.getExternalStorageDirectory()+"/mediapicker/image/";
+                    return this;
+            }
+            return this;
+        }
+        public ImagePicker.Builder setOnImageSetListener(OnImageSetListener onImagePicked) {
+            imagePicker.onImagePicked = onImagePicked;
+            return this;
+        }
+        public ImagePicker.Builder setExtension(Extension extension) {
+            imagePicker.extension = extension;
+            return this;
+        }
+        public void pick(){
+            Intent intent=new Intent(imagePicker.context,ImageActivity.class);
+            intent.putExtra(ImageTags.EXTENSION,imagePicker.extension);
+            intent.putExtra(ImageTags.LEVEL,imagePicker.compressLevel);
+            intent.putExtra(ImageTags.MODE,imagePicker.mode);
+            intent.putExtra(ImageTags.DIRECTORY,imagePicker.directory);
+            imagePicker.context.startActivity(intent);
+
+        }
+    }
+
 
     public enum Extension{
         PNG(".png"),JPG(".jpg");
@@ -67,6 +113,7 @@ public class ImagePicker{
             return value;
         }
     }
+    @Deprecated
     public ImagePicker(Activity context){
         this.context = context;
         this.extension = Extension.PNG;
@@ -76,6 +123,7 @@ public class ImagePicker{
     }
 
 
+    @Deprecated
     public void pick(){
         Intent intent=new Intent(context,ImageActivity.class);
         intent.putExtra(ImageTags.EXTENSION,extension);
@@ -85,18 +133,19 @@ public class ImagePicker{
         context.startActivity(intent);
 
     }
-
+    @Deprecated
     public void setCompressLevel(ComperesLevel compressLevel) {
         this.compressLevel = compressLevel;
     }
-
+    @Deprecated
     public void setMode(Mode mode) {
         this.mode = mode;
     }
-
+    @Deprecated
     public void setDirectory(String directory) {
         this.directory = directory;
     }
+    @Deprecated
     public void setDirectory(Directory directory){
         switch (directory){
             case DEFAULT:
@@ -104,11 +153,11 @@ public class ImagePicker{
                 break;
         }
     }
-
+    @Deprecated
     public void setOnImageSetListener(OnImageSetListener onImagePicked) {
-        ImagePicker.onImagePicked = onImagePicked;
+        this.onImagePicked = onImagePicked;
     }
-
+    @Deprecated
     public void setExtension(Extension extension) {
         this.extension = extension;
     }
