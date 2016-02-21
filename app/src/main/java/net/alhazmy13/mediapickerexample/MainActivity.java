@@ -8,9 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.squareup.leakcanary.RefWatcher;
-
 import net.alhazmy13.mediapicker.Image.ImagePicker;
 
 public class MainActivity extends AppCompatActivity implements ImagePicker.OnImageSetListener {
@@ -21,8 +18,6 @@ public class MainActivity extends AppCompatActivity implements ImagePicker.OnIma
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        RefWatcher refWatcher = App.getRefWatcher(this);
-        refWatcher.watch(this);
         textView=(TextView)findViewById(R.id.tv_path);
         Button pickButton = (Button) findViewById(R.id.bt_pick);
         imageView=(ImageView)findViewById(R.id.iv_image);

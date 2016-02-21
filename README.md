@@ -4,7 +4,7 @@
 # Media Picker
 ![](https://img.shields.io/badge/Platform-Android-brightgreen.svg)
 ![](https://img.shields.io/crates/l/rustc-serialize.svg)
-![](https://img.shields.io/badge/version-1.2.2-blue.svg)
+![](https://img.shields.io/badge/version-1.2.3-blue.svg)
 
 ------ 
 Media Picker is an Android Libary that lets you to select multiple images, video or voice for Android 4.1 (API 16) +.
@@ -18,7 +18,7 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 <dependency>
 <groupId>net.alhazmy13.MediaPicker</groupId>
 <artifactId>libary</artifactId>
-<version>1.2.2</version>
+<version>1.2.3</version>
 </dependency>
 ```
 
@@ -26,7 +26,7 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 **Gradle**
 ```gradle
 dependencies {
-	compile 'net.alhazmy13.MediaPicker:libary:1.2.2'
+	compile 'net.alhazmy13.MediaPicker:libary:1.2.3'
 }
 ```
 
