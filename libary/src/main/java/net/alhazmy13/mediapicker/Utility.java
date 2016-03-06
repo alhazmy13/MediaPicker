@@ -4,14 +4,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.annotation.WorkerThread;
+import android.util.Log;
 
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -31,6 +32,7 @@ public class Utility {
         os.close();
         return path;
     }
+
     public static String getRandomString(){
         return UUID.randomUUID().toString();
     }
@@ -60,6 +62,63 @@ public class Utility {
                 cursor.close();
             }
         }
+    }
+
+    @WorkerThread
+    public static void compressAndRotateIfNeeded(File file, int value) throws IOException {
+
+        String path = file.getAbsolutePath();
+
+        Log.d("compress", "file path: " + path);
+
+        BitmapFactory.Options bounds = new BitmapFactory.Options();
+
+        // TODO: Support sample decoding with user width and height preferences
+        bounds.inSampleSize = 4;
+
+        Bitmap bm = BitmapFactory.decodeFile(path, bounds);
+
+        if (bm == null) {
+            Log.d("compress", "bitmap is null");
+            return;
+        }
+
+        int rotationAngle = getCameraPhotoOrientation(file);
+
+        Matrix matrix = new Matrix();
+        matrix.postRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
+        Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight,
+                matrix, true);
+
+        FileOutputStream fos = new FileOutputStream(path);
+        rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, value, fos);
+        fos.flush();
+        fos.close();
+    }
+
+    @WorkerThread
+    public static int getCameraPhotoOrientation(File file) throws IOException {
+        ExifInterface exif = new ExifInterface(
+                file.getAbsolutePath());
+        int orientation = exif.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL);
+
+        int rotate = 0;
+
+        switch (orientation) {
+            case ExifInterface.ORIENTATION_ROTATE_270:
+                rotate = 270;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_180:
+                rotate = 180;
+                break;
+            case ExifInterface.ORIENTATION_ROTATE_90:
+                rotate = 90;
+                break;
+        }
+
+        return rotate;
     }
 
 }

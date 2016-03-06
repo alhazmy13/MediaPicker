@@ -6,8 +6,8 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,10 +21,8 @@ import net.alhazmy13.mediapicker.Image.ImagePicker.Extension;
 import net.alhazmy13.mediapicker.Image.ImagePicker.Mode;
 import net.alhazmy13.mediapicker.Utility;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.OutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -129,26 +127,18 @@ public class ImageActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
         switch (requestCode){
             case CAMERA_REQUEST:
                 if (resultCode == Activity.RESULT_OK) {
-                    try {
-                        File file = new File(destination.getAbsolutePath());
-                        Uri uri = Uri.fromFile(file);
-                        Bitmap bitmap=MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
-                        OutputStream os = new BufferedOutputStream(new FileOutputStream(destination));
-                        bitmap.compress(Bitmap.CompressFormat.JPEG, compressLevel.getValue(), os);
-                        ImagePicker.onImagePicked.OnImageSet(destination.getAbsolutePath());
-                        os.close();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    new CompressImageTask(destination.getAbsolutePath(),
+                            compressLevel.getValue()).execute();
                 }
                 break;
             case SELECT_PHOTO:
                 if(resultCode == RESULT_OK){
                     try {
-                        Uri selectedImage = data.getData();
+                        Uri selectedImage =  data.getData();
                         String selectedImagePath = Utility.getRealPathFromURI(this,selectedImage);
                         ImagePicker.onImagePicked.OnImageSet(selectedImagePath);
                     } catch (Exception e) {
@@ -159,8 +149,6 @@ public class ImageActivity extends AppCompatActivity {
         //ImagePicker.onImagePicked = null;
         finish();
     }
-
-
 
     private void pickImageWrapper() {
         if (Build.VERSION.SDK_INT >= 23) {
@@ -242,6 +230,36 @@ public class ImageActivity extends AppCompatActivity {
             break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    private static class CompressImageTask extends AsyncTask<Void, Void, Void> {
+
+        private final String mPath;
+        private final int mCompressLevel;
+
+        public CompressImageTask(String path, int compressLevel) {
+            mPath = path;
+            mCompressLevel = compressLevel;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            File file = new File(mPath);
+            try {
+                Utility.compressAndRotateIfNeeded(file, mCompressLevel);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            ImagePicker.onImagePicked.OnImageSet(mPath);
         }
     }
 
