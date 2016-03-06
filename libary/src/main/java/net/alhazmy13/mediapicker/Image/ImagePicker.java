@@ -4,166 +4,161 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Environment;
 
+import java.lang.ref.WeakReference;
+
 /**
  * Created by Alhazmy13 on 10/26/15.
  * MediaPicker
  */
 public class ImagePicker {
 
-    private Activity context;
-    private Extension extension;
-    private ComperesLevel compressLevel;
-    private Mode mode;
-    private String directory;
-    protected static OnImageSetListener onImagePicked;
+    public static final int IMAGE_PICKER_REQUEST_CODE = 12345;
+    public static final String EXTRA_IMAGE_PATH = "EXTRA_IMAGE_PATH";
 
+    private static final String IMAGE_PICKER_DIR = "/mediapicker/images/";
 
-    public interface OnImageSetListener {
-        void OnImageSet(String path);
+    private final Extension extension;
+    private final ComperesLevel compressLevel;
+    private final Mode mode;
+    private final String directory;
 
+    private ImagePicker(Builder builder) {
+
+        // Required
+        WeakReference<Activity> context = builder.context;
+
+        // Optional
+        extension = builder.extension;
+        compressLevel = builder.compressLevel;
+        mode = builder.mode;
+        directory = builder.directory;
+
+        Intent callingIntent = ImageActivity.getCallingIntent(context.get(), extension, compressLevel,
+                mode, directory);
+
+        context.get().startActivityForResult(callingIntent, IMAGE_PICKER_REQUEST_CODE);
     }
 
+    public Mode getMode() {
+        return mode;
+    }
 
+    public String getDirectory() {
+        return directory;
+    }
 
-    public static class Builder{
-        private ImagePicker imagePicker;
-        public  Builder(Activity context){
-            imagePicker = new ImagePicker(context);
+    public ComperesLevel getCompressLevel() {
+        return compressLevel;
+    }
+
+    public Extension getExtension() {
+        return extension;
+    }
+
+    public static class Builder {
+
+        // Required params
+        private final WeakReference<Activity> context;
+
+        // Optional params
+        private Extension extension;
+        private ComperesLevel compressLevel;
+        private Mode mode;
+        private String directory;
+
+        public Builder(Activity context) {
+            this.context = new WeakReference<>(context);
         }
-        public ImagePicker.Builder setCompressLevel(ComperesLevel compressLevel) {
-            imagePicker.compressLevel = compressLevel;
+
+        public ImagePicker.Builder compressLevel(ComperesLevel compressLevel) {
+            this.compressLevel = compressLevel;
             return this;
         }
-        public ImagePicker.Builder setMode(Mode mode) {
-            imagePicker.mode = mode;
+
+        public ImagePicker.Builder mode(Mode mode) {
+            this.mode = mode;
             return this;
         }
-        public ImagePicker.Builder setDirectory(String directory) {
-            imagePicker.directory = directory;
+
+        public ImagePicker.Builder directory(String directory) {
+            this.directory = directory;
             return this;
         }
-        public ImagePicker.Builder setDirectory(Directory directory){
-            switch (directory){
+
+        public ImagePicker.Builder directory(Directory directory) {
+            switch (directory) {
                 case DEFAULT:
-                    imagePicker.directory = Environment.getExternalStorageDirectory()+"/mediapicker/image/";
-                    return this;
+                    this.directory = Environment.getExternalStorageDirectory() + IMAGE_PICKER_DIR;
             }
             return this;
         }
-        public ImagePicker.Builder setOnImageSetListener(OnImageSetListener onImagePicked) {
-            imagePicker.onImagePicked = onImagePicked;
-            return this;
-        }
-        public ImagePicker.Builder setExtension(Extension extension) {
-            imagePicker.extension = extension;
-            return this;
-        }
-        public void pick(){
-            Intent intent=new Intent(imagePicker.context,ImageActivity.class);
-            intent.putExtra(ImageTags.EXTENSION,imagePicker.extension);
-            intent.putExtra(ImageTags.LEVEL,imagePicker.compressLevel);
-            intent.putExtra(ImageTags.MODE,imagePicker.mode);
-            intent.putExtra(ImageTags.DIRECTORY,imagePicker.directory);
-            imagePicker.context.startActivity(intent);
 
+        public ImagePicker.Builder extension(Extension extension) {
+            this.extension = extension;
+            return this;
+        }
+
+        public ImagePicker build() {
+            return new ImagePicker(this);
         }
     }
 
 
-    public enum Extension{
-        PNG(".png"),JPG(".jpg");
+    public enum Extension {
+        PNG(".png"), JPG(".jpg");
         private final String value;
-        Extension(String value){
+
+        Extension(String value) {
             this.value = value;
         }
+
         public String getValue() {
             return value;
         }
     }
 
-    public enum ComperesLevel{
-        HARD(20),MEDIUM(50),SOFT(80),NONE(100);
+    public enum ComperesLevel {
+        HARD(20), MEDIUM(50), SOFT(80), NONE(100);
         private final int value;
-        ComperesLevel(int value){
+
+        ComperesLevel(int value) {
             this.value = value;
         }
+
         public int getValue() {
             return value;
         }
+
         public static ComperesLevel getEnum(int value) {
-            for(ComperesLevel v : values())
-                if(v.getValue() == value) return v;
+            for (ComperesLevel v : values())
+                if (v.getValue() == value) return v;
             throw new IllegalArgumentException();
         }
     }
 
-    public enum Mode{
-        CAMERA(0),GALLERY(1),CAMERA_AND_GALLERY(2);
+    public enum Mode {
+        CAMERA(0), GALLERY(1), CAMERA_AND_GALLERY(2);
         private final int value;
-        Mode(int value){
+
+        Mode(int value) {
             this.value = value;
         }
+
         public int getValue() {
             return value;
         }
     }
 
-    public enum Directory{
+    public enum Directory {
         DEFAULT(0);
         private final int value;
-        Directory(int value){
+
+        Directory(int value) {
             this.value = value;
         }
+
         public int getValue() {
             return value;
         }
-    }
-    @Deprecated
-    public ImagePicker(Activity context){
-        this.context = context;
-        this.extension = Extension.PNG;
-        this.directory = Environment.getExternalStorageDirectory()+"/mediapicker/image/";
-        this.mode = Mode.CAMERA;
-        this.compressLevel = ComperesLevel.NONE;
-    }
-
-
-    @Deprecated
-    public void pick(){
-        Intent intent=new Intent(context,ImageActivity.class);
-        intent.putExtra(ImageTags.EXTENSION,extension);
-        intent.putExtra(ImageTags.LEVEL,compressLevel);
-        intent.putExtra(ImageTags.MODE,mode);
-        intent.putExtra(ImageTags.DIRECTORY,directory);
-        context.startActivity(intent);
-
-    }
-    @Deprecated
-    public void setCompressLevel(ComperesLevel compressLevel) {
-        this.compressLevel = compressLevel;
-    }
-    @Deprecated
-    public void setMode(Mode mode) {
-        this.mode = mode;
-    }
-    @Deprecated
-    public void setDirectory(String directory) {
-        this.directory = directory;
-    }
-    @Deprecated
-    public void setDirectory(Directory directory){
-        switch (directory){
-            case DEFAULT:
-                this.directory = Environment.getExternalStorageDirectory()+"/mediapicker/image/";
-                break;
-        }
-    }
-    @Deprecated
-    public void setOnImageSetListener(OnImageSetListener onImagePicked) {
-        this.onImagePicked = onImagePicked;
-    }
-    @Deprecated
-    public void setExtension(Extension extension) {
-        this.extension = extension;
     }
 }

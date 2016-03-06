@@ -1,8 +1,8 @@
 package net.alhazmy13.mediapicker.Image;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -24,6 +24,7 @@ import net.alhazmy13.mediapicker.Utility;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,38 +36,39 @@ import java.util.Map;
  */
 public class ImageActivity extends AppCompatActivity {
     private static final String TAG = "ImageActivity";
-    private  final int CAMERA_REQUEST = 1888;
-    private  final int REQUEST_CODE_ASK_PERMISSIONS = 123;
-    private  final int SELECT_PHOTO = 43;
+
+    private final int CAMERA_REQUEST = 1888;
+    private final int REQUEST_CODE_ASK_PERMISSIONS = 123;
+    private final int REQUEST_CODE_SELECT_PHOTO = 43;
+
     private File destination;
     private ComperesLevel compressLevel;
-    private Extension extension ;
+    private Extension extension;
     private Uri mImageUri;
     private ImagePicker.Mode mode;
     private String directory;
 
-   // private OnImageSetListener onImageSetListener;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         Intent intent = getIntent();
-        if(intent!=null) {
+        if (intent != null) {
             compressLevel = (ComperesLevel) intent.getSerializableExtra(ImageTags.LEVEL);
             extension = (Extension) intent.getSerializableExtra(ImageTags.EXTENSION);
             mode = (Mode) intent.getSerializableExtra(ImageTags.MODE);
             directory = intent.getStringExtra(ImageTags.DIRECTORY);
-          //  onImageSetListener = ImagePicker.onImagePicked;
         }
-        pickImageWrapper();
 
-
+        if (savedInstanceState == null) {
+            pickImageWrapper();
+        }
     }
 
-
-    private void pickImage(){
+    private void pickImage() {
         Utility.createFolder(directory);
-        destination = new File(directory,Utility.getRandomString()+extension.getValue());
-        switch (mode){
+        destination = new File(directory, Utility.getRandomString() + extension.getValue());
+        switch (mode) {
             case CAMERA:
                 startActivityFromCamera();
                 break;
@@ -77,7 +79,6 @@ public class ImageActivity extends AppCompatActivity {
                 showFromCameraOrGalleryAlert();
                 break;
         }
-
     }
 
     private void showFromCameraOrGalleryAlert() {
@@ -100,7 +101,7 @@ public class ImageActivity extends AppCompatActivity {
     private void startActivityFromGallery() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.setType("image/*");
-        startActivityForResult(photoPickerIntent, SELECT_PHOTO);
+        startActivityForResult(photoPickerIntent, REQUEST_CODE_SELECT_PHOTO);
     }
 
     private void startActivityFromCamera() {
@@ -113,6 +114,7 @@ public class ImageActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
         if (mImageUri != null) {
             outState.putString(ImageTags.CAMERA_IMAGE_URI, mImageUri.toString());
             outState.putInt(ImageTags.COMPRESS_LEVEL, compressLevel.getValue());
@@ -122,6 +124,7 @@ public class ImageActivity extends AppCompatActivity {
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
+
         if (savedInstanceState.containsKey(ImageTags.CAMERA_IMAGE_URI)) {
             mImageUri = Uri.parse(savedInstanceState.getString(ImageTags.CAMERA_IMAGE_URI));
             destination = new File(mImageUri.getPath());
@@ -131,25 +134,39 @@ public class ImageActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(TAG, "onActivityResult() called with: " + "requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
-        switch (requestCode){
+
+        switch (requestCode) {
             case CAMERA_REQUEST:
-                new CompressImageTask(destination.getAbsolutePath(),
-                            compressLevel.getValue()).execute();
+                if (resultCode == RESULT_OK) {
+                    new CompressImageTask(destination.getAbsolutePath(),
+                            compressLevel.getValue(), ImageActivity.this).execute();
+                } else {
+                    finish();
+                }
 
                 break;
-            case SELECT_PHOTO:
-                if(resultCode == RESULT_OK){
+            case REQUEST_CODE_SELECT_PHOTO:
+                if (resultCode == RESULT_OK) {
+
+                    String selectedImagePath = "";
                     try {
-                        Uri selectedImage =  data.getData();
-                        String selectedImagePath = Utility.getRealPathFromURI(this,selectedImage);
-                        ImagePicker.onImagePicked.OnImageSet(selectedImagePath);
+                        Uri selectedImage = data.getData();
+                        selectedImagePath = Utility.getRealPathFromURI(this, selectedImage);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
+
+                    finishActivity(selectedImagePath);
+                } else {
+                    finish();
                 }
         }
-        //ImagePicker.onImagePicked = null;
+    }
+
+    private void finishActivity(String path) {
+        Intent resultIntent = new Intent();
+        resultIntent.putExtra(ImagePicker.EXTRA_IMAGE_PATH, path);
+        setResult(RESULT_OK, resultIntent);
         finish();
     }
 
@@ -166,29 +183,30 @@ public class ImageActivity extends AppCompatActivity {
             if (permissionsList.size() > 0) {
                 if (permissionsNeeded.size() > 0) {
                     // Need Rationale
-                    String message = getString(R.string.media_picker_you_need_to_grant_access_to)+ permissionsNeeded.get(0);
+                    String message = getString(R.string.media_picker_you_need_to_grant_access_to) + permissionsNeeded.get(0);
                     for (int i = 1; i < permissionsNeeded.size(); i++)
                         message = message + ", " + permissionsNeeded.get(i);
                     showMessageOKCancel(message,
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    ActivityCompat.requestPermissions(ImageActivity.this,permissionsList.toArray(new String[permissionsList.size()]),
+                                    ActivityCompat.requestPermissions(ImageActivity.this, permissionsList.toArray(new String[permissionsList.size()]),
                                             REQUEST_CODE_ASK_PERMISSIONS);
                                 }
                             });
                     return;
                 }
-                ActivityCompat.requestPermissions(ImageActivity.this,permissionsList.toArray(new String[permissionsList.size()]),
+                ActivityCompat.requestPermissions(ImageActivity.this, permissionsList.toArray(new String[permissionsList.size()]),
                         REQUEST_CODE_ASK_PERMISSIONS);
                 return;
             }
 
             pickImage();
-        }else{
+        } else {
             pickImage();
         }
     }
+
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
         new AlertDialog.Builder(ImageActivity.this)
                 .setMessage(message)
@@ -197,11 +215,12 @@ public class ImageActivity extends AppCompatActivity {
                 .create()
                 .show();
     }
+
     private boolean addPermission(List<String> permissionsList, String permission) {
-        if (ActivityCompat.checkSelfPermission(ImageActivity.this,permission) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(ImageActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
             permissionsList.add(permission);
             // Check for Rationale Option
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(ImageActivity.this,permission))
+            if (!ActivityCompat.shouldShowRequestPermissionRationale(ImageActivity.this, permission))
                 return false;
         }
         return true;
@@ -210,8 +229,7 @@ public class ImageActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         switch (requestCode) {
-            case REQUEST_CODE_ASK_PERMISSIONS:
-            {
+            case REQUEST_CODE_ASK_PERMISSIONS: {
                 Map<String, Integer> perms = new HashMap<String, Integer>();
                 // Initial
                 perms.put(Manifest.permission.CAMERA, PackageManager.PERMISSION_GRANTED);
@@ -221,7 +239,7 @@ public class ImageActivity extends AppCompatActivity {
                     perms.put(permissions[i], grantResults[i]);
                 // Check for ACCESS_FINE_LOCATION
                 if (perms.get(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-                        && perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED){
+                        && perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     // All Permissions Granted
                     pickImage();
                 } else {
@@ -240,10 +258,15 @@ public class ImageActivity extends AppCompatActivity {
 
         private final String mPath;
         private final int mCompressLevel;
+        private WeakReference<ImageActivity> mContext;
 
-        public CompressImageTask(String path, int compressLevel) {
+        public CompressImageTask(String path, int compressLevel, ImageActivity context) {
             mPath = path;
             mCompressLevel = compressLevel;
+            mContext = new WeakReference<>(context);
+
+            Log.d(TAG, "CompressImageTask(): " + "path = [" + path + "], compressLevel = ["
+                    + compressLevel + "]");
         }
 
         @Override
@@ -262,8 +285,23 @@ public class ImageActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            ImagePicker.onImagePicked.OnImageSet(mPath);
+
+            ImageActivity context = mContext.get();
+            if (context != null) {
+                context.finishActivity(mPath);
+            }
         }
+    }
+
+    public static Intent getCallingIntent(Context activity, Extension extension,
+                                          ComperesLevel compressLevel, Mode mode,
+                                          String directory) {
+        Intent intent = new Intent(activity, ImageActivity.class);
+        intent.putExtra(ImageTags.EXTENSION, extension);
+        intent.putExtra(ImageTags.LEVEL, compressLevel);
+        intent.putExtra(ImageTags.MODE, mode);
+        intent.putExtra(ImageTags.DIRECTORY, directory);
+        return intent;
     }
 
 }
