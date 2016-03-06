@@ -140,7 +140,10 @@ public class ImageActivity extends AppCompatActivity {
                 if (resultCode == RESULT_OK) {
                     new CompressImageTask(destination.getAbsolutePath(),
                             compressLevel.getValue(), ImageActivity.this).execute();
+                } else {
+                    finish();
                 }
+
                 break;
             case REQUEST_CODE_SELECT_PHOTO:
                 if (resultCode == RESULT_OK) {
@@ -154,6 +157,8 @@ public class ImageActivity extends AppCompatActivity {
                     }
 
                     finishActivity(selectedImagePath);
+                } else {
+                    finish();
                 }
         }
     }
