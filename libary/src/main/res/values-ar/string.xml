@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="media_picker_select_from">حدد مصدر الصورة</string>
+    <string name="media_picker_camera">الكاميرا</string>
+    <string name="media_picker_gallery">مستعرض الصور</string>
+    <string name="media_picker_ok">موافق</string>
+    <string name="media_picker_cancel">إلغاء</string>
+    <string name="media_picker_some_permission_is_denied">بعض الصلاحيات لم يوافق عليها!</string>
+    <string name="media_picker_you_need_to_grant_access_to">يجب الموافقة على الصلاحيات</string>
+</resources>

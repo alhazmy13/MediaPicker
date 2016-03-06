@@ -17,7 +17,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.util.UUID;
 
 /**
  * Created by Alhazmy13 on 11/10/15.
@@ -77,7 +76,7 @@ public class Utility {
         BitmapFactory.Options bounds = new BitmapFactory.Options();
 
         // TODO: Support sample decoding with user width and height preferences
-        bounds.inSampleSize = 4;
+//        bounds.inSampleSize = 4;
 
         Bitmap bm = BitmapFactory.decodeFile(path, bounds);
 
