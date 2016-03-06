@@ -4,13 +4,15 @@
 # Media Picker
 ![](https://img.shields.io/badge/Platform-Android-brightgreen.svg)
 ![](https://img.shields.io/crates/l/rustc-serialize.svg)
-![](https://img.shields.io/badge/version-1.2.3-blue.svg)
+![](https://img.shields.io/badge/version-2.0.0-blue.svg)
 
 ------ 
 Media Picker is an Android Libary that lets you to select multiple images, video or voice for Android 4.1 (API 16) +.
 You can report any issue on issues page. **Note: If you speak Arabic, you can submit issues with Arabic language and I will check them. :)**
 
-
+# NOTE
+----
+This build `2.x.x` will break backward compatibility and there are a lot of changes to improve the performance and fix a lot of Leak memory issues, So please read below document carefully.
 ## Installation
 ------ 
 **Maven**
@@ -18,7 +20,7 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 <dependency>
 <groupId>net.alhazmy13.MediaPicker</groupId>
 <artifactId>libary</artifactId>
-<version>1.2.3</version>
+<version>2.0.0</version>
 </dependency>
 ```
 
@@ -26,7 +28,7 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 **Gradle**
 ```gradle
 dependencies {
-	compile 'net.alhazmy13.MediaPicker:libary:1.2.3'
+	compile 'net.alhazmy13.MediaPicker:libary:2.0.0'
 }
 ```
 
@@ -35,96 +37,66 @@ dependencies {
 ## Images
 After adding the library, you need to:
 
-1. Implement an `OnImageSetListener`
-2. Create an object from `ImagePicker` 
+1. Create an object from `ImagePicker`
+2. Override `onActivityResult` to receive the path of image.
 
 
-### Implement an `OnImageSetListener`
-In order to receive the path of image, you will need to implement the `OnImageSetListener`  interfaces. Typically this will  call camera activity and return the path of image.
+
+### Create an `ImagePicker`
+You will need to create a new instance of `ImagePicker`. Once the instance are configured, you can call `build()`.
+
 ```java
-  @Override
-    public void onImageSet(String path) {
-       //imageView.setImageBitmap(BitmapFactory.decodeFile(path));
+        new ImagePicker.Builder(this)
+                .build();
+```
+### Override `onActivityResult `
+In order to receive the path of image, you will need to override `onActivityResult ` .
+
+```java
+   @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+            String mPath = data.getStringExtra(ImagePicker.EXTRA_IMAGE_PATH);
+            //Your Code
+        }
     }
 ```
-### Create an `ImagePicker`
-You will need to create a new instance of `ImagePicker`. Once the instance are configured, you can call `pick()`.
-```java
-        new ImagePicker.Builder(MainActivity.this)
-                .setOnImageSetListener(this)
-                .pick();
-```
-
 
 ### Additional Options
-* `setMode` to select the mode, you can chose one ot these `CAMERA`,`GALLERY` or `CAMERA_AND_GALLERY`
+* `mode` to select the mode, you can chose one ot these `CAMERA`,`GALLERY` or `CAMERA_AND_GALLERY`
+
 ```java
-.setMode(ImagePicker.Mode.CAMERA)
+.mode(ImagePicker.Mode.CAMERA)
 ```
  
-* `setExtanion` You can change the extanion of image to `PNG` or `JPG`
-```java
-.setExtension(ImagePicker.Extension.PNG)
-```
-* `setCompressLevel` You can change the quality of image with three different levels `HARD`,`MEDIUM`, `SOFT` or `NONE`
-```java
-.setCompressLevel(ImagePicker.ComperesLevel.MEDIUM)
-```
-
-* `setDirectory` You can pass the storage path, or You can select `Directory.DEFAULT_DIR` to keep the default path.
+* `extension` You can change the extanion of image to `PNG` or `JPG`
 
 ```java
-.setDirectory(ImagePicker.Directory.DEFAULT)
+.extension(ImagePicker.Extension.PNG)
+```
+* `compressLevel` You can change the quality of image with three different levels `HARD`,`MEDIUM`, `SOFT` or `NONE`
+
+```java
+.compressLevel(ImagePicker.ComperesLevel.MEDIUM)
+```
+
+* `directory` You can pass the storage path, or You can select `Directory.DEFAULT_DIR` to keep the default path.
+
+```java
+.directory(ImagePicker.Directory.DEFAULT)
 
 //OR
 
-.setDirectory(Environment.getExternalStorageDirectory()+"/myFolder")
+.directory(Environment.getExternalStorageDirectory()+"/myFolder")
 
 ```
 ------ 
 
 ## Video
 ------ 
-After adding the library, you need to:
-
-1. Implement an `OnVideoSetListener`
-2. Create an object from `VideoPicker` 
-
-
-### Implement an `OnVideoSetListener`
-In order to receive the path of video, you will need to implement the `OnVideoSetListener`  interfaces. Typically this will  call camera activity and return the path of video.
-```java
- @Override
-    public void OnVideoSet(String path) {
-        //
-    }
-```
-
-### Create a `VideoPicker`
-You will need to create a new instance of `VideoPicker`. Once the instance are configured, you can call `pick()`.
-```java
-        VideoPicker videoPicker=new VideoPicker(this);
-        videoPicker.setOnVideoSetListener(this);
-        videoPicker.pick();
-```
-
-
-### Additional Options
-* `SetExtanion` You can change the extanion of video to `Mp4`,`3gp` or `mkv`
-```java
-    videoPicker.setExtension(VideoPicker._MP4);
-```
-* `setDirectory` You can pass the storage path, or You can select `VideoPicker.DEFAULT_DIR` to keep the default path.
-
-```java
-videoPicker.setDirectory(VideoPicker.DEFAULT_DIR);
-
-//OR
-
-videoPicker.setDirectory(Environment.getExternalStorageDirectory()+"/myFolder");
-
-```
-
+######COMAING SOON
 
 
 ## Theme the pickers
