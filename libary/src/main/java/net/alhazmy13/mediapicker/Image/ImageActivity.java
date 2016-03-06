@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import net.alhazmy13.camerapicker.R;
@@ -33,6 +34,7 @@ import java.util.Map;
  * MediaPicker
  */
 public class ImageActivity extends AppCompatActivity {
+    private static final String TAG = "ImageActivity";
     private  final int CAMERA_REQUEST = 1888;
     private  final int REQUEST_CODE_ASK_PERMISSIONS = 123;
     private  final int SELECT_PHOTO = 43;
@@ -42,7 +44,6 @@ public class ImageActivity extends AppCompatActivity {
     private Uri mImageUri;
     private ImagePicker.Mode mode;
     private String directory;
-    private ImagePicker receiver;
 
    // private OnImageSetListener onImageSetListener;
     @Override
@@ -114,6 +115,7 @@ public class ImageActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         if (mImageUri != null) {
             outState.putString(ImageTags.CAMERA_IMAGE_URI, mImageUri.toString());
+            outState.putInt(ImageTags.COMPRESS_LEVEL, compressLevel.getValue());
         }
     }
 
@@ -122,18 +124,19 @@ public class ImageActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState.containsKey(ImageTags.CAMERA_IMAGE_URI)) {
             mImageUri = Uri.parse(savedInstanceState.getString(ImageTags.CAMERA_IMAGE_URI));
+            destination = new File(mImageUri.getPath());
+            compressLevel = ComperesLevel.getEnum(savedInstanceState.getInt(ImageTags.COMPRESS_LEVEL));
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        Log.d(TAG, "onActivityResult() called with: " + "requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
         switch (requestCode){
             case CAMERA_REQUEST:
-                if (resultCode == Activity.RESULT_OK) {
-                    new CompressImageTask(destination.getAbsolutePath(),
+                new CompressImageTask(destination.getAbsolutePath(),
                             compressLevel.getValue()).execute();
-                }
+
                 break;
             case SELECT_PHOTO:
                 if(resultCode == RESULT_OK){

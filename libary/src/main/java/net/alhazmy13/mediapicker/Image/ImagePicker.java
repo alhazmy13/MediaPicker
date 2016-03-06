@@ -90,6 +90,11 @@ public class ImagePicker {
         public int getValue() {
             return value;
         }
+        public static ComperesLevel getEnum(int value) {
+            for(ComperesLevel v : values())
+                if(v.getValue() == value) return v;
+            throw new IllegalArgumentException();
+        }
     }
 
     public enum Mode{

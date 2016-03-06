@@ -11,4 +11,5 @@ class ImageTags {
     public static final String DIRECTORY = "DIRECTORY";
     public static final String CAMERA_IMAGE_URI = "cameraImageUri";
     public static final String LISTENER = "LISTENER";
+    public static final String COMPRESS_LEVEL = "COMPRESS_LEVEL";
 }

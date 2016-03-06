@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.WorkerThread;
 import android.util.Log;
@@ -22,7 +23,7 @@ import java.util.UUID;
  * Created by Alhazmy13 on 11/10/15.
  */
 public class Utility {
-
+    private static final String TAG = "Utility";
 
     public static String compressImage(String path) throws IOException {
         File file = new File(path);
@@ -34,17 +35,19 @@ public class Utility {
     }
 
     public static String getRandomString(){
-        return UUID.randomUUID().toString();
+        return SystemClock.currentThreadTimeMillis()+"";
+       // return UUID.randomUUID().toString();
     }
 
     public static void createFolder(String path){
         try {
-            File folder=new File(path.toString());
-            if (!folder.exists()) {
-                folder.mkdirs();
+            File dir = new File(path.substring(0,path.lastIndexOf("/")));
+            Log.d(TAG, "createFolder: "+dir.exists());
+            if (!dir.exists()) {
+                dir.mkdirs();
             }
         }catch (Exception ex){
-
+            Log.w(TAG, "creating file error: ", ex);
         }
 
     }
