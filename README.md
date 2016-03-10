@@ -134,7 +134,7 @@ In order to receive the path of video, you will need to override `onActivityResu
 * `extension` You can change the extanion of image to `_MP4` , `_MKV` or `_3GP`
 
 ```java
-.extension(VideoPicker.Extension. _MP4)
+.extension(VideoPicker.Extension._MP4)
 ```
 
 * `directory` You can pass the storage path, or select `Directory.DEFAULT_DIR` to keep the default path.
