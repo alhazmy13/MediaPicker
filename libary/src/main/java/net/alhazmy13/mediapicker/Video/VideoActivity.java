@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -18,14 +17,11 @@ import android.widget.Toast;
 
 import net.alhazmy13.camerapicker.R;
 import net.alhazmy13.mediapicker.Utility;
-import net.alhazmy13.mediapicker.Video.VideoPicker.ComperesLevel;
 import net.alhazmy13.mediapicker.Video.VideoPicker.Extension;
 import net.alhazmy13.mediapicker.Video.VideoPicker.Mode;
 
 
 import java.io.File;
-import java.io.IOException;
-import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +39,6 @@ public class VideoActivity extends AppCompatActivity {
     private final int REQUEST_CODE_SELECT_VIDEO = 44;
 
     private File destination;
-    private ComperesLevel compressLevel;
     private Extension extension;
     private Uri mVideoUri;
     private Mode mode;
@@ -55,7 +50,6 @@ public class VideoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null) {
-            compressLevel = (ComperesLevel) intent.getSerializableExtra(VideoTags.LEVEL);
             extension = (Extension) intent.getSerializableExtra(VideoTags.EXTENSION);
             mode = (Mode) intent.getSerializableExtra(VideoTags.MODE);
             directory = intent.getStringExtra(VideoTags.DIRECTORY);
@@ -126,7 +120,6 @@ public class VideoActivity extends AppCompatActivity {
 
         if (mVideoUri != null) {
             outState.putString(VideoTags.CAMERA_IMAGE_URI, mVideoUri.toString());
-            outState.putInt(VideoTags.COMPRESS_LEVEL, compressLevel.getValue());
         }
     }
 
@@ -137,7 +130,6 @@ public class VideoActivity extends AppCompatActivity {
         if (savedInstanceState.containsKey(VideoTags.CAMERA_IMAGE_URI)) {
             mVideoUri = Uri.parse(savedInstanceState.getString(VideoTags.CAMERA_IMAGE_URI));
             destination = new File(mVideoUri.getPath());
-            compressLevel = VideoPicker.ComperesLevel.getEnum(savedInstanceState.getInt(VideoTags.COMPRESS_LEVEL));
         }
     }
 
@@ -264,51 +256,12 @@ public class VideoActivity extends AppCompatActivity {
         }
     }
 
-    private static class CompressImageTask extends AsyncTask<Void, Void, Void> {
 
-        private final String mPath;
-        private final int mCompressLevel;
-        private WeakReference<VideoActivity> mContext;
-
-        public CompressImageTask(String path, int compressLevel, VideoActivity context) {
-            mPath = path;
-            mCompressLevel = compressLevel;
-            mContext = new WeakReference<>(context);
-
-            Log.d(TAG, "CompressImageTask(): " + "path = [" + path + "], compressLevel = ["
-                    + compressLevel + "]");
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            File file = new File(mPath);
-            try {
-                Utility.compressAndRotateIfNeeded(file, mCompressLevel);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-            VideoActivity context = mContext.get();
-            if (context != null) {
-                context.finishActivity(mPath);
-            }
-        }
-    }
-
-    public static Intent getCallingIntent(Context activity, Extension extension,
-                                          ComperesLevel compressLevel, Mode mode,
+    public static Intent getCallingIntent(Context activity, Extension extension
+            , Mode mode,
                                           String directory) {
         Intent intent = new Intent(activity, VideoActivity.class);
         intent.putExtra(VideoTags.EXTENSION, extension);
-        intent.putExtra(VideoTags.LEVEL, compressLevel);
         intent.putExtra(VideoTags.MODE, mode);
         intent.putExtra(VideoTags.DIRECTORY, directory);
         return intent;

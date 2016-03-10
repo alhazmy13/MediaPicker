@@ -19,7 +19,6 @@ public class VideoPicker {
     private static final String IMAGE_PICKER_DIR = "/mediapicker/videos/";
 
     private final Extension extension;
-    private final ComperesLevel compressLevel;
     private final Mode mode;
     private final String directory;
 
@@ -30,11 +29,10 @@ public class VideoPicker {
 
         // Optional
         extension = builder.extension;
-        compressLevel = builder.compressLevel;
         mode = builder.mode;
         directory = builder.directory;
 
-        Intent callingIntent = VideoActivity.getCallingIntent(context.get(), extension, compressLevel,
+        Intent callingIntent = VideoActivity.getCallingIntent(context.get(), extension,
                 mode, directory);
 
         context.get().startActivityForResult(callingIntent, VIDEO_PICKER_REQUEST_CODE);
@@ -48,9 +46,6 @@ public class VideoPicker {
         return directory;
     }
 
-    public ComperesLevel getCompressLevel() {
-        return compressLevel;
-    }
 
     public Extension getExtension() {
         return extension;
@@ -63,7 +58,6 @@ public class VideoPicker {
 
         // Optional params
         private Extension extension = Extension._MP4;
-        private ComperesLevel compressLevel =  ComperesLevel.NONE;
         private Mode mode = Mode.CAMERA;
         private String directory = Environment.getExternalStorageDirectory() + IMAGE_PICKER_DIR;
 
@@ -71,10 +65,6 @@ public class VideoPicker {
             this.context = new WeakReference<>(context);
         }
 
-        public VideoPicker.Builder compressLevel(ComperesLevel compressLevel) {
-            this.compressLevel = compressLevel;
-            return this;
-        }
 
         public VideoPicker.Builder mode(Mode mode) {
             this.mode = mode;
@@ -118,24 +108,7 @@ public class VideoPicker {
         }
     }
 
-    public enum ComperesLevel {
-        HARD(20), MEDIUM(50), SOFT(80), NONE(100);
-        private final int value;
 
-        ComperesLevel(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-
-        public static ComperesLevel getEnum(int value) {
-            for (ComperesLevel v : values())
-                if (v.getValue() == value) return v;
-            throw new IllegalArgumentException();
-        }
-    }
 
     public enum Mode {
         CAMERA(0), GALLERY(1), CAMERA_AND_GALLERY(2);

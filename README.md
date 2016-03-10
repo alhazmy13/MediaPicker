@@ -4,7 +4,7 @@
 # Media Picker
 ![](https://img.shields.io/badge/Platform-Android-brightgreen.svg)
 ![](https://img.shields.io/crates/l/rustc-serialize.svg)
-![](https://img.shields.io/badge/version-2.0.1-blue.svg)
+![](https://img.shields.io/badge/version-2.1.0-blue.svg)
 
 ------ 
 Media Picker is an Android Libary that lets you to select multiple images, video or voice for Android 4.1 (API 16) +.
@@ -20,7 +20,7 @@ This build `2.x.x` will break backward compatibility and there are a lot of chan
 <dependency>
 <groupId>net.alhazmy13.MediaPicker</groupId>
 <artifactId>libary</artifactId>
-<version>2.0.1</version>
+<version>2.1.0</version>
 </dependency>
 ```
 
@@ -28,7 +28,7 @@ This build `2.x.x` will break backward compatibility and there are a lot of chan
 **Gradle**
 ```gradle
 dependencies {
-	compile 'net.alhazmy13.MediaPicker:libary:2.0.1'
+	compile 'net.alhazmy13.MediaPicker:libary:2.1.0'
 }
 ```
 
@@ -82,7 +82,7 @@ In order to receive the path of image, you will need to override `onActivityResu
 .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
 ```
 
-* `directory` You can pass the storage path, or You can select `Directory.DEFAULT_DIR` to keep the default path.
+* `directory` You can pass the storage path, or select `Directory.DEFAULT_DIR` to keep the default path.
 
 ```java
 .directory(ImagePicker.Directory.DEFAULT)
@@ -96,7 +96,57 @@ In order to receive the path of image, you will need to override `onActivityResu
 
 ## Video
 ------ 
-######COMAING SOON
+
+1. Create an object from `VideoPicker`
+2. Override `onActivityResult` to receive the path of video.
+
+
+
+### Create `VideoPicker`
+You will need to create a new instance of `VideoPicker`. Once the instance are configured, you can call `build()`.
+
+```java
+        new VideoPicker.Builder(this)
+                .build();
+```
+### Override `onActivityResult `
+In order to receive the path of video, you will need to override `onActivityResult ` .
+
+```java
+   @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+            String mPath = data.getStringExtra(VideoPicker.EXTRA_VIDEO_PATH);
+            //Your Code
+        }
+    }
+```
+
+### Additional Options
+* `mode` to select the mode, you can chose one ot these `CAMERA`,`GALLERY` or `CAMERA_AND_GALLERY`
+
+```java
+.mode(VideoPicker.Mode.CAMERA)
+```
+ 
+* `extension` You can change the extanion of image to `_MP4` , `_MKV` or `_3GP`
+
+```java
+.extension(VideoPicker.Extension. _MP4)
+```
+
+* `directory` You can pass the storage path, or select `Directory.DEFAULT_DIR` to keep the default path.
+
+```java
+.directory(VideoPicker.Directory.DEFAULT)
+
+//OR
+
+.directory(Environment.getExternalStorageDirectory()+"/myFolder")
+
+```
 
 
 ## Theme the pickers
@@ -108,6 +158,11 @@ You can change the strings be overwriting below resources in your project.
     <string name="media_picker_select_from">Select From:</string>
     <string name="media_picker_camera">Camera</string>
     <string name="media_picker_gallery">Gallery</string>
+    <string name="media_picker_ok">Ok</string>
+    <string name="media_picker_cancel">Cancel</string>
+    <string name="media_picker_some_permission_is_denied">Some Permission is Denied</string>
+    <string name="media_picker_you_need_to_grant_access_to">You need to grant access to</string>
+    <string name="media_picker_read_Write_external_storage"><![CDATA[Read & Write External Storage]]></string>
 ```
 
 
