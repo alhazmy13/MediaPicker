@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.UUID;
 
 /**
  * Created by Alhazmy13 on 11/10/15.
@@ -34,8 +35,8 @@ public class Utility {
     }
 
     public static String getRandomString(){
-        return SystemClock.currentThreadTimeMillis()+"";
-       // return UUID.randomUUID().toString();
+       // return SystemClock.currentThreadTimeMillis()+"";
+        return UUID.randomUUID().toString();
     }
 
     public static void createFolder(String path){

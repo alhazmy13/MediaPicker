@@ -1,6 +1,7 @@
 package net.alhazmy13.mediapicker.Image;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -95,7 +96,15 @@ public class ImageActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         startActivityFromGallery();
                     }
-                }).show();
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        Log.d(TAG, "onCancel: ");
+                        finish();
+                    }
+                })
+                .show();
     }
 
     private void startActivityFromGallery() {

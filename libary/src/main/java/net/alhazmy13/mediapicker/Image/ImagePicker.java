@@ -61,10 +61,10 @@ public class ImagePicker {
         private final WeakReference<Activity> context;
 
         // Optional params
-        private Extension extension;
-        private ComperesLevel compressLevel;
-        private Mode mode;
-        private String directory;
+        private Extension extension = Extension.PNG;
+        private ComperesLevel compressLevel =  ComperesLevel.NONE;
+        private Mode mode = Mode.CAMERA;
+        private String directory = Environment.getExternalStorageDirectory() + IMAGE_PICKER_DIR;
 
         public Builder(Activity context) {
             this.context = new WeakReference<>(context);
