@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.alhazmy13.mediapicker.Image.ImagePicker;
+import net.alhazmy13.mediapicker.Video.VideoPicker;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -60,7 +61,8 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void pickImage() {
-        new ImagePicker.Builder(MainActivity.this)
+        new VideoPicker.Builder(MainActivity.this)
+                .mode(VideoPicker.Mode.GALLERY)
                 .build();
     }
 
@@ -68,8 +70,8 @@ public class MainActivity extends AppCompatActivity  {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-            mPath = data.getStringExtra(ImagePicker.EXTRA_IMAGE_PATH);
+        if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+            mPath = data.getStringExtra(VideoPicker.EXTRA_VIDEO_PATH);
             loadImage();
         }
     }
