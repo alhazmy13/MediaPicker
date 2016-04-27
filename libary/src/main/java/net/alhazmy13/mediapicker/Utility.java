@@ -68,9 +68,9 @@ public class Utility {
     }
 
     @WorkerThread
-    public static void compressAndRotateIfNeeded(File file, int value) throws IOException {
+    public static void compressAndRotateIfNeeded(File sourceFile, File destinationFile, int value) throws IOException {
 
-        String path = file.getAbsolutePath();
+        String path = sourceFile.getAbsolutePath();
 
         Log.d("compress", "file path: " + path);
 
@@ -86,14 +86,14 @@ public class Utility {
             return;
         }
 
-        int rotationAngle = getCameraPhotoOrientation(file);
+        int rotationAngle = getCameraPhotoOrientation(sourceFile);
 
         Matrix matrix = new Matrix();
         matrix.postRotate(rotationAngle, (float) bm.getWidth() / 2, (float) bm.getHeight() / 2);
         Bitmap rotatedBitmap = Bitmap.createBitmap(bm, 0, 0, bounds.outWidth, bounds.outHeight,
                 matrix, true);
 
-        FileOutputStream fos = new FileOutputStream(path);
+        FileOutputStream fos = new FileOutputStream(destinationFile.getAbsoluteFile());
         rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, value, fos);
         fos.flush();
         fos.close();

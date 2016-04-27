@@ -1,7 +1,6 @@
 package net.alhazmy13.mediapicker.Image;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -109,7 +108,9 @@ public class ImageActivity extends AppCompatActivity {
 
     private void startActivityFromGallery() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         photoPickerIntent.setType("image/*");
+        mImageUri = Uri.fromFile(destination);
         startActivityForResult(photoPickerIntent, REQUEST_CODE_SELECT_PHOTO);
     }
 
@@ -147,7 +148,7 @@ public class ImageActivity extends AppCompatActivity {
         switch (requestCode) {
             case CAMERA_REQUEST:
                 if (resultCode == RESULT_OK) {
-                    new CompressImageTask(destination.getAbsolutePath(),
+                    new CompressImageTask(destination.getAbsolutePath(), destination.getAbsolutePath(),
                             compressLevel.getValue(), ImageActivity.this).execute();
                 } else {
                     finish();
@@ -156,16 +157,15 @@ public class ImageActivity extends AppCompatActivity {
                 break;
             case REQUEST_CODE_SELECT_PHOTO:
                 if (resultCode == RESULT_OK) {
-
                     String selectedImagePath = "";
                     try {
                         Uri selectedImage = data.getData();
                         selectedImagePath = Utility.getRealPathFromURI(this, selectedImage);
+                        new CompressImageTask(selectedImagePath, destination.getAbsolutePath(),
+                                compressLevel.getValue(), ImageActivity.this).execute();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-                    finishActivity(selectedImagePath);
                 } else {
                     finish();
                 }
@@ -266,15 +266,17 @@ public class ImageActivity extends AppCompatActivity {
     private static class CompressImageTask extends AsyncTask<Void, Void, Void> {
 
         private final String mPath;
+        private final String mDestinationPath;
         private final int mCompressLevel;
         private WeakReference<ImageActivity> mContext;
 
-        public CompressImageTask(String path, int compressLevel, ImageActivity context) {
-            mPath = path;
+        public CompressImageTask(String sourcePath, String destinationPath, int compressLevel, ImageActivity context) {
+            mPath = sourcePath;
+            mDestinationPath = destinationPath;
             mCompressLevel = compressLevel;
             mContext = new WeakReference<>(context);
 
-            Log.d(TAG, "CompressImageTask(): " + "path = [" + path + "], compressLevel = ["
+            Log.d(TAG, "CompressImageTask(): " + "path = [" + sourcePath + "], destinationPath = [" + destinationPath + "], compressLevel = ["
                     + compressLevel + "]");
         }
 
@@ -282,8 +284,9 @@ public class ImageActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
 
             File file = new File(mPath);
+            File destinationFile = new File(mDestinationPath);
             try {
-                Utility.compressAndRotateIfNeeded(file, mCompressLevel);
+                Utility.compressAndRotateIfNeeded(file, destinationFile, mCompressLevel);
             } catch (IOException e) {
                 e.printStackTrace();
             }
