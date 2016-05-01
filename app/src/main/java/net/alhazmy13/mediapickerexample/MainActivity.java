@@ -2,6 +2,7 @@ package net.alhazmy13.mediapickerexample;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -61,8 +62,11 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void pickImage() {
-        new VideoPicker.Builder(MainActivity.this)
-                .mode(VideoPicker.Mode.GALLERY)
+        new ImagePicker.Builder(MainActivity.this)
+                .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
+                .compressLevel(ImagePicker.ComperesLevel.HARD)
+                .directory(ImagePicker.Directory.DEFAULT)
+                .scale(300, 300)
                 .build();
     }
 
@@ -72,6 +76,10 @@ public class MainActivity extends AppCompatActivity  {
 
         if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
             mPath = data.getStringExtra(VideoPicker.EXTRA_VIDEO_PATH);
+            loadImage();
+        }
+        else if(requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+            mPath = data.getStringExtra(ImagePicker.EXTRA_IMAGE_PATH);
             loadImage();
         }
     }

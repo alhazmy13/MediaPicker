@@ -1,7 +1,6 @@
 package net.alhazmy13.mediapicker.Image;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -48,6 +47,8 @@ public class ImageActivity extends AppCompatActivity {
     private Uri mImageUri;
     private ImagePicker.Mode mode;
     private String directory;
+    private int reqWidth;
+    private int reqHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,8 @@ public class ImageActivity extends AppCompatActivity {
             extension = (Extension) intent.getSerializableExtra(ImageTags.EXTENSION);
             mode = (Mode) intent.getSerializableExtra(ImageTags.MODE);
             directory = intent.getStringExtra(ImageTags.DIRECTORY);
+            reqWidth = intent.getIntExtra(ImageTags.REQUESTED_WIDTH, 0);
+            reqHeight = intent.getIntExtra(ImageTags.REQUESTED_HEIGHT, 0);
         }
 
         if (savedInstanceState == null) {
@@ -109,7 +112,9 @@ public class ImageActivity extends AppCompatActivity {
 
     private void startActivityFromGallery() {
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         photoPickerIntent.setType("image/*");
+        mImageUri = Uri.fromFile(destination);
         startActivityForResult(photoPickerIntent, REQUEST_CODE_SELECT_PHOTO);
     }
 
@@ -147,8 +152,8 @@ public class ImageActivity extends AppCompatActivity {
         switch (requestCode) {
             case CAMERA_REQUEST:
                 if (resultCode == RESULT_OK) {
-                    new CompressImageTask(destination.getAbsolutePath(),
-                            compressLevel.getValue(), ImageActivity.this).execute();
+                    new CompressImageTask(destination.getAbsolutePath(), destination.getAbsolutePath(),
+                            compressLevel.getValue(), reqWidth, reqHeight, ImageActivity.this).execute();
                 } else {
                     finish();
                 }
@@ -156,16 +161,15 @@ public class ImageActivity extends AppCompatActivity {
                 break;
             case REQUEST_CODE_SELECT_PHOTO:
                 if (resultCode == RESULT_OK) {
-
                     String selectedImagePath = "";
                     try {
                         Uri selectedImage = data.getData();
                         selectedImagePath = Utility.getRealPathFromURI(this, selectedImage);
+                        new CompressImageTask(destination.getAbsolutePath(), destination.getAbsolutePath(),
+                                compressLevel.getValue(), reqWidth, reqHeight, ImageActivity.this).execute();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-
-                    finishActivity(selectedImagePath);
                 } else {
                     finish();
                 }
@@ -266,15 +270,21 @@ public class ImageActivity extends AppCompatActivity {
     private static class CompressImageTask extends AsyncTask<Void, Void, Void> {
 
         private final String mPath;
+        private final String mDestinationPath;
         private final int mCompressLevel;
         private WeakReference<ImageActivity> mContext;
+        private final int mReqWidth;
+        private final int mReqHeight;
 
-        public CompressImageTask(String path, int compressLevel, ImageActivity context) {
-            mPath = path;
+        public CompressImageTask(String sourcePath, String destinationPath, int compressLevel, int reqWidth, int reqHeight, ImageActivity context) {
+            mPath = sourcePath;
+            mDestinationPath = destinationPath;
             mCompressLevel = compressLevel;
             mContext = new WeakReference<>(context);
+            mReqWidth = reqWidth;
+            mReqHeight = reqHeight;
 
-            Log.d(TAG, "CompressImageTask(): " + "path = [" + path + "], compressLevel = ["
+            Log.d(TAG, "CompressImageTask(): " + "path = [" + sourcePath + "], destinationPath = [" + destinationPath + "], compressLevel = ["
                     + compressLevel + "]");
         }
 
@@ -282,8 +292,9 @@ public class ImageActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
 
             File file = new File(mPath);
+            File destinationFile = new File(mDestinationPath);
             try {
-                Utility.compressAndRotateIfNeeded(file, mCompressLevel);
+                Utility.compressAndRotateIfNeeded(file, destinationFile, mCompressLevel, mReqWidth, mReqHeight);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -304,12 +315,14 @@ public class ImageActivity extends AppCompatActivity {
 
     public static Intent getCallingIntent(Context activity, Extension extension,
                                           ComperesLevel compressLevel, Mode mode,
-                                          String directory) {
+                                          String directory, int reqWidth, int reqHeight) {
         Intent intent = new Intent(activity, ImageActivity.class);
         intent.putExtra(ImageTags.EXTENSION, extension);
         intent.putExtra(ImageTags.LEVEL, compressLevel);
         intent.putExtra(ImageTags.MODE, mode);
         intent.putExtra(ImageTags.DIRECTORY, directory);
+        intent.putExtra(ImageTags.REQUESTED_WIDTH, reqWidth);
+        intent.putExtra(ImageTags.REQUESTED_HEIGHT, reqHeight);
         return intent;
     }
 
