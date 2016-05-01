@@ -21,6 +21,8 @@ public class ImagePicker {
     private final ComperesLevel compressLevel;
     private final Mode mode;
     private final String directory;
+    private final int reqHeight;
+    private final int reqWidth;
 
     private ImagePicker(Builder builder) {
 
@@ -32,9 +34,12 @@ public class ImagePicker {
         compressLevel = builder.compressLevel;
         mode = builder.mode;
         directory = builder.directory;
+        reqHeight = builder.reqHeight;
+        reqWidth = builder.reqWidth;
+
 
         Intent callingIntent = ImageActivity.getCallingIntent(context.get(), extension, compressLevel,
-                mode, directory);
+                mode, directory, reqWidth, reqHeight);
 
         context.get().startActivityForResult(callingIntent, IMAGE_PICKER_REQUEST_CODE);
     }
@@ -65,6 +70,8 @@ public class ImagePicker {
         private ComperesLevel compressLevel =  ComperesLevel.NONE;
         private Mode mode = Mode.CAMERA;
         private String directory = Environment.getExternalStorageDirectory() + IMAGE_PICKER_DIR;
+        private int reqHeight;
+        private int reqWidth;
 
         public Builder(Activity context) {
             this.context = new WeakReference<>(context);
@@ -95,6 +102,12 @@ public class ImagePicker {
 
         public ImagePicker.Builder extension(Extension extension) {
             this.extension = extension;
+            return this;
+        }
+
+        public ImagePicker.Builder scale(int width, int height) {
+            this.reqHeight = height;
+            this.reqWidth = width;
             return this;
         }
 

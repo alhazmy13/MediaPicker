@@ -68,18 +68,19 @@ public class Utility {
     }
 
     @WorkerThread
-    public static void compressAndRotateIfNeeded(File sourceFile, File destinationFile, int value) throws IOException {
+    public static void compressAndRotateIfNeeded(File sourceFile, File destinationFile, int value, int reqWidth, int reqHeight) throws IOException {
 
         String path = sourceFile.getAbsolutePath();
 
-        Log.d("compress", "file path: " + path);
-
         BitmapFactory.Options bounds = new BitmapFactory.Options();
-
-        // TODO: Support sample decoding with user width and height preferences
-//        bounds.inSampleSize = 4;
-
-        Bitmap bm = BitmapFactory.decodeFile(path, bounds);
+        Bitmap bm;
+        if(reqHeight !=0 && reqWidth != 0) {
+            bounds.inJustDecodeBounds = true;
+            bm = BitmapFactory.decodeFile(path, bounds);
+            bounds.inSampleSize = calculateInSampleSize(bounds, reqWidth, reqHeight);
+            bounds.inJustDecodeBounds = false;
+        }
+        bm = BitmapFactory.decodeFile(path, bounds);
 
         if (bm == null) {
             Log.d("compress", "bitmap is null");
@@ -97,6 +98,28 @@ public class Utility {
         rotatedBitmap.compress(Bitmap.CompressFormat.JPEG, value, fos);
         fos.flush();
         fos.close();
+    }
+
+    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 
     @WorkerThread

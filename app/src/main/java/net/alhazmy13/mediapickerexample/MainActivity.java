@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity  {
                 .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
                 .compressLevel(ImagePicker.ComperesLevel.HARD)
                 .directory(ImagePicker.Directory.DEFAULT)
+                .scale(300, 300)
                 .build();
     }
 
