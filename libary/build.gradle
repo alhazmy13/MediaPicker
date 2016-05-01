@@ -14,7 +14,7 @@ ext {
     siteUrl = 'https://github.com/alhzmy13/MediaPicker'
     gitUrl = 'https://github.com/alhzmy13/MediaPicker.git'
 
-    libraryVersion = '2.1.0'
+    libraryVersion = '2.1.1'
 
     developerId = 'alhazmy13'
     developerName = 'Abdullah Alhazmy'
