@@ -19,30 +19,231 @@
     </section>
 
     <section class="main-content">
-      <h3>
-<a id="welcome-to-media-picker-pages" class="anchor" href="#welcome-to-media-picker-pages" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to Media Picker Pages.</h3>
+      <p align="left">
+  <img src="https://cloud.githubusercontent.com/assets/4659608/12700433/4276edc0-c7f3-11e5-9f2c-de6bcbb9416d.png" width="600">
+</p>
 
-<p>This automatic page generator is the easiest way to create beautiful pages for all of your projects. Author your page content here <a href="https://guides.github.com/features/mastering-markdown/">using GitHub Flavored Markdown</a>, select a template crafted by a designer, and publish. After your page is generated, you can check out the new <code>gh-pages</code> branch locally. If you’re using GitHub Desktop, simply sync your repository and you’ll see the new branch.</p>
+<h1>
+<a id="media-picker" class="anchor" href="#media-picker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Media Picker</h1>
+
+<p><img src="https://img.shields.io/badge/Platform-Android-brightgreen.svg" alt="">
+<img src="https://img.shields.io/crates/l/rustc-serialize.svg" alt="">
+<img src="https://img.shields.io/badge/version-2.1.1-blue.svg" alt=""></p>
+
+<hr>
+
+<p>Media Picker is an Android Libary that lets you to select multiple images, video or voice for Android 4.1 (API 16) +.
+You can report any issue on issues page. <strong>Note: If you speak Arabic, you can submit issues with Arabic language and I will check them. :)</strong></p>
+
+<h1>
+<a id="note" class="anchor" href="#note" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>NOTE</h1>
+
+<hr>
+
+<p>This build <code>2.x.x</code> will break backward compatibility and there are a lot of changes to improve the performance and fix a lot of Leak memory issues, So please read below document carefully.</p>
+
+<h2>
+<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+
+<hr>
+
+<p><strong>Maven</strong></p>
+
+<div class="highlight highlight-text-xml"><pre>&lt;<span class="pl-ent">dependency</span>&gt;
+&lt;<span class="pl-ent">groupId</span>&gt;net.alhazmy13.MediaPicker&lt;/<span class="pl-ent">groupId</span>&gt;
+&lt;<span class="pl-ent">artifactId</span>&gt;libary&lt;/<span class="pl-ent">artifactId</span>&gt;
+&lt;<span class="pl-ent">version</span>&gt;2.1.1&lt;/<span class="pl-ent">version</span>&gt;
+&lt;/<span class="pl-ent">dependency</span>&gt;</pre></div>
+
+<p><strong>Gradle</strong></p>
+
+<div class="highlight highlight-source-groovy-gradle"><pre><span class="pl-en">dependencies</span> {
+    compile <span class="pl-s"><span class="pl-pds">'</span>net.alhazmy13.MediaPicker:libary:2.1.1<span class="pl-pds">'</span></span>
+}</pre></div>
+
+<h1>
+<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h1>
+
+<hr>
+
+<h2>
+<a id="images" class="anchor" href="#images" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Images</h2>
+
+<p>After adding the library, you need to:</p>
+
+<ol>
+<li>Create an object from <code>ImagePicker</code>
+</li>
+<li>Override <code>onActivityResult</code> to receive the path of image.</li>
+</ol>
 
 <h3>
-<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a id="create-an-imagepicker" class="anchor" href="#create-an-imagepicker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Create an <code>ImagePicker</code>
+</h3>
 
-<p>We’ve crafted some handsome templates for you to use. Go ahead and click 'Continue to layouts' to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved.</p>
+<p>You will need to create a new instance of <code>ImagePicker</code>. Once the instance are configured, you can call <code>build()</code>.</p>
 
-<h3>
-<a id="creating-pages-manually" class="anchor" href="#creating-pages-manually" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Creating pages manually</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/#mentioning-users-and-teams" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
+<div class="highlight highlight-source-java"><pre>        <span class="pl-k">new</span> <span class="pl-smi">ImagePicker</span>.<span class="pl-smi">Builder</span>(<span class="pl-v">this</span>)
+                .build();</pre></div>
 
 <h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h3>
+<a id="override-onactivityresult" class="anchor" href="#override-onactivityresult" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Override <code>onActivityResult</code>
+</h3>
 
-<p>Having trouble with Pages? Check out our <a href="https://help.github.com/pages">documentation</a> or <a href="https://github.com/contact">contact support</a> and we’ll help you sort it out.</p>
+<p>In order to receive the path of image, you will need to override <code>onActivityResult</code> .</p>
+
+<div class="highlight highlight-source-java"><pre>   @<span class="pl-smi">Override</span>
+    <span class="pl-k">protected</span> <span class="pl-k">void</span> onActivityResult(<span class="pl-k">int</span> requestCode, <span class="pl-k">int</span> resultCode, <span class="pl-smi">Intent</span> data) {
+        <span class="pl-v">super</span><span class="pl-k">.</span>onActivityResult(requestCode, resultCode, data);
+
+        <span class="pl-k">if</span> (requestCode <span class="pl-k">==</span> <span class="pl-smi">ImagePicker</span><span class="pl-c1"><span class="pl-k">.</span>IMAGE_PICKER_REQUEST_CODE</span> <span class="pl-k">&amp;&amp;</span> resultCode <span class="pl-k">==</span> <span class="pl-c1">RESULT_OK</span>) {
+            <span class="pl-smi">String</span> mPath <span class="pl-k">=</span> data<span class="pl-k">.</span>getStringExtra(<span class="pl-smi">ImagePicker</span><span class="pl-c1"><span class="pl-k">.</span>EXTRA_IMAGE_PATH</span>);
+            <span class="pl-c">//Your Code</span>
+        }
+    }</pre></div>
+
+<h3>
+<a id="additional-options" class="anchor" href="#additional-options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Additional Options</h3>
+
+<ul>
+<li>
+<code>mode</code> to select the mode, you can chose one ot these <code>CAMERA</code>,<code>GALLERY</code> or <code>CAMERA_AND_GALLERY</code>
+</li>
+</ul>
+
+<div class="highlight highlight-source-java"><pre>.mode(<span class="pl-smi">ImagePicker</span><span class="pl-k">.</span><span class="pl-smi">Mode</span><span class="pl-c1"><span class="pl-k">.</span>CAMERA</span>)</pre></div>
+
+<ul>
+<li>
+<code>extension</code> You can change the extanion of image to <code>PNG</code> or <code>JPG</code>
+</li>
+</ul>
+
+<div class="highlight highlight-source-java"><pre>.extension(<span class="pl-smi">ImagePicker</span><span class="pl-k">.</span><span class="pl-smi">Extension</span><span class="pl-c1"><span class="pl-k">.</span>PNG</span>)</pre></div>
+
+<ul>
+<li>
+<code>compressLevel</code> You can change the quality of image with three different levels <code>HARD</code>,<code>MEDIUM</code>, <code>SOFT</code> or <code>NONE</code>
+</li>
+</ul>
+
+<div class="highlight highlight-source-java"><pre>.compressLevel(<span class="pl-smi">ImagePicker</span><span class="pl-k">.</span><span class="pl-smi">ComperesLevel</span><span class="pl-c1"><span class="pl-k">.</span>MEDIUM</span>)</pre></div>
+
+<ul>
+<li>
+<code>directory</code> You can pass the storage path, or select <code>Directory.DEFAULT_DIR</code> to keep the default path.</li>
+</ul>
+
+<div class="highlight highlight-source-java"><pre>.directory(<span class="pl-smi">ImagePicker</span><span class="pl-k">.</span><span class="pl-smi">Directory</span><span class="pl-c1"><span class="pl-k">.</span>DEFAULT</span>)
+
+<span class="pl-c">//OR</span>
+
+.directory(<span class="pl-smi">Environment</span><span class="pl-k">.</span>getExternalStorageDirectory()<span class="pl-k">+</span><span class="pl-s"><span class="pl-pds">"</span>/myFolder<span class="pl-pds">"</span></span>)
+</pre></div>
+
+<hr>
+
+<h2>
+<a id="video" class="anchor" href="#video" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Video</h2>
+
+<hr>
+
+<ol>
+<li>Create an object from <code>VideoPicker</code>
+</li>
+<li>Override <code>onActivityResult</code> to receive the path of video.</li>
+</ol>
+
+<h3>
+<a id="create-videopicker" class="anchor" href="#create-videopicker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Create <code>VideoPicker</code>
+</h3>
+
+<p>You will need to create a new instance of <code>VideoPicker</code>. Once the instance are configured, you can call <code>build()</code>.</p>
+
+<div class="highlight highlight-source-java"><pre>        <span class="pl-k">new</span> <span class="pl-smi">VideoPicker</span>.<span class="pl-smi">Builder</span>(<span class="pl-v">this</span>)
+                .build();</pre></div>
+
+<h3>
+<a id="override-onactivityresult-1" class="anchor" href="#override-onactivityresult-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Override <code>onActivityResult</code>
+</h3>
+
+<p>In order to receive the path of video, you will need to override <code>onActivityResult</code> .</p>
+
+<div class="highlight highlight-source-java"><pre>   @<span class="pl-smi">Override</span>
+    <span class="pl-k">protected</span> <span class="pl-k">void</span> onActivityResult(<span class="pl-k">int</span> requestCode, <span class="pl-k">int</span> resultCode, <span class="pl-smi">Intent</span> data) {
+        <span class="pl-v">super</span><span class="pl-k">.</span>onActivityResult(requestCode, resultCode, data);
+
+        <span class="pl-k">if</span> (requestCode <span class="pl-k">==</span> <span class="pl-smi">VideoPicker</span><span class="pl-c1"><span class="pl-k">.</span>VIDEO_PICKER_REQUEST_CODE</span> <span class="pl-k">&amp;&amp;</span> resultCode <span class="pl-k">==</span> <span class="pl-c1">RESULT_OK</span>) {
+            <span class="pl-smi">String</span> mPath <span class="pl-k">=</span> data<span class="pl-k">.</span>getStringExtra(<span class="pl-smi">VideoPicker</span><span class="pl-c1"><span class="pl-k">.</span>EXTRA_VIDEO_PATH</span>);
+            <span class="pl-c">//Your Code</span>
+        }
+    }</pre></div>
+
+<h3>
+<a id="additional-options-1" class="anchor" href="#additional-options-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Additional Options</h3>
+
+<ul>
+<li>
+<code>mode</code> to select the mode, you can chose one ot these <code>CAMERA</code>,<code>GALLERY</code> or <code>CAMERA_AND_GALLERY</code>
+</li>
+</ul>
+
+<div class="highlight highlight-source-java"><pre>.mode(<span class="pl-smi">VideoPicker</span><span class="pl-k">.</span><span class="pl-smi">Mode</span><span class="pl-c1"><span class="pl-k">.</span>CAMERA</span>)</pre></div>
+
+<ul>
+<li>
+<code>extension</code> You can change the extanion of image to <code>_MP4</code> , <code>_MKV</code> or <code>_3GP</code>
+</li>
+</ul>
+
+<div class="highlight highlight-source-java"><pre>.extension(<span class="pl-smi">VideoPicker</span><span class="pl-k">.</span><span class="pl-smi">Extension</span><span class="pl-k">.</span>_MP4)</pre></div>
+
+<ul>
+<li>
+<code>directory</code> You can pass the storage path, or select <code>Directory.DEFAULT_DIR</code> to keep the default path.</li>
+</ul>
+
+<div class="highlight highlight-source-java"><pre>.directory(<span class="pl-smi">VideoPicker</span><span class="pl-k">.</span><span class="pl-smi">Directory</span><span class="pl-c1"><span class="pl-k">.</span>DEFAULT</span>)
+
+<span class="pl-c">//OR</span>
+
+.directory(<span class="pl-smi">Environment</span><span class="pl-k">.</span>getExternalStorageDirectory()<span class="pl-k">+</span><span class="pl-s"><span class="pl-pds">"</span>/myFolder<span class="pl-pds">"</span></span>)
+</pre></div>
+
+<h2>
+<a id="theme-the-pickers" class="anchor" href="#theme-the-pickers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Theme the pickers</h2>
+
+<p>You can change the strings be overwriting below resources in your project.</p>
+
+<div class="highlight highlight-text-xml"><pre>
+    &lt;<span class="pl-ent">string</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>media_picker_select_from<span class="pl-pds">"</span></span>&gt;Select From:&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">string</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>media_picker_camera<span class="pl-pds">"</span></span>&gt;Camera&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">string</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>media_picker_gallery<span class="pl-pds">"</span></span>&gt;Gallery&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">string</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>media_picker_ok<span class="pl-pds">"</span></span>&gt;Ok&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">string</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>media_picker_cancel<span class="pl-pds">"</span></span>&gt;Cancel&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">string</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>media_picker_some_permission_is_denied<span class="pl-pds">"</span></span>&gt;Some Permission is Denied&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">string</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>media_picker_you_need_to_grant_access_to<span class="pl-pds">"</span></span>&gt;You need to grant access to&lt;/<span class="pl-ent">string</span>&gt;
+    &lt;<span class="pl-ent">string</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>media_picker_read_Write_external_storage<span class="pl-pds">"</span></span>&gt;<span class="pl-s"><span class="pl-pds">&lt;![CDATA[</span>Read &amp; Write External Storage<span class="pl-pds">]]&gt;</span></span>&lt;/<span class="pl-ent">string</span>&gt;</pre></div>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
+
+<hr>
+
+<pre><code>Copyright 2015 alhazmy
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+   http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+</code></pre>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/alhazmy13/MediaPicker">Media Picker</a> is maintained by <a href="https://github.com/alhazmy13">alhazmy13</a>.</span>
