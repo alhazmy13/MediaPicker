@@ -105,9 +105,9 @@ public class ImagePicker {
             return this;
         }
 
-        public ImagePicker.Builder scale(int width, int height) {
-            this.reqHeight = height;
-            this.reqWidth = width;
+        public ImagePicker.Builder scale(int minWidth, int minHeight) {
+            this.reqHeight = minHeight;
+            this.reqWidth = minWidth;
             return this;
         }
 

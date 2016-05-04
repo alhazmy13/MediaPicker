@@ -6,7 +6,7 @@
 ![](https://img.shields.io/crates/l/rustc-serialize.svg)
 ![](https://img.shields.io/badge/version-2.1.1-blue.svg)
 
------- 
+------
 Media Picker is an Android Libary that lets you to select multiple images, video or voice for Android 4.1 (API 16) +.
 You can report any issue on issues page. **Note: If you speak Arabic, you can submit issues with Arabic language and I will check them. :)**
 
@@ -14,7 +14,7 @@ You can report any issue on issues page. **Note: If you speak Arabic, you can su
 ----
 This build `2.x.x` will break backward compatibility and there are a lot of changes to improve the performance and fix a lot of Leak memory issues, So please read below document carefully.
 ## Installation
------- 
+------
 **Maven**
 ```xml
 <dependency>
@@ -33,7 +33,7 @@ dependencies {
 ```
 
 # Usage
------- 
+------
 ## Images
 After adding the library, you need to:
 
@@ -65,13 +65,13 @@ In order to receive the path of image, you will need to override `onActivityResu
 ```
 
 ### Additional Options
-* `mode` to select the mode, you can chose one ot these `CAMERA`,`GALLERY` or `CAMERA_AND_GALLERY`
+* `mode` to select the mode, you can choose one of these `CAMERA`,`GALLERY` or `CAMERA_AND_GALLERY`
 
 ```java
 .mode(ImagePicker.Mode.CAMERA)
 ```
- 
-* `extension` You can change the extanion of image to `PNG` or `JPG`
+
+* `extension` You can change the extension of image to `PNG` or `JPG`
 
 ```java
 .extension(ImagePicker.Extension.PNG)
@@ -92,10 +92,16 @@ In order to receive the path of image, you will need to override `onActivityResu
 .directory(Environment.getExternalStorageDirectory()+"/myFolder")
 
 ```
------- 
+
+* `scale` You can scale the image to a a minimum width and height. This will only be used if compressLevel is set. To avoid OutOfMemory issues, ensure this is used.
+
+```java
+.scale(500, 500)
+```
+------
 
 ## Video
------- 
+------
 
 1. Create an object from `VideoPicker`
 2. Override `onActivityResult` to receive the path of video.
@@ -130,7 +136,7 @@ In order to receive the path of video, you will need to override `onActivityResu
 ```java
 .mode(VideoPicker.Mode.CAMERA)
 ```
- 
+
 * `extension` You can change the extanion of image to `_MP4` , `_MKV` or `_3GP`
 
 ```java
@@ -168,7 +174,7 @@ You can change the strings be overwriting below resources in your project.
 
 
 ## License
------- 
+------
     Copyright 2015 alhazmy
 
     Licensed under the Apache License, Version 2.0 (the "License");
@@ -182,5 +188,3 @@ You can change the strings be overwriting below resources in your project.
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
-    
-
