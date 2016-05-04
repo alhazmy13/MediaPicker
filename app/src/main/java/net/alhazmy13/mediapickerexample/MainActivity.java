@@ -64,9 +64,9 @@ public class MainActivity extends AppCompatActivity  {
     private void pickImage() {
         new ImagePicker.Builder(MainActivity.this)
                 .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
-                .compressLevel(ImagePicker.ComperesLevel.HARD)
+                .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
                 .directory(ImagePicker.Directory.DEFAULT)
-                .scale(300, 300)
+                .scale(600, 600)
                 .build();
     }
 
