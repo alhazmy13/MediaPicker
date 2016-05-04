@@ -165,7 +165,7 @@ public class ImageActivity extends AppCompatActivity {
                     try {
                         Uri selectedImage = data.getData();
                         selectedImagePath = Utility.getRealPathFromURI(this, selectedImage);
-                        new CompressImageTask(destination.getAbsolutePath(), destination.getAbsolutePath(),
+                        new CompressImageTask(selectedImagePath, destination.getAbsolutePath(),
                                 compressLevel.getValue(), reqWidth, reqHeight, ImageActivity.this).execute();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -308,7 +308,7 @@ public class ImageActivity extends AppCompatActivity {
 
             ImageActivity context = mContext.get();
             if (context != null) {
-                context.finishActivity(mPath);
+                context.finishActivity(mDestinationPath);
             }
         }
     }
