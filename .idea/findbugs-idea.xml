@@ -1,22 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<module external.linked.project.id="MediaPicker" external.linked.project.path="$MODULE_DIR$" external.root.project.path="$MODULE_DIR$" external.system.id="GRADLE" external.system.module.group="" external.system.module.version="unspecified" type="JAVA_MODULE" version="4">
-  <component name="FacetManager">
-    <facet type="java-gradle" name="Java-Gradle">
-      <configuration>
-        <option name="BUILD_FOLDER_PATH" value="$MODULE_DIR$/build" />
-        <option name="BUILDABLE" value="false" />
-      </configuration>
-    </facet>
-  </component>
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_7" inherit-compiler-output="true">
-    <exclude-output />
-    <content url="file://$MODULE_DIR$">
-      <excludeFolder url="file://$MODULE_DIR$/.gradle" />
-    </content>
-    <orderEntry type="inheritedJdk" />
-    <orderEntry type="sourceFolder" forTests="false" />
-  </component>
+<project version="4">
   <component name="org.twodividedbyzero.idea.findbugs">
+    <option name="annotationTypeSettings">
+      <map>
+        <entry key="ExpPriority" value="-4473925;-12828863;-8355712;WAVE_UNDERSCORE;0;" />
+        <entry key="HighPriority" value="-39836;-12828863;-39836;WAVE_UNDERSCORE;1;" />
+        <entry key="IgnorePriority" value="-4473925;-12828863;-11978414;WAVE_UNDERSCORE;0;" />
+        <entry key="LowPriority" value="-4473925;-12828863;-10316203;BOXED;0;" />
+        <entry key="NormalPriority" value="-4473925;-12828863;-10461184;WAVE_UNDERSCORE;2;" />
+      </map>
+    </option>
     <option name="_basePreferences">
       <map>
         <entry key="property.analysisEffortLevel" value="default" />
@@ -220,5 +213,14 @@
         <entry key="STYLE" value="true" />
       </map>
     </option>
+    <option name="_annotationTypeSettings">
+      <map>
+        <entry key="ExpPriority" value="-4473925;-12828863;-8355712;WAVE_UNDERSCORE;0;" />
+        <entry key="HighPriority" value="-39836;-12828863;-39836;WAVE_UNDERSCORE;1;" />
+        <entry key="IgnorePriority" value="-4473925;-12828863;-11978414;WAVE_UNDERSCORE;0;" />
+        <entry key="LowPriority" value="-4473925;-12828863;-10316203;BOXED;0;" />
+        <entry key="NormalPriority" value="-4473925;-12828863;-10461184;WAVE_UNDERSCORE;2;" />
+      </map>
+    </option>
   </component>
-</module>
+</project>
