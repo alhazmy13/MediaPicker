@@ -3,8 +3,10 @@
 </p>
 # Media Picker
 ![](https://img.shields.io/badge/Platform-Android-brightgreen.svg)
-![](https://img.shields.io/crates/l/rustc-serialize.svg)
+![](https://img.shields.io/packagist/l/doctrine/orm.svg)
 ![](https://img.shields.io/badge/version-2.1.4-blue.svg)
+![](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)
+![](https://img.shields.io/github/stars/badges/shields.svg?style=social&label=Star)
 
 ------
 Media Picker is an Android Libary that lets you to select multiple images, video or voice for Android 4.1 (API 16) +.
