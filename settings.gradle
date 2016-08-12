@@ -1,1 +1,1 @@
-include ':app', ':libary'
+include ':app', ':libary', ':adapter-rxjava'

@@ -2,17 +2,19 @@ package net.alhazmy13.mediapickerexample;
 
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import net.alhazmy13.mediapicker.Image.ImagePicker;
 import net.alhazmy13.mediapicker.Video.VideoPicker;
+import net.alhazmy13.mediapicker.adapter_rxjava.ImagePickerHelper;
+
+import rx.Subscriber;
 
 public class MainActivity extends AppCompatActivity  {
 
@@ -62,12 +64,32 @@ public class MainActivity extends AppCompatActivity  {
     }
 
     private void pickImage() {
+        new ImagePickerHelper(
         new ImagePicker.Builder(MainActivity.this)
                 .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
                 .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
                 .directory(ImagePicker.Directory.DEFAULT)
-                .scale(600, 600)
-                .build();
+                .scale(600, 600))
+                .getObservable()
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "onCompleted() called with: " + "");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError() called with: " + "e = [" + e + "]");
+                        e.printStackTrace();
+                    }
+
+                    @Override
+                    public void onNext(String imagePath) {
+                        Log.d(TAG, "onNext() called with: " + "imagePath = [" + imagePath + "]");
+                        mPath = imagePath;
+                        loadImage();
+                    }
+                });;
     }
 
     @Override

@@ -13,4 +13,5 @@ class ImageTags {
     public static final String COMPRESS_LEVEL = "COMPRESS_LEVEL";
     public static final String REQUESTED_WIDTH = "REQUESTED_WIDTH";
     public static final String REQUESTED_HEIGHT = "REQUESTED_HEIGHT";
+    public static final String IMAGE_PATH = "IMAGE_PATH";
 }

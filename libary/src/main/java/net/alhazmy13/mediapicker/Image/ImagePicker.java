@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Environment;
 
+
 import java.lang.ref.WeakReference;
 
 /**
@@ -23,8 +24,7 @@ public class ImagePicker {
     private final String directory;
     private final int reqHeight;
     private final int reqWidth;
-
-    private ImagePicker(Builder builder) {
+    public ImagePicker(Builder builder) {
 
         // Required
         WeakReference<Activity> context = builder.context;
@@ -36,13 +36,13 @@ public class ImagePicker {
         directory = builder.directory;
         reqHeight = builder.reqHeight;
         reqWidth = builder.reqWidth;
-
-
         Intent callingIntent = ImageActivity.getCallingIntent(context.get(), extension, compressLevel,
                 mode, directory, reqWidth, reqHeight);
 
         context.get().startActivityForResult(callingIntent, IMAGE_PICKER_REQUEST_CODE);
     }
+
+
 
     public Mode getMode() {
         return mode;
@@ -60,7 +60,9 @@ public class ImagePicker {
         return extension;
     }
 
-    public static class Builder {
+
+
+    public static class Builder implements ImagePickerBuilderBase{
 
         // Required params
         private final WeakReference<Activity> context;
@@ -72,26 +74,26 @@ public class ImagePicker {
         private String directory = Environment.getExternalStorageDirectory() + IMAGE_PICKER_DIR;
         private int reqHeight;
         private int reqWidth;
-
         public Builder(Activity context) {
             this.context = new WeakReference<>(context);
         }
 
+        @Override
         public ImagePicker.Builder compressLevel(ComperesLevel compressLevel) {
             this.compressLevel = compressLevel;
             return this;
         }
-
+        @Override
         public ImagePicker.Builder mode(Mode mode) {
             this.mode = mode;
             return this;
         }
-
+        @Override
         public ImagePicker.Builder directory(String directory) {
             this.directory = directory;
             return this;
         }
-
+        @Override
         public ImagePicker.Builder directory(Directory directory) {
             switch (directory) {
                 case DEFAULT:
@@ -99,21 +101,29 @@ public class ImagePicker {
             }
             return this;
         }
-
+        @Override
         public ImagePicker.Builder extension(Extension extension) {
             this.extension = extension;
             return this;
         }
-
+        @Override
         public ImagePicker.Builder scale(int minWidth, int minHeight) {
             this.reqHeight = minHeight;
             this.reqWidth = minWidth;
             return this;
         }
 
+
+        @Override
         public ImagePicker build() {
             return new ImagePicker(this);
         }
+
+
+        public Activity getContext() {
+            return context.get();
+        }
+
     }
 
 

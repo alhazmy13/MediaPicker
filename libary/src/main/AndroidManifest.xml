@@ -12,6 +12,7 @@
         <activity android:name="net.alhazmy13.mediapicker.Video.VideoActivity"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent"/>
+
     </application>
 
 </manifest>

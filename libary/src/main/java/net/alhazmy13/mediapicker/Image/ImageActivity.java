@@ -49,7 +49,6 @@ public class ImageActivity extends AppCompatActivity {
     private String directory;
     private int reqWidth;
     private int reqHeight;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -275,7 +274,6 @@ public class ImageActivity extends AppCompatActivity {
         private WeakReference<ImageActivity> mContext;
         private final int mReqWidth;
         private final int mReqHeight;
-
         public CompressImageTask(String sourcePath, String destinationPath, int compressLevel, int reqWidth, int reqHeight, ImageActivity context) {
             mPath = sourcePath;
             mDestinationPath = destinationPath;
@@ -283,10 +281,11 @@ public class ImageActivity extends AppCompatActivity {
             mContext = new WeakReference<>(context);
             mReqWidth = reqWidth;
             mReqHeight = reqHeight;
-
             Log.d(TAG, "CompressImageTask(): " + "path = [" + sourcePath + "], destinationPath = [" + destinationPath + "], compressLevel = ["
                     + compressLevel + "]");
         }
+
+
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -309,9 +308,15 @@ public class ImageActivity extends AppCompatActivity {
             ImageActivity context = mContext.get();
             if (context != null) {
                 context.finishActivity(mDestinationPath);
+                Intent intent = new Intent();
+                intent.setAction("net.alhazmy13.mediapicker.adapter_rxjava.service");
+                intent.putExtra(ImageTags.IMAGE_PATH,mDestinationPath);
+                context.sendBroadcast(intent);
             }
         }
     }
+
+
 
     public static Intent getCallingIntent(Context activity, Extension extension,
                                           ComperesLevel compressLevel, Mode mode,
