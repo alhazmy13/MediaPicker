@@ -2,14 +2,14 @@ apply plugin: 'com.android.library'
 //./gradlew bintrayUpload
 ext {
     bintrayRepo = 'maven'
-    bintrayName = 'MediaPicker'
+    bintrayName = 'MediaPickerRx'
 
     publishedGroupId = 'net.alhazmy13.MediaPicker'
-    libraryName = 'adapter_rxjava'
+    libraryName = 'rxjava'
 
-    artifact = 'adapter_rxjava'
+    artifact = 'rxjava'
 
-    libraryDescription = 'Media Picker'
+    libraryDescription = 'Media PickerRx'
 
     siteUrl = 'https://github.com/alhzmy13/MediaPicker'
     gitUrl = 'https://github.com/alhzmy13/MediaPicker.git'
@@ -50,5 +50,5 @@ dependencies {
     compile 'io.reactivex:rxjava:1.1.6'
     compile project(':libary')
 }
-apply from: '../libary/bintrayv1.gradle'
-apply from: '../libary/installv1.gradle'
+apply from: './bintrayv1.gradle'
+apply from: './installv1.gradle'

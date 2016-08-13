@@ -21,7 +21,7 @@ This build `2.x.x` will break backward compatibility and there are a lot of chan
 <dependency>
 <groupId>net.alhazmy13.MediaPicker</groupId>
 <artifactId>libary</artifactId>
-<version>2.1.4</version>
+<version>2.2.0</version>
 </dependency>
 ```
 
@@ -29,7 +29,7 @@ This build `2.x.x` will break backward compatibility and there are a lot of chan
 **Gradle**
 ```gradle
 dependencies {
-	compile 'net.alhazmy13.MediaPicker:libary:2.1.4'
+	compile 'net.alhazmy13.MediaPicker:libary:2.2.0'
 }
 ```
 
@@ -99,6 +99,43 @@ In order to receive the path of image, you will need to override `onActivityResu
 ```java
 .scale(500, 500)
 ```
+
+### RxJava for MediaPicker
+
+It's an extenstion that allow you to return an observable from ImagePickerBuilder, all you need is to add below dependency and then return the observable from `ImagePickerHelper` class.
+
+
+**Gradle**
+
+```gradle
+dependencies {
+	compile 'net.alhazmy13.MediaPicker:rxjava:(Last_version)'
+}
+```
+
+```Java
+  new ImagePickerHelper(
+        new ImagePicker.Builder(Context)
+                ...)
+                .getObservable()
+                .subscribe(new Subscriber<String>() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "onCompleted() called with: " + "");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError()");
+                    }
+
+                    @Override
+                    public void onNext(String imagePath) {
+                        Log.d(TAG, "onNext() ");
+                    }
+                });
+```
+
 ------
 
 ## Video

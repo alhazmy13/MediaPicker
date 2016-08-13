@@ -1,4 +1,4 @@
-package net.alhazmy13.mediapicker.adapter_rxjava.observable;
+package net.alhazmy13.mediapicker.rxjava.observable;
 
 import android.content.Context;
 import android.util.Log;

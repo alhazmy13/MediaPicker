@@ -1,9 +1,9 @@
-package net.alhazmy13.mediapicker.adapter_rxjava.observable;
+package net.alhazmy13.mediapicker.rxjava.observable;
 
 
 import android.util.Log;
 import net.alhazmy13.mediapicker.Image.ImagePicker;
-import net.alhazmy13.mediapicker.adapter_rxjava.service.ImagePickerReceiver;
+import net.alhazmy13.mediapicker.rxjava.service.ImagePickerReceiver;
 
 import rx.Observer;
 import rx.Subscriber;

@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import net.alhazmy13.mediapicker.Image.ImagePicker;
 import net.alhazmy13.mediapicker.Video.VideoPicker;
-import net.alhazmy13.mediapicker.adapter_rxjava.ImagePickerHelper;
+import net.alhazmy13.mediapicker.rxjava.ImagePickerHelper;
 
 import rx.Subscriber;
 

@@ -1,4 +1,4 @@
-package net.alhazmy13.mediapicker.adapter_rxjava.service;
+package net.alhazmy13.mediapicker.rxjava.service;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

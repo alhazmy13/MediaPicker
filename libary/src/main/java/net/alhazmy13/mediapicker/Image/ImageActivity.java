@@ -309,7 +309,7 @@ public class ImageActivity extends AppCompatActivity {
             if (context != null) {
                 context.finishActivity(mDestinationPath);
                 Intent intent = new Intent();
-                intent.setAction("net.alhazmy13.mediapicker.adapter_rxjava.service");
+                intent.setAction("net.alhazmy13.mediapicker.rxjava.service");
                 intent.putExtra(ImageTags.IMAGE_PATH,mDestinationPath);
                 context.sendBroadcast(intent);
             }
