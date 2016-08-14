@@ -19,7 +19,7 @@ import rx.Subscriber;
 public class MainActivity extends AppCompatActivity  {
 
     private static final String TAG = "MainActivity";
-    private static final String IMAGE_PATH = "IMAGE_PATH";
+    private static final String IMAGE_PATH = "IMAGE_TAGS_IMAGE_PATH";
 
     private TextView textView;
     private ImageView imageView;
@@ -89,22 +89,22 @@ public class MainActivity extends AppCompatActivity  {
                         mPath = imagePath;
                         loadImage();
                     }
-                });;
+                });
     }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-            mPath = data.getStringExtra(VideoPicker.EXTRA_VIDEO_PATH);
-            loadImage();
-        }
-        else if(requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-            mPath = data.getStringExtra(ImagePicker.EXTRA_IMAGE_PATH);
-            loadImage();
-        }
-    }
+//
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+//            mPath = data.getStringExtra(VideoPicker.EXTRA_VIDEO_PATH);
+//            loadImage();
+//        }
+//        else if(requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+//            mPath = data.getStringExtra(ImagePicker.EXTRA_IMAGE_PATH);
+//            loadImage();
+//        }
+//    }
 
     private void loadImage() {
         textView.setText(mPath);

@@ -26,8 +26,7 @@ abstract class ImagePickerBaseObservable implements Observable.OnSubscribe<Strin
 
     @Override
     public void call(final Subscriber subscriber) {
-      //  Log.d(TAG, "call() called with: " + "subscriber = [" + subscriber + "]");
-
+        Log.d(TAG, "call() called with: " + "subscriber = [" + subscriber + "]");
         subscriber.add(Subscriptions.create(new Action0() {
             @Override
             public void call() {
@@ -36,6 +35,8 @@ abstract class ImagePickerBaseObservable implements Observable.OnSubscribe<Strin
             }
         }));
     }
+
+    public abstract void registerImagePickerObservable();
 
 
     protected void onUnsubscribed() {

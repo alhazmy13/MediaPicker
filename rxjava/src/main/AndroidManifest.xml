@@ -1,12 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.alhazmy13.mediapicker.rxjava">
 
-    <application >
-        <receiver android:name=".service.ImagePickerReceiver"/>
-        <intent-filter>
-            <action android:name="net.alhazmy13.mediapicker.rxjava.service">
-            </action>
-        </intent-filter>
-    </application>
+    <application />
+
+
 
 </manifest>

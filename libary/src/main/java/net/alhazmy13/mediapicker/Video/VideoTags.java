@@ -8,7 +8,7 @@ class VideoTags {
     public static final String LEVEL = "level";
     public static final String EXTENSION = "extension";
     public static final String MODE = "mode";
-    public static final String DIRECTORY = "DIRECTORY";
+    public static final String DIRECTORY = "IMAGE_TAGS_DIRECTORY";
     public static final String CAMERA_IMAGE_URI = "cameraImageUri";
-    public static final String COMPRESS_LEVEL = "COMPRESS_LEVEL";
+    public static final String COMPRESS_LEVEL = "IMAGE_TAGS_COMPRESS_LEVEL";
 }

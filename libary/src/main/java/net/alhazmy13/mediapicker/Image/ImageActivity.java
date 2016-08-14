@@ -55,12 +55,12 @@ public class ImageActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         if (intent != null) {
-            compressLevel = (ComperesLevel) intent.getSerializableExtra(ImageTags.LEVEL);
-            extension = (Extension) intent.getSerializableExtra(ImageTags.EXTENSION);
-            mode = (Mode) intent.getSerializableExtra(ImageTags.MODE);
-            directory = intent.getStringExtra(ImageTags.DIRECTORY);
-            reqWidth = intent.getIntExtra(ImageTags.REQUESTED_WIDTH, 0);
-            reqHeight = intent.getIntExtra(ImageTags.REQUESTED_HEIGHT, 0);
+            compressLevel = (ComperesLevel) intent.getSerializableExtra(ImageTags.Tags.LEVEL);
+            extension = (Extension) intent.getSerializableExtra(ImageTags.Tags.EXTENSION);
+            mode = (Mode) intent.getSerializableExtra(ImageTags.Tags.MODE);
+            directory = intent.getStringExtra(ImageTags.Tags.DIRECTORY);
+            reqWidth = intent.getIntExtra(ImageTags.Tags.REQUESTED_WIDTH, 0);
+            reqHeight = intent.getIntExtra(ImageTags.Tags.REQUESTED_HEIGHT, 0);
         }
 
         if (savedInstanceState == null) {
@@ -129,8 +129,8 @@ public class ImageActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
 
         if (mImageUri != null) {
-            outState.putString(ImageTags.CAMERA_IMAGE_URI, mImageUri.toString());
-            outState.putInt(ImageTags.COMPRESS_LEVEL, compressLevel.getValue());
+            outState.putString(ImageTags.Tags.CAMERA_IMAGE_URI, mImageUri.toString());
+            outState.putInt(ImageTags.Tags.COMPRESS_LEVEL, compressLevel.getValue());
         }
     }
 
@@ -138,10 +138,10 @@ public class ImageActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        if (savedInstanceState.containsKey(ImageTags.CAMERA_IMAGE_URI)) {
-            mImageUri = Uri.parse(savedInstanceState.getString(ImageTags.CAMERA_IMAGE_URI));
+        if (savedInstanceState.containsKey(ImageTags.Tags.CAMERA_IMAGE_URI)) {
+            mImageUri = Uri.parse(savedInstanceState.getString(ImageTags.Tags.CAMERA_IMAGE_URI));
             destination = new File(mImageUri.getPath());
-            compressLevel = ComperesLevel.getEnum(savedInstanceState.getInt(ImageTags.COMPRESS_LEVEL));
+            compressLevel = ComperesLevel.getEnum(savedInstanceState.getInt(ImageTags.Tags.COMPRESS_LEVEL));
         }
     }
 
@@ -310,7 +310,7 @@ public class ImageActivity extends AppCompatActivity {
                 context.finishActivity(mDestinationPath);
                 Intent intent = new Intent();
                 intent.setAction("net.alhazmy13.mediapicker.rxjava.service");
-                intent.putExtra(ImageTags.IMAGE_PATH,mDestinationPath);
+                intent.putExtra(ImageTags.Tags.IMAGE_PATH,mDestinationPath);
                 context.sendBroadcast(intent);
             }
         }
@@ -322,12 +322,12 @@ public class ImageActivity extends AppCompatActivity {
                                           ComperesLevel compressLevel, Mode mode,
                                           String directory, int reqWidth, int reqHeight) {
         Intent intent = new Intent(activity, ImageActivity.class);
-        intent.putExtra(ImageTags.EXTENSION, extension);
-        intent.putExtra(ImageTags.LEVEL, compressLevel);
-        intent.putExtra(ImageTags.MODE, mode);
-        intent.putExtra(ImageTags.DIRECTORY, directory);
-        intent.putExtra(ImageTags.REQUESTED_WIDTH, reqWidth);
-        intent.putExtra(ImageTags.REQUESTED_HEIGHT, reqHeight);
+        intent.putExtra(ImageTags.Tags.EXTENSION, extension);
+        intent.putExtra(ImageTags.Tags.LEVEL, compressLevel);
+        intent.putExtra(ImageTags.Tags.MODE, mode);
+        intent.putExtra(ImageTags.Tags.DIRECTORY, directory);
+        intent.putExtra(ImageTags.Tags.REQUESTED_WIDTH, reqWidth);
+        intent.putExtra(ImageTags.Tags.REQUESTED_HEIGHT, reqHeight);
         return intent;
     }
 
