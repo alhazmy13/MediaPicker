@@ -21,7 +21,7 @@ This build `2.x.x` will break backward compatibility and there are a lot of chan
 <dependency>
 <groupId>net.alhazmy13.MediaPicker</groupId>
 <artifactId>libary</artifactId>
-<version>2.2.0</version>
+<version>2.2.1</version>
 </dependency>
 ```
 
@@ -29,7 +29,7 @@ This build `2.x.x` will break backward compatibility and there are a lot of chan
 **Gradle**
 ```gradle
 dependencies {
-	compile 'net.alhazmy13.MediaPicker:libary:2.2.0'
+	compile 'net.alhazmy13.MediaPicker:libary:2.2.1'
 }
 ```
 
