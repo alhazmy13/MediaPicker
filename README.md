@@ -106,7 +106,7 @@ In order to receive the path of image, you will need to override `onActivityResu
 ```java
 .scale(500, 500)
 ```
-* `allowMultipleImages` Extra used to indicate that an image picker can allow the user to select and return multiple images from gallery **CANNOT select single image from gallery if this feature was enabled**
+* `allowMultipleImages` Extra used to select and return multiple images from gallery **CANNOT select single image from gallery if this feature was enabled**
 
 ```java
 	.allowMultipleImages(true)
