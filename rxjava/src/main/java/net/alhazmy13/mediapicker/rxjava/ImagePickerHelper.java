@@ -2,6 +2,8 @@ package net.alhazmy13.mediapicker.rxjava;
 import net.alhazmy13.mediapicker.Image.ImagePicker;
 import net.alhazmy13.mediapicker.rxjava.observable.ImagePickerObservable;
 
+import java.util.List;
+
 import rx.Observable;
 
 /**
@@ -14,7 +16,7 @@ public class ImagePickerHelper {
         this.mBuilder = builder;
     }
 
-    public  Observable<String> getObservable(){
+    public Observable<List<String>> getObservable(){
         return Observable.create(new ImagePickerObservable(mBuilder));
     }
 

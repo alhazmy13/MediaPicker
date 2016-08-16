@@ -1,6 +1,7 @@
 package net.alhazmy13.mediapicker.Image;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -11,19 +12,19 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
 import net.alhazmy13.camerapicker.R;
-import net.alhazmy13.mediapicker.Image.ImagePicker.ComperesLevel;
-import net.alhazmy13.mediapicker.Image.ImagePicker.Extension;
-import net.alhazmy13.mediapicker.Image.ImagePicker.Mode;
+import net.alhazmy13.mediapicker.FileProcessing;
 import net.alhazmy13.mediapicker.Utility;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,46 +38,47 @@ import java.util.Map;
 public class ImageActivity extends AppCompatActivity {
     private static final String TAG = "ImageActivity";
 
-    private final int CAMERA_REQUEST = 1888;
-    private final int REQUEST_CODE_ASK_PERMISSIONS = 123;
-    private final int REQUEST_CODE_SELECT_PHOTO = 43;
 
     private File destination;
-    private ComperesLevel compressLevel;
-    private Extension extension;
     private Uri mImageUri;
-    private ImagePicker.Mode mode;
-    private String directory;
-    private int reqWidth;
-    private int reqHeight;
+    private ImageConfig mImgConfig;
+    private List<String> listOfImgs;
+
+    public static Intent getCallingIntent(Context activity, ImageConfig imageConfig) {
+        Intent intent = new Intent(activity, ImageActivity.class);
+        intent.putExtra(ImageTags.Tags.IMG_CONFIG, imageConfig);
+        return intent;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Intent intent = getIntent();
         if (intent != null) {
-            compressLevel = (ComperesLevel) intent.getSerializableExtra(ImageTags.Tags.LEVEL);
-            extension = (Extension) intent.getSerializableExtra(ImageTags.Tags.EXTENSION);
-            mode = (Mode) intent.getSerializableExtra(ImageTags.Tags.MODE);
-            directory = intent.getStringExtra(ImageTags.Tags.DIRECTORY);
-            reqWidth = intent.getIntExtra(ImageTags.Tags.REQUESTED_WIDTH, 0);
-            reqHeight = intent.getIntExtra(ImageTags.Tags.REQUESTED_HEIGHT, 0);
+            mImgConfig = (ImageConfig) intent.getSerializableExtra(ImageTags.Tags.IMG_CONFIG);
         }
 
         if (savedInstanceState == null) {
             pickImageWrapper();
+            listOfImgs = new ArrayList<>();
         }
+        if (mImgConfig.debug)
+            Log.d(ImageTags.Tags.TAG, mImgConfig.toString());
     }
 
     private void pickImage() {
-        Utility.createFolder(directory);
-        destination = new File(directory, Utility.getRandomString() + extension.getValue());
-        switch (mode) {
+        Utility.createFolder(mImgConfig.directory);
+        destination = new File(mImgConfig.directory, Utility.getRandomString() + mImgConfig.extension.getValue());
+        switch (mImgConfig.mode) {
             case CAMERA:
                 startActivityFromCamera();
                 break;
             case GALLERY:
-                startActivityFromGallery();
+                if (mImgConfig.allowMultiple)
+                    startActivityFromGalleryMultiImg();
+                else
+                    startActivityFromGallery();
                 break;
             case CAMERA_AND_GALLERY:
                 showFromCameraOrGalleryAlert();
@@ -90,19 +92,27 @@ public class ImageActivity extends AppCompatActivity {
                 .setPositiveButton(getString(R.string.media_picker_camera), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
+                        if (mImgConfig.debug)
+                            Log.d(ImageTags.Tags.TAG, "Alert Dialog - Start From Camera");
                         startActivityFromCamera();
                     }
                 })
                 .setNegativeButton(getString(R.string.media_picker_gallery), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        startActivityFromGallery();
+                        if (mImgConfig.debug)
+                            Log.d(ImageTags.Tags.TAG, "Alert Dialog - Start From Gallery");
+                        if (mImgConfig.allowMultiple)
+                            startActivityFromGalleryMultiImg();
+                        else
+                            startActivityFromGallery();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(DialogInterface dialogInterface) {
-                        Log.d(TAG, "onCancel: ");
+                        if (mImgConfig.debug)
+                            Log.d(ImageTags.Tags.TAG, "Alert Dialog - Canceled");
                         finish();
                     }
                 })
@@ -110,74 +120,97 @@ public class ImageActivity extends AppCompatActivity {
     }
 
     private void startActivityFromGallery() {
+        mImgConfig.isImgFromCamera = false;
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         photoPickerIntent.setType("image/*");
-        mImageUri = Uri.fromFile(destination);
-        startActivityForResult(photoPickerIntent, REQUEST_CODE_SELECT_PHOTO);
+        startActivityForResult(photoPickerIntent, ImageTags.IntentCode.REQUEST_CODE_SELECT_PHOTO);
+        if (mImgConfig.debug)
+            Log.d(ImageTags.Tags.TAG, "Gallery Start with Single Image mode");
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    private void startActivityFromGalleryMultiImg() {
+        mImgConfig.isImgFromCamera = false;
+        Intent photoPickerIntent = new Intent();
+        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        photoPickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+        photoPickerIntent.setAction(Intent.ACTION_GET_CONTENT);
+        photoPickerIntent.setType("image/*");
+        startActivityForResult(Intent.createChooser(photoPickerIntent, "Select Picture"), ImageTags.IntentCode.REQUEST_CODE_SELECT_MULTI_PHOTO);
+        if (mImgConfig.debug)
+            Log.d(ImageTags.Tags.TAG, "Gallery Start with Multiple Images mode");
     }
 
     private void startActivityFromCamera() {
+        mImgConfig.isImgFromCamera = true;
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         mImageUri = Uri.fromFile(destination);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
-        startActivityForResult(intent, CAMERA_REQUEST);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), ImageTags.IntentCode.CAMERA_REQUEST);
+        if (mImgConfig.debug)
+            Log.d(ImageTags.Tags.TAG, "Camera Start");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
         if (mImageUri != null) {
             outState.putString(ImageTags.Tags.CAMERA_IMAGE_URI, mImageUri.toString());
-            outState.putInt(ImageTags.Tags.COMPRESS_LEVEL, compressLevel.getValue());
+            outState.putSerializable(ImageTags.Tags.IMG_CONFIG, mImgConfig);
         }
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-
         if (savedInstanceState.containsKey(ImageTags.Tags.CAMERA_IMAGE_URI)) {
             mImageUri = Uri.parse(savedInstanceState.getString(ImageTags.Tags.CAMERA_IMAGE_URI));
             destination = new File(mImageUri.getPath());
-            compressLevel = ComperesLevel.getEnum(savedInstanceState.getInt(ImageTags.Tags.COMPRESS_LEVEL));
+            mImgConfig = (ImageConfig) savedInstanceState.getSerializable(ImageTags.Tags.IMG_CONFIG);
         }
     }
 
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         switch (requestCode) {
-            case CAMERA_REQUEST:
+            case ImageTags.IntentCode.CAMERA_REQUEST:
                 if (resultCode == RESULT_OK) {
-                    new CompressImageTask(destination.getAbsolutePath(), destination.getAbsolutePath(),
-                            compressLevel.getValue(), reqWidth, reqHeight, ImageActivity.this).execute();
+                    new CompressImageTask(destination.getAbsolutePath(), mImgConfig
+                            , ImageActivity.this).execute();
                 } else {
                     finish();
                 }
 
                 break;
-            case REQUEST_CODE_SELECT_PHOTO:
+            case ImageTags.IntentCode.REQUEST_CODE_SELECT_PHOTO:
                 if (resultCode == RESULT_OK) {
-                    String selectedImagePath = "";
                     try {
                         Uri selectedImage = data.getData();
-                        selectedImagePath = Utility.getRealPathFromURI(this, selectedImage);
-                        new CompressImageTask(selectedImagePath, destination.getAbsolutePath(),
-                                compressLevel.getValue(), reqWidth, reqHeight, ImageActivity.this).execute();
+                        String selectedImagePath = FileProcessing.getPath(this, selectedImage);
+                        new CompressImageTask(selectedImagePath,
+                                mImgConfig, ImageActivity.this).execute();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
                     finish();
                 }
+                break;
+            case ImageTags.IntentCode.REQUEST_CODE_SELECT_MULTI_PHOTO:
+                listOfImgs = ImageProcessing.processMultiImage(this, data);
+                new CompressImageTask(listOfImgs,
+                        mImgConfig, ImageActivity.this).execute();
+                break;
+
         }
     }
 
-    private void finishActivity(String path) {
+    private void finishActivity(List<String> path) {
         Intent resultIntent = new Intent();
-        resultIntent.putExtra(ImagePicker.EXTRA_IMAGE_PATH, path);
+        resultIntent.putExtra(ImagePicker.EXTRA_IMAGE_PATH, (Serializable) path);
         setResult(RESULT_OK, resultIntent);
         finish();
     }
@@ -203,13 +236,13 @@ public class ImageActivity extends AppCompatActivity {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     ActivityCompat.requestPermissions(ImageActivity.this, permissionsList.toArray(new String[permissionsList.size()]),
-                                            REQUEST_CODE_ASK_PERMISSIONS);
+                                            ImageTags.IntentCode.REQUEST_CODE_ASK_PERMISSIONS);
                                 }
                             });
                     return;
                 }
                 ActivityCompat.requestPermissions(ImageActivity.this, permissionsList.toArray(new String[permissionsList.size()]),
-                        REQUEST_CODE_ASK_PERMISSIONS);
+                        ImageTags.IntentCode.REQUEST_CODE_ASK_PERMISSIONS);
                 return;
             }
 
@@ -239,9 +272,9 @@ public class ImageActivity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case REQUEST_CODE_ASK_PERMISSIONS: {
+            case ImageTags.IntentCode.REQUEST_CODE_ASK_PERMISSIONS: {
                 Map<String, Integer> perms = new HashMap<String, Integer>();
                 // Initial
                 perms.put(Manifest.permission.CAMERA, PackageManager.PERMISSION_GRANTED);
@@ -268,34 +301,46 @@ public class ImageActivity extends AppCompatActivity {
 
     private static class CompressImageTask extends AsyncTask<Void, Void, Void> {
 
-        private final String mPath;
-        private final String mDestinationPath;
-        private final int mCompressLevel;
+        private final ImageConfig mImgConfig;
+        private final List<String> listOfImgs;
+        private List<String> destinationPaths;
         private WeakReference<ImageActivity> mContext;
-        private final int mReqWidth;
-        private final int mReqHeight;
-        public CompressImageTask(String sourcePath, String destinationPath, int compressLevel, int reqWidth, int reqHeight, ImageActivity context) {
-            mPath = sourcePath;
-            mDestinationPath = destinationPath;
-            mCompressLevel = compressLevel;
-            mContext = new WeakReference<>(context);
-            mReqWidth = reqWidth;
-            mReqHeight = reqHeight;
-            Log.d(TAG, "CompressImageTask(): " + "path = [" + sourcePath + "], destinationPath = [" + destinationPath + "], compressLevel = ["
-                    + compressLevel + "]");
+
+
+        public CompressImageTask(List<String> listOfImgs, ImageConfig imageConfig, ImageActivity context) {
+            this.listOfImgs = listOfImgs;
+            this.mContext = new WeakReference<>(context);
+            this.mImgConfig = imageConfig;
+            this.destinationPaths = new ArrayList<>();
         }
 
+        public CompressImageTask(String absolutePath, ImageConfig imageConfig, ImageActivity context) {
+            List<String> list = new ArrayList<>();
+            list.add(absolutePath);
+            this.listOfImgs = list;
+            this.mContext = new WeakReference<>(context);
+            this.destinationPaths = new ArrayList<>();
+            this.mImgConfig = imageConfig;
+        }
 
 
         @Override
         protected Void doInBackground(Void... params) {
+            for (String mPath : listOfImgs) {
+                File file = new File(mPath);
+                File destinationFile = null;
+                if (mImgConfig.isImgFromCamera) {
+                    destinationFile = file;
+                } else {
+                    destinationFile = new File(mImgConfig.directory, Utility.getRandomString() + mImgConfig.extension.getValue());
+                }
+                destinationPaths.add(destinationFile.getAbsolutePath());
+                try {
+                    Utility.compressAndRotateIfNeeded(file, destinationFile, mImgConfig.compressLevel.getValue(), mImgConfig.reqWidth, mImgConfig.reqHeight);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
 
-            File file = new File(mPath);
-            File destinationFile = new File(mDestinationPath);
-            try {
-                Utility.compressAndRotateIfNeeded(file, destinationFile, mCompressLevel, mReqWidth, mReqHeight);
-            } catch (IOException e) {
-                e.printStackTrace();
             }
 
             return null;
@@ -307,28 +352,13 @@ public class ImageActivity extends AppCompatActivity {
 
             ImageActivity context = mContext.get();
             if (context != null) {
-                context.finishActivity(mDestinationPath);
+                context.finishActivity(destinationPaths);
                 Intent intent = new Intent();
                 intent.setAction("net.alhazmy13.mediapicker.rxjava.service");
-                intent.putExtra(ImageTags.Tags.IMAGE_PATH,mDestinationPath);
+                intent.putExtra(ImageTags.Tags.IMAGE_PATH, (Serializable) destinationPaths);
                 context.sendBroadcast(intent);
             }
         }
-    }
-
-
-
-    public static Intent getCallingIntent(Context activity, Extension extension,
-                                          ComperesLevel compressLevel, Mode mode,
-                                          String directory, int reqWidth, int reqHeight) {
-        Intent intent = new Intent(activity, ImageActivity.class);
-        intent.putExtra(ImageTags.Tags.EXTENSION, extension);
-        intent.putExtra(ImageTags.Tags.LEVEL, compressLevel);
-        intent.putExtra(ImageTags.Tags.MODE, mode);
-        intent.putExtra(ImageTags.Tags.DIRECTORY, directory);
-        intent.putExtra(ImageTags.Tags.REQUESTED_WIDTH, reqWidth);
-        intent.putExtra(ImageTags.Tags.REQUESTED_HEIGHT, reqHeight);
-        return intent;
     }
 
 }

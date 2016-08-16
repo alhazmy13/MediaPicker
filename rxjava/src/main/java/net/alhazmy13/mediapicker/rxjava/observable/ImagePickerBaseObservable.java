@@ -5,6 +5,8 @@ import android.util.Log;
 
 import net.alhazmy13.mediapicker.Image.ImagePicker;
 
+import java.util.List;
+
 import rx.Observable;
 import rx.Observer;
 import rx.Subscriber;
@@ -15,7 +17,7 @@ import rx.subscriptions.Subscriptions;
  * Created by Alhazmy13 on 8/7/16.
  * MediaPicker
  */
-abstract class ImagePickerBaseObservable implements Observable.OnSubscribe<String> {
+abstract class ImagePickerBaseObservable implements Observable.OnSubscribe<List<String>> {
 
     private static final String TAG = "ImagePicker";
     public Context context;

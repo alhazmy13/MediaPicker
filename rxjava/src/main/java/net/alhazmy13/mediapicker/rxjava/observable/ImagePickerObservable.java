@@ -4,9 +4,11 @@ package net.alhazmy13.mediapicker.rxjava.observable;
 import android.content.IntentFilter;
 import android.util.Log;
 
-import net.alhazmy13.mediapicker.Image.ImageTags;
 import net.alhazmy13.mediapicker.Image.ImagePicker;
+import net.alhazmy13.mediapicker.Image.ImageTags;
 import net.alhazmy13.mediapicker.rxjava.service.ImagePickerReceiver;
+
+import java.util.List;
 
 import rx.Observer;
 import rx.Subscriber;
@@ -17,12 +19,13 @@ import rx.subscriptions.Subscriptions;
  * Created by Alhazmy13 on 8/7/16.
  * MediaPicker
  */
-public class ImagePickerObservable extends ImagePickerBaseObservable{
+public class ImagePickerObservable extends ImagePickerBaseObservable {
 
     private static final String TAG = "ImagePickerObservable";
+    public Observer<List<String>> observer;
     private ImagePicker.Builder imagePicker;
-    public Observer<String> observer;
     private ImagePickerReceiver receiver;
+
     public ImagePickerObservable(ImagePicker.Builder imagePicker) {
         super(imagePicker.getContext());
         this.imagePicker = imagePicker;
@@ -55,9 +58,12 @@ public class ImagePickerObservable extends ImagePickerBaseObservable{
     @Override
     public void onUnsubscribed() {
         Log.d(TAG, "onUnsubscribed() called with: " + "");
+        try {
+            context.unregisterReceiver(receiver);
+        } catch (IllegalArgumentException ignored) {
+        }
+
     }
-
-
 
 
 }

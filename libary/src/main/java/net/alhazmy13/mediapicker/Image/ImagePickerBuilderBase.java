@@ -17,6 +17,10 @@ public interface ImagePickerBuilderBase {
 
     ImagePicker.Builder scale(int minWidth, int minHeight);
 
+    ImagePicker.Builder allowMultipleImages(boolean allowMultiple);
+
+    ImagePicker.Builder enableDebuggingMode(boolean debug);
+
     ImagePicker build();
 
 }

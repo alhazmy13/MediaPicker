@@ -7,6 +7,8 @@ import android.util.Log;
 
 import net.alhazmy13.mediapicker.Image.ImageTags;
 
+import java.util.List;
+
 import rx.Observer;
 
 /**
@@ -16,15 +18,15 @@ import rx.Observer;
 public class ImagePickerReceiver extends BroadcastReceiver{
 
     private static final String TAG = "ImagePickerReceiver";
-    private Observer<String> observer;
+    private Observer<List<String>> observer;
 
-    public ImagePickerReceiver(Observer<String> observer) {
+    public ImagePickerReceiver(Observer<List<String>> observer) {
         this.observer = observer;
     }
 
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Received message "+intent);
-        String imagePath = intent.getStringExtra(ImageTags.Tags.IMAGE_PATH);
+        List<String> imagePath = (List<String>) intent.getSerializableExtra(ImageTags.Tags.IMAGE_PATH);
         observer.onNext(imagePath);
     }
 }

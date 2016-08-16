@@ -1,30 +1,30 @@
 package net.alhazmy13.mediapickerexample;
 
-import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import net.alhazmy13.mediapicker.Image.ImagePicker;
-import net.alhazmy13.mediapicker.Video.VideoPicker;
 import net.alhazmy13.mediapicker.rxjava.ImagePickerHelper;
+
+import java.io.Serializable;
+import java.util.List;
 
 import rx.Subscriber;
 
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
     private static final String IMAGE_PATH = "IMAGE_TAGS_IMAGE_PATH";
-
     private TextView textView;
     private ImageView imageView;
-
-    private String mPath;
+    private String videoPath;
+    private  List<String> mPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity  {
         Button pickButton = (Button) findViewById(R.id.bt_pick);
         imageView = (ImageView) findViewById(R.id.iv_image);
 
+        assert pickButton != null;
         pickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,9 +49,7 @@ public class MainActivity extends AppCompatActivity  {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        if (!TextUtils.isEmpty(mPath)) {
-            outState.putString(IMAGE_PATH, mPath);
-        }
+        outState.putSerializable(IMAGE_PATH, (Serializable) mPath);
     }
 
     @Override
@@ -58,20 +57,23 @@ public class MainActivity extends AppCompatActivity  {
         super.onRestoreInstanceState(savedInstanceState);
 
         if (savedInstanceState.containsKey(IMAGE_PATH)) {
-            mPath = savedInstanceState.getString(IMAGE_PATH);
+            mPath = (List<String>) savedInstanceState.getSerializable(IMAGE_PATH);
             loadImage();
         }
     }
 
     private void pickImage() {
         new ImagePickerHelper(
-        new ImagePicker.Builder(MainActivity.this)
-                .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
-                .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
-                .directory(ImagePicker.Directory.DEFAULT)
-                .scale(600, 600))
+                new ImagePicker.Builder(MainActivity.this)
+                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
+                        .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
+                        .directory(ImagePicker.Directory.DEFAULT)
+                        .extension(ImagePicker.Extension.PNG)
+                        .scale(600, 600)
+                        .allowMultipleImages(true)
+                        .enableDebuggingMode(true))
                 .getObservable()
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Subscriber<List<String>>() {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "onCompleted() called with: " + "");
@@ -84,7 +86,7 @@ public class MainActivity extends AppCompatActivity  {
                     }
 
                     @Override
-                    public void onNext(String imagePath) {
+                    public void onNext(List<String> imagePath) {
                         Log.d(TAG, "onNext() called with: " + "imagePath = [" + imagePath + "]");
                         mPath = imagePath;
                         loadImage();
@@ -97,18 +99,19 @@ public class MainActivity extends AppCompatActivity  {
 //        super.onActivityResult(requestCode, resultCode, data);
 //
 //        if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-//            mPath = data.getStringExtra(VideoPicker.EXTRA_VIDEO_PATH);
+//            videoPath = data.getStringExtra(VideoPicker.EXTRA_VIDEO_PATH);
 //            loadImage();
 //        }
 //        else if(requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-//            mPath = data.getStringExtra(ImagePicker.EXTRA_IMAGE_PATH);
+//            mPath = (List<String>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_PATH);
 //            loadImage();
 //        }
 //    }
 
     private void loadImage() {
-        textView.setText(mPath);
-        imageView.setImageBitmap(BitmapFactory.decodeFile(mPath));
+        Log.d(TAG, "loadImage: "+mPath.size());
+        textView.setText(mPath.get(0));
+        imageView.setImageBitmap(BitmapFactory.decodeFile(mPath.get(0)));
     }
 
 }

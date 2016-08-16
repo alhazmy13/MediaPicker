@@ -1,7 +1,9 @@
 package net.alhazmy13.mediapicker.Image;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Environment;
 
 
@@ -16,48 +18,17 @@ public class ImagePicker {
     public static final int IMAGE_PICKER_REQUEST_CODE = 12345;
     public static final String EXTRA_IMAGE_PATH = "EXTRA_IMAGE_PATH";
 
-    private static final String IMAGE_PICKER_DIR = "/mediapicker/images/";
-
-    private final Extension extension;
-    private final ComperesLevel compressLevel;
-    private final Mode mode;
-    private final String directory;
-    private final int reqHeight;
-    private final int reqWidth;
+    private final ImageConfig imageConfig;
     public ImagePicker(Builder builder) {
 
         // Required
         WeakReference<Activity> context = builder.context;
 
         // Optional
-        extension = builder.extension;
-        compressLevel = builder.compressLevel;
-        mode = builder.mode;
-        directory = builder.directory;
-        reqHeight = builder.reqHeight;
-        reqWidth = builder.reqWidth;
-        Intent callingIntent = ImageActivity.getCallingIntent(context.get(), extension, compressLevel,
-                mode, directory, reqWidth, reqHeight);
+        imageConfig = builder.imageConfig;
+        Intent callingIntent = ImageActivity.getCallingIntent(context.get(), imageConfig);
 
         context.get().startActivityForResult(callingIntent, IMAGE_PICKER_REQUEST_CODE);
-    }
-
-
-
-    public Mode getMode() {
-        return mode;
-    }
-
-    public String getDirectory() {
-        return directory;
-    }
-
-    public ComperesLevel getCompressLevel() {
-        return compressLevel;
-    }
-
-    public Extension getExtension() {
-        return extension;
     }
 
 
@@ -67,49 +38,56 @@ public class ImagePicker {
         // Required params
         private final WeakReference<Activity> context;
 
-        // Optional params
-        private Extension extension = Extension.PNG;
-        private ComperesLevel compressLevel =  ComperesLevel.NONE;
-        private Mode mode = Mode.CAMERA;
-        private String directory = Environment.getExternalStorageDirectory() + IMAGE_PICKER_DIR;
-        private int reqHeight;
-        private int reqWidth;
+        private ImageConfig imageConfig;
         public Builder(Activity context) {
             this.context = new WeakReference<>(context);
+            this.imageConfig = new ImageConfig();
         }
 
         @Override
         public ImagePicker.Builder compressLevel(ComperesLevel compressLevel) {
-            this.compressLevel = compressLevel;
+            this.imageConfig.compressLevel = compressLevel;
             return this;
         }
         @Override
         public ImagePicker.Builder mode(Mode mode) {
-            this.mode = mode;
+            this.imageConfig.mode = mode;
             return this;
         }
         @Override
         public ImagePicker.Builder directory(String directory) {
-            this.directory = directory;
+            this.imageConfig.directory = directory;
             return this;
         }
         @Override
         public ImagePicker.Builder directory(Directory directory) {
             switch (directory) {
                 case DEFAULT:
-                    this.directory = Environment.getExternalStorageDirectory() + IMAGE_PICKER_DIR;
+                    this.imageConfig.directory = Environment.getExternalStorageDirectory() + ImageTags.Tags.IMAGE_PICKER_DIR;
             }
             return this;
         }
         @Override
         public ImagePicker.Builder extension(Extension extension) {
-            this.extension = extension;
+            this.imageConfig.extension = extension;
             return this;
         }
         @Override
         public ImagePicker.Builder scale(int minWidth, int minHeight) {
-            this.reqHeight = minHeight;
-            this.reqWidth = minWidth;
+            this.imageConfig.reqHeight = minHeight;
+            this.imageConfig.reqWidth = minWidth;
+            return this;
+        }
+        @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+        @Override
+        public ImagePicker.Builder allowMultipleImages(boolean allowMultiple){
+            this.imageConfig.allowMultiple = allowMultiple;
+            return this;
+        }
+
+        @Override
+        public ImagePicker.Builder enableDebuggingMode(boolean debug) {
+            this.imageConfig.debug = debug;
             return this;
         }
 
