@@ -47,8 +47,15 @@ After adding the library, you need to:
 You will need to create a new instance of `ImagePicker`. Once the instance are configured, you can call `build()`.
 
 ```java
-        new ImagePicker.Builder(this)
-                .build();
+        new ImagePicker.Builder(MainActivity.this)
+                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
+                        .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
+                        .directory(ImagePicker.Directory.DEFAULT)
+                        .extension(ImagePicker.Extension.PNG)
+                        .scale(600, 600)
+                        .allowMultipleImages(false)
+                        .enableDebuggingMode(true)
+                        .build();
 ```
 ### Override `onActivityResult `
 In order to receive the path of image, you will need to override `onActivityResult ` .
@@ -59,7 +66,7 @@ In order to receive the path of image, you will need to override `onActivityResu
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-            String mPath = data.getStringExtra(ImagePicker.EXTRA_IMAGE_PATH);
+            List<String> mPaths = (List<String>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_PATH);
             //Your Code
         }
     }
@@ -99,6 +106,17 @@ In order to receive the path of image, you will need to override `onActivityResu
 ```java
 .scale(500, 500)
 ```
+* `allowMultipleImages` Extra used to indicate that an image picker can allow the user to select and return multiple images from gallery **CANNOT select single image from gallery if this feature was enabled**
+
+```java
+	.allowMultipleImages(true)
+```
+
+* `enableDebuggingMode` used to print Image Picker Log
+
+```java
+	.enableDebuggingMode(true)
+```
 
 ### RxJava for MediaPicker
 
@@ -118,7 +136,7 @@ dependencies {
         new ImagePicker.Builder(Context)
                 ...)
                 .getObservable()
-                .subscribe(new Subscriber<String>() {
+                .subscribe(new Subscriber<List<String>>() {
                     @Override
                     public void onCompleted() {
                         Log.d(TAG, "onCompleted() called with: " + "");
@@ -130,7 +148,7 @@ dependencies {
                     }
 
                     @Override
-                    public void onNext(String imagePath) {
+                    public void onNext(List<String> imagePaths) {
                         Log.d(TAG, "onNext() ");
                     }
                 });
