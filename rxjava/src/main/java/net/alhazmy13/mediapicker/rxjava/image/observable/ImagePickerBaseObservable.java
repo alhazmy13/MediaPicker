@@ -1,14 +1,11 @@
-package net.alhazmy13.mediapicker.rxjava.observable;
+package net.alhazmy13.mediapicker.rxjava.image.observable;
 
 import android.content.Context;
 import android.util.Log;
 
-import net.alhazmy13.mediapicker.Image.ImagePicker;
-
 import java.util.List;
 
 import rx.Observable;
-import rx.Observer;
 import rx.Subscriber;
 import rx.functions.Action0;
 import rx.subscriptions.Subscriptions;

@@ -19,7 +19,7 @@ public class ImageTags {
     }
 
     public static final class Action{
-        public static final String SERVICE_ACTION = "net.alhazmy13.mediapicker.rxjava.service";
+        public static final String SERVICE_ACTION = "net.alhazmy13.mediapicker.rxjava.image.service";
     }
 
     public final class IntentCode{

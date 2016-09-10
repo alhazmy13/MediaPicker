@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.alhazmy13.mediapicker.Image.ImagePicker;
-import net.alhazmy13.mediapicker.rxjava.ImagePickerHelper;
+import net.alhazmy13.mediapicker.rxjava.image.ImagePickerHelper;
 
 import java.io.Serializable;
 import java.util.List;
@@ -70,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
                         .directory(ImagePicker.Directory.DEFAULT)
                         .extension(ImagePicker.Extension.PNG)
                         .scale(600, 600)
-                        .allowMultipleImages(true)
                         .enableDebuggingMode(true))
                 .getObservable()
                 .subscribe(new Subscriber<List<String>>() {
