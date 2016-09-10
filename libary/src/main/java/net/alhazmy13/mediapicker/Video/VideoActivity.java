@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -109,7 +110,7 @@ public class VideoActivity extends AppCompatActivity {
 
     private void startActivityFromCamera() {
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        mVideoUri = Uri.fromFile(destination);
+        mVideoUri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", destination);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mVideoUri);
         startActivityForResult(intent, CAMERA_REQUEST);
     }
