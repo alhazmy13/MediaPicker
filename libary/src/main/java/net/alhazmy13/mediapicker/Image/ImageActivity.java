@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
@@ -145,7 +146,7 @@ public class ImageActivity extends AppCompatActivity {
     private void startActivityFromCamera() {
         mImgConfig.isImgFromCamera = true;
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        mImageUri = Uri.fromFile(destination);
+        mImageUri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", destination);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), ImageTags.IntentCode.CAMERA_REQUEST);
         if (mImgConfig.debug)
