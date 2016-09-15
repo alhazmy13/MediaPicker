@@ -25,17 +25,16 @@ public class MainActivity extends AppCompatActivity {
     private ImageView imageView;
     private String videoPath;
     private  List<String> mPath;
-
+    private Button pickButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
         textView = (TextView) findViewById(R.id.tv_path);
-        Button pickButton = (Button) findViewById(R.id.bt_pick);
+        pickButton = (Button) findViewById(R.id.bt_pick);
         imageView = (ImageView) findViewById(R.id.iv_image);
 
-        assert pickButton != null;
         pickButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
                         .directory(ImagePicker.Directory.DEFAULT)
                         .extension(ImagePicker.Extension.PNG)
                         .scale(600, 600)
+                        .allowMultipleImages(true)
                         .enableDebuggingMode(true))
                 .getObservable()
                 .subscribe(new Subscriber<List<String>>() {

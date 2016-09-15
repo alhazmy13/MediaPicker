@@ -22,8 +22,7 @@ class ImageProcessing {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static List<String> processMultiImage(Context context, Intent data) {
         List<String> listOfImgs = new ArrayList<>();
-        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)
-                && (null == data.getData()))
+        if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) && (null == data.getData()))
         {
             ClipData clipdata = data.getClipData();
             for (int i=0; i<clipdata.getItemCount();i++)

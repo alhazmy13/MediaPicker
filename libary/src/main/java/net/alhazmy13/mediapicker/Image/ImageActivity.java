@@ -175,19 +175,14 @@ public class ImageActivity extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
+        if (resultCode == RESULT_OK) {
         switch (requestCode) {
             case ImageTags.IntentCode.CAMERA_REQUEST:
-                if (resultCode == RESULT_OK) {
                     new CompressImageTask(destination.getAbsolutePath(), mImgConfig
                             , ImageActivity.this).execute();
-                } else {
-                    finish();
-                }
 
                 break;
             case ImageTags.IntentCode.REQUEST_CODE_SELECT_PHOTO:
-                if (resultCode == RESULT_OK) {
                     try {
                         Uri selectedImage = data.getData();
                         String selectedImagePath = FileProcessing.getPath(this, selectedImage);
@@ -196,16 +191,21 @@ public class ImageActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                } else {
-                    finish();
-                }
+
                 break;
             case ImageTags.IntentCode.REQUEST_CODE_SELECT_MULTI_PHOTO:
                 listOfImgs = ImageProcessing.processMultiImage(this, data);
                 new CompressImageTask(listOfImgs,
                         mImgConfig, ImageActivity.this).execute();
-                break;
 
+                break;
+        }
+        }else{
+            Intent intent = new Intent();
+            intent.setAction("net.alhazmy13.mediapicker.rxjava.image.service");
+            intent.putExtra(ImageTags.Tags.PICK_ERROR,"user did not select any image");
+            sendBroadcast(intent);
+            finish();
         }
     }
 
