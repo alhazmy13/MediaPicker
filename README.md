@@ -4,7 +4,7 @@
 # Media Picker
 ![](https://img.shields.io/badge/Platform-Android-brightgreen.svg)
 ![](https://img.shields.io/packagist/l/doctrine/orm.svg)
-![](https://img.shields.io/badge/version-2.2.3-blue.svg)
+![](https://img.shields.io/badge/version-2.2.4-blue.svg)
 
 **[Please let me know if your application go to production via this link](https://docs.google.com/forms/d/e/1FAIpQLSe4Y5Fwn1mlEoD4RxjXQzTvL4mofhESuBlTkAPQhI7J_WqMDQ/viewform?c=0&w=1)**
 ------
@@ -21,7 +21,7 @@ This build `2.x.x` will break backward compatibility and there are a lot of chan
 <dependency>
 <groupId>net.alhazmy13.MediaPicker</groupId>
 <artifactId>libary</artifactId>
-<version>2.2.3</version>
+<version>2.2.4</version>
 </dependency>
 ```
 
@@ -29,7 +29,7 @@ This build `2.x.x` will break backward compatibility and there are a lot of chan
 **Gradle**
 ```gradle
 dependencies {
-	compile 'net.alhazmy13.MediaPicker:libary:2.2.3'
+	compile 'net.alhazmy13.MediaPicker:libary:2.2.4'
 }
 ```
 

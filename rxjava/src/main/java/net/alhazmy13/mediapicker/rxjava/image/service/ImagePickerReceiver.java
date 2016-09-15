@@ -15,7 +15,7 @@ import rx.Observer;
  * Created by Alhazmy13 on 8/7/16.
  * MediaPicker
  */
-public class ImagePickerReceiver extends BroadcastReceiver{
+public class ImagePickerReceiver extends BroadcastReceiver {
 
     private static final String TAG = "ImagePickerReceiver";
     private Observer<List<String>> observer;
@@ -25,8 +25,11 @@ public class ImagePickerReceiver extends BroadcastReceiver{
     }
 
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "Received message "+intent);
+        Log.d(TAG, "Received message " + intent);
         List<String> imagePath = (List<String>) intent.getSerializableExtra(ImageTags.Tags.IMAGE_PATH);
-        observer.onNext(imagePath);
+        if (imagePath != null && imagePath.size() > 0)
+            observer.onNext(imagePath);
+        else
+            observer.onError(new Throwable(intent.getStringExtra(ImageTags.Tags.PICK_ERROR)));
     }
 }
