@@ -175,38 +175,48 @@ public class ImageActivity extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.d(ImageTags.Tags.TAG, "onActivityResult() called with: " + "requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
         if (resultCode == RESULT_OK) {
-        switch (requestCode) {
-            case ImageTags.IntentCode.CAMERA_REQUEST:
+            switch (requestCode) {
+                case ImageTags.IntentCode.CAMERA_REQUEST:
                     new CompressImageTask(destination.getAbsolutePath(), mImgConfig
                             , ImageActivity.this).execute();
 
-                break;
-            case ImageTags.IntentCode.REQUEST_CODE_SELECT_PHOTO:
-                    try {
-                        Uri selectedImage = data.getData();
-                        String selectedImagePath = FileProcessing.getPath(this, selectedImage);
-                        new CompressImageTask(selectedImagePath,
+                    break;
+                case ImageTags.IntentCode.REQUEST_CODE_SELECT_PHOTO:
+                    processOneImage(data);
+                    break;
+                case ImageTags.IntentCode.REQUEST_CODE_SELECT_MULTI_PHOTO:
+                    //Check if the intent contain only one image
+                    if (data.getClipData() == null) {
+                        processOneImage(data);
+                    } else {
+                        //intent has multi images
+                        listOfImgs = ImageProcessing.processMultiImage(this, data);
+                        new CompressImageTask(listOfImgs,
                                 mImgConfig, ImageActivity.this).execute();
-                    } catch (Exception e) {
-                        e.printStackTrace();
                     }
-
-                break;
-            case ImageTags.IntentCode.REQUEST_CODE_SELECT_MULTI_PHOTO:
-                listOfImgs = ImageProcessing.processMultiImage(this, data);
-                new CompressImageTask(listOfImgs,
-                        mImgConfig, ImageActivity.this).execute();
-
-                break;
-        }
-        }else{
+                    break;
+            }
+        } else {
             Intent intent = new Intent();
             intent.setAction("net.alhazmy13.mediapicker.rxjava.image.service");
-            intent.putExtra(ImageTags.Tags.PICK_ERROR,"user did not select any image");
+            intent.putExtra(ImageTags.Tags.PICK_ERROR, "user did not select any image");
             sendBroadcast(intent);
             finish();
         }
+    }
+
+    private void processOneImage(Intent data) {
+        try {
+            Uri selectedImage = data.getData();
+            String selectedImagePath = FileProcessing.getPath(this, selectedImage);
+            new CompressImageTask(selectedImagePath,
+                    mImgConfig, ImageActivity.this).execute();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 
     private void finishActivity(List<String> path) {
