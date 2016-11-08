@@ -2,7 +2,7 @@
 <html lang="en-us">
   <head>
     <meta charset="UTF-8">
-    <title>Media Picker by alhazmy13</title>
+    <title>Media Picker - AR by alhazmy13</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
@@ -11,7 +11,7 @@
   </head>
   <body>
     <section class="page-header">
-      <h1 class="project-name">Media Picker</h1>
+      <h1 class="project-name">Media Picker - AR</h1>
       <h2 class="project-tagline">Media Picker is an Android Libary that lets you to select multiple images, video or voice for Android.</h2>
       <a href="https://github.com/alhazmy13/MediaPicker" class="btn">View on GitHub</a>
       <a href="https://github.com/alhazmy13/MediaPicker/zipball/master" class="btn">Download .zip</a>
@@ -32,18 +32,12 @@
 
 <hr>
 
-<p>Media Picker is an Android Libary that lets you to select multiple images, video or voice for Android 4.1 (API 16) +.
-You can report any issue on issues page. <strong>Note: If you speak Arabic, you can submit issues with Arabic language and I will check them. :)</strong></p>
+<p>اذا كنت مطور اندرويد واردت التعامل مع الكاميرا سواء كان لالتقاط الصور او تسجيل مقطع فيديو او حتى اذا اردت استيراد صورة من الاستديو الخاص بالجهاز, فربما واجهتك مشكلة في تنفيد الكود الخاص بهذ الامر, لذلك تسهيلاً لعملية التواصل مع الوسائط بشكل عام او الكاميرا بشكل خاص وجدت هذه المكتبة.</p>
 
-<h1>
-<a id="note" class="anchor" href="#note" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>NOTE</h1>
-
-<hr>
-
-<p>This build <code>2.x.x</code> will break backward compatibility and there are a lot of changes to improve the performance and fix a lot of Leak memory issues, So please read below document carefully.</p>
+<p>هذه المكتبة توفر لك عناء كتابة الاكواد فلا حاجة لاستدعاء الـ Intent الخاص بالكاميرا او كتابة الاكواد الخاصة بتخزين الصور على ذاكرة الجهاز او اضافة الاوامر الخاصة بصلاحيات الكاميرا وذاكرة التخزين, فمن خلال بعض الاسطر البسيطة تستطيع الوصول للكاميرا والتقاط الصور ومن ثم تقوم المتكبة بارجاع الرابط الخاص بالصورة.</p>
 
 <h2>
-<a id="installation" class="anchor" href="#installation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installation</h2>
+<a id="التثبيت" class="anchor" href="#%D8%A7%D9%84%D8%AA%D8%AB%D8%A8%D9%8A%D8%AA" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>التثبيت</h2>
 
 <hr>
 
@@ -62,156 +56,159 @@ You can report any issue on issues page. <strong>Note: If you speak Arabic, you 
 }</pre></div>
 
 <h1>
-<a id="usage" class="anchor" href="#usage" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Usage</h1>
+<a id="الاستخدام" class="anchor" href="#%D8%A7%D9%84%D8%A7%D8%B3%D8%AA%D8%AE%D8%AF%D8%A7%D9%85" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>الاستخدام</h1>
 
 <hr>
 
-<h2>
-<a id="images" class="anchor" href="#images" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Images</h2>
+<p dir="rtl">بعد اضافتك للمكتبة كل ما عليك عمله هو التالي:</p>
 
-<p>After adding the library, you need to:</p>
-
-<ol>
-<li>Create an object from <code>ImagePicker</code>
+<ol dir="rtl">
+<li>انشاء Object من كلاس <code>ImagePicker</code>
 </li>
-<li>Override <code>onActivityResult</code> to receive the path of image.</li>
+<li>عمل Override لميثود <code>onActivityResult</code> لاستقبال مسار الصور الملتقطة من الكاميرا او الاستديو.</li>
 </ol>
 
-<h3>
-<a id="create-an-imagepicker" class="anchor" href="#create-an-imagepicker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Create an <code>ImagePicker</code>
+<h3 dir="rtl" id="انشاءobjectمنكلاسimagepicker">
+<a id="انشاء-object-من-كلاس-imagepicker" class="anchor" href="#%D8%A7%D9%86%D8%B4%D8%A7%D8%A1-object-%D9%85%D9%86-%D9%83%D9%84%D8%A7%D8%B3-imagepicker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>انشاء Object من كلاس <code>ImagePicker</code>
 </h3>
 
-<p>You will need to create a new instance of <code>ImagePicker</code>. Once the instance are configured, you can call <code>build()</code>.</p>
+<p dir="rtl">تستطيع انشاء instance جديد من كلاس <code>ImagePicker</code> عن طريق الـ <code>Builder</code> ومن ثم تمرير جميع الخصائص التي تحتاجها وعند الانتهاء استدعي الميثود <code>build()</code> .</p>
 
-<div class="highlight highlight-source-java"><pre>        <span class="pl-k">new</span> <span class="pl-smi">ImagePicker</span>.<span class="pl-smi">Builder</span>(<span class="pl-v">this</span>)
-                .build();</pre></div>
+<pre dir="ltr"><code class="java">        new ImagePicker.Builder(MainActivity.this)
+                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
+                        .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
+                        .directory(ImagePicker.Directory.DEFAULT)
+                        .extension(ImagePicker.Extension.PNG)
+                        .scale(600, 600)
+                        .allowMultipleImages(false)
+                        .enableDebuggingMode(true)
+                        .build();
+</code></pre>
 
-<h3>
+<h3 dir="rtl" id="overrideonactivityresult">
 <a id="override-onactivityresult" class="anchor" href="#override-onactivityresult" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Override <code>onActivityResult</code>
 </h3>
 
-<p>In order to receive the path of image, you will need to override <code>onActivityResult</code> .</p>
+<p dir="rtl">لاستقبال مسار الصور الملتقطة من الاستديو او الكاميرا يجب عليك عمل Override لميثود <code>onActivityResult</code>
+.</p>
 
-<div class="highlight highlight-source-java"><pre>   @<span class="pl-smi">Override</span>
-    <span class="pl-k">protected</span> <span class="pl-k">void</span> onActivityResult(<span class="pl-k">int</span> requestCode, <span class="pl-k">int</span> resultCode, <span class="pl-smi">Intent</span> data) {
-        <span class="pl-v">super</span><span class="pl-k">.</span>onActivityResult(requestCode, resultCode, data);
+<pre dir="ltr"><code class="java">   @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-        <span class="pl-k">if</span> (requestCode <span class="pl-k">==</span> <span class="pl-smi">ImagePicker</span><span class="pl-c1"><span class="pl-k">.</span>IMAGE_PICKER_REQUEST_CODE</span> <span class="pl-k">&amp;&amp;</span> resultCode <span class="pl-k">==</span> <span class="pl-c1">RESULT_OK</span>) {
-            <span class="pl-smi">String</span> mPath <span class="pl-k">=</span> data<span class="pl-k">.</span>getStringExtra(<span class="pl-smi">ImagePicker</span><span class="pl-c1"><span class="pl-k">.</span>EXTRA_IMAGE_PATH</span>);
-            <span class="pl-c">//Your Code</span>
+        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE &amp;&amp; resultCode == RESULT_OK) {
+            List&lt;String&gt; mPaths = (List&lt;String&gt;) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_PATH);
+            //Your Code
         }
-    }</pre></div>
+    }
+</code></pre>
 
-<h3>
-<a id="additional-options" class="anchor" href="#additional-options" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Additional Options</h3>
+<h2 dir="rtl" id="فيالاسفليوجدبعضالخصائصالتيتستطيعاستخدامهامعكلاسimagepicker">
+<a id="في-الاسفل-يوجد-بعض-الخصائص-التي-تستطيع-استخدامها-مع-كلاس-imagepicker" class="anchor" href="#%D9%81%D9%8A-%D8%A7%D9%84%D8%A7%D8%B3%D9%81%D9%84-%D9%8A%D9%88%D8%AC%D8%AF-%D8%A8%D8%B9%D8%B6-%D8%A7%D9%84%D8%AE%D8%B5%D8%A7%D8%A6%D8%B5-%D8%A7%D9%84%D8%AA%D9%8A-%D8%AA%D8%B3%D8%AA%D8%B7%D9%8A%D8%B9-%D8%A7%D8%B3%D8%AA%D8%AE%D8%AF%D8%A7%D9%85%D9%87%D8%A7-%D9%85%D8%B9-%D9%83%D9%84%D8%A7%D8%B3-imagepicker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>في الاسفل يوجد بعض الخصائص التي تستطيع استخدامها مع كلاس <code>ImagePicker</code>
+</h2>
 
-<ul>
+<ul dir="rtl">
 <li>
-<code>mode</code> to select the mode, you can chose one ot these <code>CAMERA</code>,<code>GALLERY</code> or <code>CAMERA_AND_GALLERY</code>
+<code>mode</code> لتغير اسلوب التقاط الصور سواء كانت من الكاميرا فقط او الاستديو فقط او الاثنين <code>CAMERA</code>,<code>GALLERY</code> or <code>CAMERA_AND_GALLERY</code>
 </li>
 </ul>
 
-<div class="highlight highlight-source-java"><pre>.mode(<span class="pl-smi">ImagePicker</span><span class="pl-k">.</span><span class="pl-smi">Mode</span><span class="pl-c1"><span class="pl-k">.</span>CAMERA</span>)</pre></div>
+<pre dir="ltr"><code class="java">.mode(ImagePicker.Mode.CAMERA)
+</code></pre>
 
-<ul>
+<ul dir="rtl">
 <li>
-<code>extension</code> You can change the extanion of image to <code>PNG</code> or <code>JPG</code>
+<code>extension</code> لتغير امتداد الصورة سواء كانت <code>PNG</code> او <code>JPG</code>
 </li>
 </ul>
 
-<div class="highlight highlight-source-java"><pre>.extension(<span class="pl-smi">ImagePicker</span><span class="pl-k">.</span><span class="pl-smi">Extension</span><span class="pl-c1"><span class="pl-k">.</span>PNG</span>)</pre></div>
+<pre dir="ltr"><code class="java">.extension(ImagePicker.Extension.PNG)
+</code></pre>
 
-<ul>
+<ul dir="rtl">
 <li>
-<code>compressLevel</code> You can change the quality of image with three different levels <code>HARD</code>,<code>MEDIUM</code>, <code>SOFT</code> or <code>NONE</code>
+<code>compressLevel</code> من خلال هذا الامر تستطيع تغير درجة ضغط الصورة مع ملاحظة ان كل مازادت درجة الضغط ستقل جودة الصورة وسيقل حجمها ايضا <code>HARD</code>,<code>MEDIUM</code>, <code>SOFT</code> or <code>NONE</code>
 </li>
 </ul>
 
-<div class="highlight highlight-source-java"><pre>.compressLevel(<span class="pl-smi">ImagePicker</span><span class="pl-k">.</span><span class="pl-smi">ComperesLevel</span><span class="pl-c1"><span class="pl-k">.</span>MEDIUM</span>)</pre></div>
+<pre dir="ltr"><code class="java">.compressLevel(ImagePicker.ComperesLevel.MEDIUM)
+</code></pre>
 
-<ul>
+<ul dir="rtl">
 <li>
-<code>directory</code> You can pass the storage path, or select <code>Directory.DEFAULT_DIR</code> to keep the default path.</li>
+<code>directory</code> تستطيع تغير مسار حفظ الصور الى المسار الذي تريده او تستطيع تمرير <code>Directory.DEFAULT_DIR</code> لحفظ الصور في المسار الافتراضي للمكتبة.</li>
 </ul>
 
-<div class="highlight highlight-source-java"><pre>.directory(<span class="pl-smi">ImagePicker</span><span class="pl-k">.</span><span class="pl-smi">Directory</span><span class="pl-c1"><span class="pl-k">.</span>DEFAULT</span>)
+<pre dir="ltr"><code class="java">.directory(ImagePicker.Directory.DEFAULT)
+</code></pre>
 
-<span class="pl-c">//OR</span>
+<p dir="rtl"><strong>أو</strong>
+<code>java
+.directory(Environment.getExternalStorageDirectory()+"/myFolder")
+</code></p>
 
-.directory(<span class="pl-smi">Environment</span><span class="pl-k">.</span>getExternalStorageDirectory()<span class="pl-k">+</span><span class="pl-s"><span class="pl-pds">"</span>/myFolder<span class="pl-pds">"</span></span>)
-</pre></div>
-
-<hr>
-
-<h2>
-<a id="video" class="anchor" href="#video" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Video</h2>
-
-<hr>
-
-<ol>
-<li>Create an object from <code>VideoPicker</code>
-</li>
-<li>Override <code>onActivityResult</code> to receive the path of video.</li>
-</ol>
-
-<h3>
-<a id="create-videopicker" class="anchor" href="#create-videopicker" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Create <code>VideoPicker</code>
-</h3>
-
-<p>You will need to create a new instance of <code>VideoPicker</code>. Once the instance are configured, you can call <code>build()</code>.</p>
-
-<div class="highlight highlight-source-java"><pre>        <span class="pl-k">new</span> <span class="pl-smi">VideoPicker</span>.<span class="pl-smi">Builder</span>(<span class="pl-v">this</span>)
-                .build();</pre></div>
-
-<h3>
-<a id="override-onactivityresult-1" class="anchor" href="#override-onactivityresult-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Override <code>onActivityResult</code>
-</h3>
-
-<p>In order to receive the path of video, you will need to override <code>onActivityResult</code> .</p>
-
-<div class="highlight highlight-source-java"><pre>   @<span class="pl-smi">Override</span>
-    <span class="pl-k">protected</span> <span class="pl-k">void</span> onActivityResult(<span class="pl-k">int</span> requestCode, <span class="pl-k">int</span> resultCode, <span class="pl-smi">Intent</span> data) {
-        <span class="pl-v">super</span><span class="pl-k">.</span>onActivityResult(requestCode, resultCode, data);
-
-        <span class="pl-k">if</span> (requestCode <span class="pl-k">==</span> <span class="pl-smi">VideoPicker</span><span class="pl-c1"><span class="pl-k">.</span>VIDEO_PICKER_REQUEST_CODE</span> <span class="pl-k">&amp;&amp;</span> resultCode <span class="pl-k">==</span> <span class="pl-c1">RESULT_OK</span>) {
-            <span class="pl-smi">String</span> mPath <span class="pl-k">=</span> data<span class="pl-k">.</span>getStringExtra(<span class="pl-smi">VideoPicker</span><span class="pl-c1"><span class="pl-k">.</span>EXTRA_VIDEO_PATH</span>);
-            <span class="pl-c">//Your Code</span>
-        }
-    }</pre></div>
-
-<h3>
-<a id="additional-options-1" class="anchor" href="#additional-options-1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Additional Options</h3>
-
-<ul>
+<ul dir="rtl">
 <li>
-<code>mode</code> to select the mode, you can chose one ot these <code>CAMERA</code>,<code>GALLERY</code> or <code>CAMERA_AND_GALLERY</code>
-</li>
+<code>scale</code> من خلال هذا الامر تستطيع تغير طول وعرض الصورة مع ملاحظة ان هذا الخيار لايعمل الا في حالة تغيرك لدرجة ضغط الصورة.</li>
 </ul>
 
-<div class="highlight highlight-source-java"><pre>.mode(<span class="pl-smi">VideoPicker</span><span class="pl-k">.</span><span class="pl-smi">Mode</span><span class="pl-c1"><span class="pl-k">.</span>CAMERA</span>)</pre></div>
+<pre dir="ltr"><code class="java">.scale(500, 500)
+</code></pre>
 
-<ul>
+<ul dir="rtl">
 <li>
-<code>extension</code> You can change the extanion of image to <code>_MP4</code> , <code>_MKV</code> or <code>_3GP</code>
-</li>
+<code>allowMultipleImages</code> من خلال هذا الامر يستطيع المستخدم اختيار اكثر من صورة من الاستديو.</li>
 </ul>
 
-<div class="highlight highlight-source-java"><pre>.extension(<span class="pl-smi">VideoPicker</span><span class="pl-k">.</span><span class="pl-smi">Extension</span><span class="pl-k">.</span>_MP4)</pre></div>
+<pre dir="ltr"><code class="java">    .allowMultipleImages(true)
+</code></pre>
 
-<ul>
+<ul dir="rtl">
 <li>
-<code>directory</code> You can pass the storage path, or select <code>Directory.DEFAULT_DIR</code> to keep the default path.</li>
+<code>enableDebuggingMode</code> يستخدم لطباعة الـ Log الخاص بالمكتبة</li>
 </ul>
 
-<div class="highlight highlight-source-java"><pre>.directory(<span class="pl-smi">VideoPicker</span><span class="pl-k">.</span><span class="pl-smi">Directory</span><span class="pl-c1"><span class="pl-k">.</span>DEFAULT</span>)
+<pre dir="ltr"><code class="java">    .enableDebuggingMode(true)
+</code></pre>
 
-<span class="pl-c">//OR</span>
+<h1>
+<a id="دعم-rxjava-مع-الصور" class="anchor" href="#%D8%AF%D8%B9%D9%85-rxjava-%D9%85%D8%B9-%D8%A7%D9%84%D8%B5%D9%88%D8%B1" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>دعم RxJava مع الصور</h1>
 
-.directory(<span class="pl-smi">Environment</span><span class="pl-k">.</span>getExternalStorageDirectory()<span class="pl-k">+</span><span class="pl-s"><span class="pl-pds">"</span>/myFolder<span class="pl-pds">"</span></span>)
-</pre></div>
+<p dir="rtl">اضافة لمكتبة MediaPicker تسمح لك باستقبال <code>observable</code> من <code>ImagePickerBuilder</code> بدلا من استقبال مسار الصور عن طريق <code>OnActivityResult</code> . </p>
 
-<h2>
-<a id="theme-the-pickers" class="anchor" href="#theme-the-pickers" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Theme the pickers</h2>
+<p dir="rtl">لإستخدام اضافة RxJava يجب عليك تضمين <code>MediaPicker:rxjava</code> من خلال الـ <code>dependency</code> ومن ثم استقبال الـ <code>observable</code> من خلال كلاس <code>ImagePickerHelper</code></p>
+
+<p dir="rtl"><strong>Gradle</strong></p>
+
+<pre dir="ltr"><code class="gradle">dependencies {
+    compile 'net.alhazmy13.MediaPicker:rxjava:(Last_version)'
+}
+</code></pre>
+
+<pre dir="ltr"><code class="Java">  new ImagePickerHelper(
+        new ImagePicker.Builder(Context)
+                ...)
+                .getObservable()
+                .subscribe(new Subscriber&lt;List&lt;String&gt;&gt;() {
+                    @Override
+                    public void onCompleted() {
+                        Log.d(TAG, "onCompleted() called with: " + "");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        Log.d(TAG, "onError()");
+                    }
+
+                    @Override
+                    public void onNext(List&lt;String&gt; imagePaths) {
+                        Log.d(TAG, "onNext() ");
+                    }
+                });
+</code></pre>
+
+<h1>
+<a id="تعديل-التصميم" class="anchor" href="#%D8%AA%D8%B9%D8%AF%D9%8A%D9%84-%D8%A7%D9%84%D8%AA%D8%B5%D9%85%D9%8A%D9%85" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>تعديل التصميم</h1>
 
 <p>You can change the strings be overwriting below resources in your project.</p>
 
@@ -225,28 +222,8 @@ You can report any issue on issues page. <strong>Note: If you speak Arabic, you 
     &lt;<span class="pl-ent">string</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>media_picker_you_need_to_grant_access_to<span class="pl-pds">"</span></span>&gt;You need to grant access to&lt;/<span class="pl-ent">string</span>&gt;
     &lt;<span class="pl-ent">string</span> <span class="pl-e">name</span>=<span class="pl-s"><span class="pl-pds">"</span>media_picker_read_Write_external_storage<span class="pl-pds">"</span></span>&gt;<span class="pl-s"><span class="pl-pds">&lt;![CDATA[</span>Read &amp; Write External Storage<span class="pl-pds">]]&gt;</span></span>&lt;/<span class="pl-ent">string</span>&gt;</pre></div>
 
-<h2>
-<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
-
-<hr>
-
-<pre><code>Copyright 2015 alhazmy
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-   http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
-</code></pre>
-
       <footer class="site-footer">
-        <span class="site-footer-owner"><a href="https://github.com/alhazmy13/MediaPicker">Media Picker</a> is maintained by <a href="https://github.com/alhazmy13">alhazmy13</a>.</span>
+        <span class="site-footer-owner"><a href="https://github.com/alhazmy13/MediaPicker">Media Picker - AR</a> is maintained by <a href="https://github.com/alhazmy13">alhazmy13</a>.</span>
 
         <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
