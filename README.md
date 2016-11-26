@@ -5,6 +5,7 @@
 ![](https://img.shields.io/badge/Platform-Android-brightgreen.svg)
 ![](https://img.shields.io/packagist/l/doctrine/orm.svg)
 ![](https://img.shields.io/badge/version-2.2.5-blue.svg)
+[![ghit.me](https://ghit.me/badge.svg?repo=Alhazmy13/MediaPicker)](https://ghit.me/repo/Alhazmy13/MediaPicker)
 
 **[Please let me know if your application go to production via this link](https://docs.google.com/forms/d/e/1FAIpQLSe4Y5Fwn1mlEoD4RxjXQzTvL4mofhESuBlTkAPQhI7J_WqMDQ/viewform?c=0&w=1)**
 ------
