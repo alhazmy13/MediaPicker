@@ -1,16 +1,13 @@
-package net.alhazmy13.mediapicker.rxjava.image.observable;
+package net.alhazmy13.mediapicker.rxjava.video.observable;
 
 
 import android.content.IntentFilter;
 import android.util.Log;
 
-import net.alhazmy13.mediapicker.Image.ImagePicker;
-import net.alhazmy13.mediapicker.Image.ImageTags;
-import net.alhazmy13.mediapicker.rxjava.image.service.ImagePickerReceiver;
+import net.alhazmy13.mediapicker.Video.VideoPicker;
+import net.alhazmy13.mediapicker.Video.VideoTags;
+import net.alhazmy13.mediapicker.rxjava.video.service.VideoPickerReceiver;
 
-import java.util.List;
-
-import rx.Observer;
 import rx.Subscriber;
 import rx.functions.Action0;
 import rx.subscriptions.Subscriptions;
@@ -19,16 +16,15 @@ import rx.subscriptions.Subscriptions;
  * Created by Alhazmy13 on 8/7/16.
  * MediaPicker
  */
-public class ImagePickerObservable extends ImagePickerBaseObservable {
+public class VideoPickerObservable extends VideoPickerBaseObservable {
 
     private static final String TAG = "VideoPickerObservable";
-    public Observer<List<String>> observer;
-    private ImagePicker.Builder imagePicker;
-    private ImagePickerReceiver receiver;
+    private VideoPicker.Builder mVideoPicker;
+    private VideoPickerReceiver mReceiver;
 
-    public ImagePickerObservable(ImagePicker.Builder imagePicker) {
-        super(imagePicker.getContext());
-        this.imagePicker = imagePicker;
+    public VideoPickerObservable(VideoPicker.Builder videoPicker) {
+        super(videoPicker.getContext());
+        this.mVideoPicker = videoPicker;
 
     }
 
@@ -36,8 +32,8 @@ public class ImagePickerObservable extends ImagePickerBaseObservable {
     @Override
     public void call(final Subscriber subscriber) {
         super.call(subscriber);
-        receiver = new ImagePickerReceiver(subscriber);
-        imagePicker.build();
+        mReceiver = new VideoPickerReceiver(subscriber);
+        mVideoPicker.build();
         registerImagePickerObservable();
         subscriber.add(Subscriptions.create(new Action0() {
             @Override
@@ -51,7 +47,7 @@ public class ImagePickerObservable extends ImagePickerBaseObservable {
     @Override
     public void registerImagePickerObservable() {
         //PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, new Intent(RECEIVER_ACTION), 0);
-        context.registerReceiver(receiver, new IntentFilter(ImageTags.Action.SERVICE_ACTION));
+        context.registerReceiver(mReceiver, new IntentFilter(VideoTags.Action.SERVICE_ACTION));
 
     }
 
@@ -59,7 +55,7 @@ public class ImagePickerObservable extends ImagePickerBaseObservable {
     public void onUnsubscribed() {
         Log.d(TAG, "onUnsubscribed() called with: " + "");
         try {
-            context.unregisterReceiver(receiver);
+            context.unregisterReceiver(mReceiver);
         } catch (IllegalArgumentException ignored) {
         }
 

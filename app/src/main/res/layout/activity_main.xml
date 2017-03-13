@@ -1,31 +1,31 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <Button
-        android:layout_width="match_parent"
+    <android.support.design.widget.AppBarLayout
         android:layout_height="wrap_content"
-        android:text="Pick"
-        android:id="@+id/bt_pick"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
-
-    <ImageView
         android:layout_width="match_parent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_height="?attr/actionBarSize"
+            android:layout_width="match_parent"
+            app:layout_scrollFlags="scroll|enterAlways"/>
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_height="wrap_content"
+            android:layout_width="match_parent" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
         android:layout_height="match_parent"
-        android:id="@+id/iv_image"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/tv_path" />
-
-    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="PATH: ..."
-        android:id="@+id/tv_path"
-        android:layout_above="@+id/bt_pick"
-        android:layout_centerHorizontal="true" />
-</RelativeLayout>
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+
+</android.support.design.widget.CoordinatorLayout>

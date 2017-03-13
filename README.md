@@ -4,7 +4,7 @@
 # Media Picker
 ![](https://img.shields.io/badge/Platform-Android-brightgreen.svg)
 ![](https://img.shields.io/hexpm/l/plug.svg)
-![](https://img.shields.io/badge/version-2.2.5-blue.svg)
+![](https://img.shields.io/badge/version-2.3.0-blue.svg)
 [![ghit.me](https://ghit.me/badge.svg?repo=Alhazmy13/MediaPicker)](https://ghit.me/repo/Alhazmy13/MediaPicker)
 
 **[Please let me know if your application go to production via this link](https://docs.google.com/forms/d/e/1FAIpQLSe4Y5Fwn1mlEoD4RxjXQzTvL4mofhESuBlTkAPQhI7J_WqMDQ/viewform?c=0&w=1)**
@@ -22,7 +22,7 @@ This build `2.x.x` will break backward compatibility and there are a lot of chan
 <dependency>
 <groupId>net.alhazmy13.MediaPicker</groupId>
 <artifactId>libary</artifactId>
-<version>2.2.5</version>
+<version>2.3.0</version>
 </dependency>
 ```
 
@@ -30,7 +30,7 @@ This build `2.x.x` will break backward compatibility and there are a lot of chan
 **Gradle**
 ```gradle
 dependencies {
-	compile 'net.alhazmy13.MediaPicker:libary:2.2.5'
+	compile 'net.alhazmy13.MediaPicker:libary:2.3.0'
 }
 ```
 
@@ -39,8 +39,8 @@ dependencies {
 ## Images
 After adding the library, you need to:
 
-1. Create an object from `ImagePicker`
-2. Override `onActivityResult` to receive the path of image.
+1. Create an object from `ImagePicker` or `VideoPicker`
+2. Override `onActivityResult` to receive the path of image or videos.
 
 
 
@@ -119,9 +119,65 @@ In order to receive the path of image, you will need to override `onActivityResu
 	.enableDebuggingMode(true)
 ```
 
+### Create an `VideoPicker`
+You will need to create a new instance of `VideoPicker`. Once the instance are configured, you can call `build()`.
+
+```java
+        new VideoPicker.Builder(MainActivity.this)
+                        .mode(VideoPicker.Mode.CAMERA_AND_GALLERY)
+                        .directory(VideoPicker.Directory.DEFAULT)
+                        .extension(VideoPicker.Extension.MP4)
+                        .enableDebuggingMode(true)
+                        .build();
+```
+### Override `onActivityResult `
+In order to receive the path of videos, you will need to override `onActivityResult ` .
+
+```java
+   @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+            List<String> mPaths = (List<String>) data.getSerializableExtra(ImagePicker.EXTRA_VIDEO_PATH);
+            //Your Code
+        }
+    }
+```
+
+### Additional Options
+* `mode` to select the mode, you can choose one of these `CAMERA`,`GALLERY` or `CAMERA_AND_GALLERY`
+
+```java
+.mode(VideoPicker.Mode.CAMERA)
+```
+
+* `extension` You can change the extension of video to `MP4` 
+
+```java
+.extension(VideoPicker.Extension.MP4)
+```
+
+* `directory` You can pass the storage path, or select `Directory.DEFAULT_DIR` to keep the default path.
+
+```java
+.directory(VideoPicker.Directory.DEFAULT)
+
+//OR
+
+.directory(Environment.getExternalStorageDirectory()+"/myFolder")
+
+```
+
+* `enableDebuggingMode` used to print Video Picker Log
+
+```java
+	.enableDebuggingMode(true)
+```
+
 ### RxJava for MediaPicker
 
-It's an extenstion that allow you to return an observable from ImagePickerBuilder, all you need is to add below dependency and then return the observable from `ImagePickerHelper` class.
+It's an extenstion that allow you to return an observable from `ImagePickerBuilder` or `VideoPickerBuilder`, all you need is to add below dependency and then return the observable from `ImagePickerHelper` || `VideoPickerHelper` class.
 
 
 **Gradle**
@@ -156,60 +212,6 @@ dependencies {
 ```
 
 ------
-
-## Video
-------
-
-1. Create an object from `VideoPicker`
-2. Override `onActivityResult` to receive the path of video.
-
-
-
-### Create `VideoPicker`
-You will need to create a new instance of `VideoPicker`. Once the instance are configured, you can call `build()`.
-
-```java
-        new VideoPicker.Builder(this)
-                .build();
-```
-### Override `onActivityResult `
-In order to receive the path of video, you will need to override `onActivityResult ` .
-
-```java
-   @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-            String mPath = data.getStringExtra(VideoPicker.EXTRA_VIDEO_PATH);
-            //Your Code
-        }
-    }
-```
-
-### Additional Options
-* `mode` to select the mode, you can chose one ot these `CAMERA`,`GALLERY` or `CAMERA_AND_GALLERY`
-
-```java
-.mode(VideoPicker.Mode.CAMERA)
-```
-
-* `extension` You can change the extanion of image to `_MP4` , `_MKV` or `_3GP`
-
-```java
-.extension(VideoPicker.Extension._MP4)
-```
-
-* `directory` You can pass the storage path, or select `Directory.DEFAULT_DIR` to keep the default path.
-
-```java
-.directory(VideoPicker.Directory.DEFAULT)
-
-//OR
-
-.directory(Environment.getExternalStorageDirectory()+"/myFolder")
-
-```
 
 
 ## Theme the pickers

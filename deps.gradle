@@ -1,0 +1,25 @@
+ext {
+    versions = [
+            support            : '25.2.0',
+            retrofit           : '2.2.0',
+            BUILD_TOOLS_VERSION: '25.0.2',
+            rxJava             : '2.0.1',
+            rxAndroid          : '2.0.1',
+            MIN_SDK_VERSION    : 14,
+            TARGET_SDK_VERSION : 25,
+            LIBRARY_VERSION    : '2.3.0'
+    ]
+    supportDeps = [
+            appcompatV7: "com.android.support:appcompat-v7:$versions.support",
+            design     : "com.android.support:design:$versions.support",
+            support    : "com.android.support:support-v13:$versions.support"
+    ]
+    rxJava = [
+            rxJava   : "io.reactivex.rxjava2:rxjava:$versions.rxJava",
+            rxAndroid: "io.reactivex.rxjava2:rxandroid:$versions.rxAndroid"
+    ]
+
+
+    supportLibs = supportDeps.values()
+    rxJavaLibs = rxJava.values()
+}
