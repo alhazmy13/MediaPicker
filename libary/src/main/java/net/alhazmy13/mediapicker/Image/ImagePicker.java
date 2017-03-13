@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Environment;
 
-
 import java.lang.ref.WeakReference;
 
 /**
@@ -15,10 +14,11 @@ import java.lang.ref.WeakReference;
  */
 public class ImagePicker {
 
-    public static final int IMAGE_PICKER_REQUEST_CODE = 12345;
+    public static final int IMAGE_PICKER_REQUEST_CODE = 42141;
     public static final String EXTRA_IMAGE_PATH = "EXTRA_IMAGE_PATH";
 
     private final ImageConfig imageConfig;
+
     public ImagePicker(Builder builder) {
 
         // Required
@@ -32,13 +32,13 @@ public class ImagePicker {
     }
 
 
-
-    public static class Builder implements ImagePickerBuilderBase{
+    public static class Builder implements ImagePickerBuilderBase {
 
         // Required params
         private final WeakReference<Activity> context;
 
         private ImageConfig imageConfig;
+
         public Builder(Activity context) {
             this.context = new WeakReference<>(context);
             this.imageConfig = new ImageConfig();
@@ -49,16 +49,19 @@ public class ImagePicker {
             this.imageConfig.compressLevel = compressLevel;
             return this;
         }
+
         @Override
         public ImagePicker.Builder mode(Mode mode) {
             this.imageConfig.mode = mode;
             return this;
         }
+
         @Override
         public ImagePicker.Builder directory(String directory) {
             this.imageConfig.directory = directory;
             return this;
         }
+
         @Override
         public ImagePicker.Builder directory(Directory directory) {
             switch (directory) {
@@ -67,20 +70,23 @@ public class ImagePicker {
             }
             return this;
         }
+
         @Override
         public ImagePicker.Builder extension(Extension extension) {
             this.imageConfig.extension = extension;
             return this;
         }
+
         @Override
         public ImagePicker.Builder scale(int minWidth, int minHeight) {
             this.imageConfig.reqHeight = minHeight;
             this.imageConfig.reqWidth = minWidth;
             return this;
         }
+
         @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
         @Override
-        public ImagePicker.Builder allowMultipleImages(boolean allowMultiple){
+        public ImagePicker.Builder allowMultipleImages(boolean allowMultiple) {
             this.imageConfig.allowMultiple = allowMultiple;
             return this;
         }

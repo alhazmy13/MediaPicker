@@ -1,38 +1,26 @@
 apply plugin: 'com.android.library'
+//apply plugin: 'com.novoda.bintray-release'
+apply from: '../deps.gradle'
+
 //./gradlew bintrayUpload
-ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'MediaPicker'
+//publish {
+//    userOrg = 'alhazmy13'
+//    groupId = 'net.alhazmy13.MediaPicker'
+//    artifactId = 'libary'
+//    uploadName = 'MediaPicker'
+//    publishVersion = versions.LIBRARY_VERSION
+//    desc = 'MediaPickerRx'
+//    dryRun = false
+//    website = 'https://github.com/alhzmy13/MediaPicker'
+//}
 
-    publishedGroupId = 'net.alhazmy13.MediaPicker'
-    libraryName = 'libary'
-
-    artifact = 'libary'
-
-    libraryDescription = 'Media Picker'
-
-    siteUrl = 'https://github.com/alhzmy13/MediaPicker'
-    gitUrl = 'https://github.com/alhzmy13/MediaPicker.git'
-
-    libraryVersion = libVersion
-
-    developerId = 'alhazmy13'
-    developerName = 'Abdullah Alhazmy'
-    developerEmail = 'me@alhazmy13.net'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
-
-
+    compileSdkVersion versions.TARGET_SDK_VERSION
+    buildToolsVersion versions.BUILD_TOOLS_VERSION
 
     defaultConfig {
-        minSdkVersion 15
-        targetSdkVersion 23
+        minSdkVersion versions.MIN_SDK_VERSION
+        targetSdkVersion versions.TARGET_SDK_VERSION
         versionCode 1
         versionName "1.0"
     }
@@ -52,10 +40,5 @@ android {
 
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
-
+    compile 'com.android.support:appcompat-v7:25.2.0'
 }
-apply from: './bintrayv1.gradle'
-apply from: './installv1.gradle'

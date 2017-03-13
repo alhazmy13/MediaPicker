@@ -1,33 +1,32 @@
 apply plugin: 'com.android.application'
+apply from: '../deps.gradle'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion versions.TARGET_SDK_VERSION
+    buildToolsVersion versions.BUILD_TOOLS_VERSION
+
     defaultConfig {
+        minSdkVersion versions.MIN_SDK_VERSION
+        targetSdkVersion versions.TARGET_SDK_VERSION
         applicationId 'net.alhazmy13.mediapicker'
-        minSdkVersion 15
-        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-            shrinkResources true
-        }
-        debug{
-            shrinkResources true
         }
     }
-    productFlavors {
+    lintOptions {
+        abortOnError false
     }
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.4.0'
+    compile "com.android.support:appcompat-v7:25.2.0"
+    compile "com.android.support:design:25.2.0"
+    compile "com.android.support:support-v13:25.2.0"
     compile project(':libary')
     compile project(':rxjava')
 }

@@ -13,90 +13,103 @@ import java.lang.ref.WeakReference;
 public class VideoPicker {
 
 
-    public static final int VIDEO_PICKER_REQUEST_CODE = 12645;
-    public static final String EXTRA_VIDEO_PATH = "EXTRA_VIDEO_PATH";
+    static final int VIDEO_PICKER_REQUEST_CODE = 53213;
+    static final String EXTRA_VIDEO_PATH = "EXTRA_VIDEO_PATH";
 
-    private static final String IMAGE_PICKER_DIR = "/mediapicker/videos/";
+    private final VideoConfig imageConfig;
 
-    private final Extension extension;
-    private final Mode mode;
-    private final String directory;
-
-    private VideoPicker(Builder builder) {
+    VideoPicker(VideoPicker.Builder builder) {
 
         // Required
         WeakReference<Activity> context = builder.context;
 
         // Optional
-        extension = builder.extension;
-        mode = builder.mode;
-        directory = builder.directory;
-
-        Intent callingIntent = VideoActivity.getCallingIntent(context.get(), extension,
-                mode, directory);
+        imageConfig = builder.imageConfig;
+        Intent callingIntent = VideoActivity.getCallingIntent(context.get(), imageConfig);
 
         context.get().startActivityForResult(callingIntent, VIDEO_PICKER_REQUEST_CODE);
     }
 
-    public Mode getMode() {
-        return mode;
-    }
 
-    public String getDirectory() {
-        return directory;
-    }
-
-
-    public Extension getExtension() {
-        return extension;
-    }
-
-    public static class Builder {
+    public static class Builder implements VideoPickerBuilderBase {
 
         // Required params
         private final WeakReference<Activity> context;
 
-        // Optional params
-        private Extension extension = Extension._MP4;
-        private Mode mode = Mode.CAMERA;
-        private String directory = Environment.getExternalStorageDirectory() + IMAGE_PICKER_DIR;
+        private VideoConfig imageConfig;
 
         public Builder(Activity context) {
             this.context = new WeakReference<>(context);
+            this.imageConfig = new VideoConfig();
         }
 
-
-        public VideoPicker.Builder mode(Mode mode) {
-            this.mode = mode;
+        //
+//        @Override
+//        public VideoPicker.Builder compressLevel(VideoPicker.ComperesLevel compressLevel) {
+//            this.imageConfig.compressLevel = compressLevel;
+//            return this;
+//        }
+        @Override
+        public VideoPicker.Builder mode(VideoPicker.Mode mode) {
+            this.imageConfig.mode = mode;
             return this;
         }
 
+        @Override
         public VideoPicker.Builder directory(String directory) {
-            this.directory = directory;
+            this.imageConfig.directory = directory;
             return this;
         }
 
-        public VideoPicker.Builder directory(Directory directory) {
+        @Override
+        public VideoPicker.Builder directory(VideoPicker.Directory directory) {
             switch (directory) {
                 case DEFAULT:
-                    this.directory = Environment.getExternalStorageDirectory() + IMAGE_PICKER_DIR;
+                    this.imageConfig.directory = Environment.getExternalStorageDirectory() + VideoTags.Tags.IMAGE_PICKER_DIR;
             }
             return this;
         }
 
-        public VideoPicker.Builder extension(Extension extension) {
-            this.extension = extension;
+        @Override
+        public VideoPicker.Builder extension(VideoPicker.Extension extension) {
+            this.imageConfig.extension = extension;
+            return this;
+        }
+//        @Override
+//        public VideoPicker.Builder scale(int minWidth, int minHeight) {
+//            this.imageConfig.reqHeight = minHeight;
+//            this.imageConfig.reqWidth = minWidth;
+//            return this;
+//        }
+//        @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+//        @Override
+//        public VideoPicker.Builder allowMultipleImages(boolean allowMultiple){
+//            this.imageConfig.allowMultiple = allowMultiple;
+//            return this;
+//        }
+
+        @Override
+        public VideoPicker.Builder enableDebuggingMode(boolean debug) {
+            this.imageConfig.debug = debug;
             return this;
         }
 
+
+        @Override
         public VideoPicker build() {
             return new VideoPicker(this);
         }
+
+
+        public Activity getContext() {
+            return context.get();
+        }
+
     }
 
 
     public enum Extension {
-        _MP4(".mp4"), _3GP(".3gp"), _MKV(".mkv");
+        MP4(".mp4");
         private final String value;
 
         Extension(String value) {
@@ -108,7 +121,24 @@ public class VideoPicker {
         }
     }
 
-
+//    public enum ComperesLevel {
+//        HARD(20), MEDIUM(50), SOFT(80), NONE(100);
+//        private final int value;
+//
+//        ComperesLevel(int value) {
+//            this.value = value;
+//        }
+//
+//        public int getValue() {
+//            return value;
+//        }
+//
+//        public static VideoPicker.ComperesLevel getEnum(int value) {
+//            for (VideoPicker.ComperesLevel v : values())
+//                if (v.getValue() == value) return v;
+//            throw new IllegalArgumentException();
+//        }
+//    }
 
     public enum Mode {
         CAMERA(0), GALLERY(1), CAMERA_AND_GALLERY(2);
