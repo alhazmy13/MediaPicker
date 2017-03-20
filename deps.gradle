@@ -7,7 +7,7 @@ ext {
             rxAndroid          : '2.0.1',
             MIN_SDK_VERSION    : 14,
             TARGET_SDK_VERSION : 25,
-            LIBRARY_VERSION    : '2.3.0'
+            LIBRARY_VERSION    : '2.3.1'
     ]
     supportDeps = [
             appcompatV7: "com.android.support:appcompat-v7:$versions.support",

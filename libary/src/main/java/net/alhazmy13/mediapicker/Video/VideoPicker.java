@@ -13,8 +13,8 @@ import java.lang.ref.WeakReference;
 public class VideoPicker {
 
 
-    static final int VIDEO_PICKER_REQUEST_CODE = 53213;
-    static final String EXTRA_VIDEO_PATH = "EXTRA_VIDEO_PATH";
+    public static final int VIDEO_PICKER_REQUEST_CODE = 53213;
+    public static final String EXTRA_VIDEO_PATH = "EXTRA_VIDEO_PATH";
 
     private final VideoConfig imageConfig;
 
