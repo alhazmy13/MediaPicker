@@ -9,7 +9,7 @@ apply plugin: 'com.android.library'
 //    groupId = 'net.alhazmy13.MediaPicker'
 //    artifactId = 'rxjava'
 //    uploadName = 'MediaPickerRx'
-//    publishVersion = versions.LIBRARY_VERSION
+//    publishVersion = '2.3.2'
 //    desc = 'MediaPickerRx'
 //    dryRun = false
 //    website = 'https://github.com/alhzmy13/MediaPicker'
