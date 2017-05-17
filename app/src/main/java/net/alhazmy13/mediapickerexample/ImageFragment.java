@@ -27,8 +27,6 @@ public class ImageFragment extends Fragment {
     private TextView path;
 
     private static final String TAG = "MainActivity";
-    private static final String IMAGE_PATH = "IMAGE_TAGS_IMAGE_PATH";
-    private String videoPath;
     private List<String> mPath;
 
 
