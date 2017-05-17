@@ -43,12 +43,7 @@ public class VideoPicker {
             this.imageConfig = new VideoConfig();
         }
 
-        //
-//        @Override
-//        public VideoPicker.Builder compressLevel(VideoPicker.ComperesLevel compressLevel) {
-//            this.imageConfig.compressLevel = compressLevel;
-//            return this;
-//        }
+
         @Override
         public VideoPicker.Builder mode(VideoPicker.Mode mode) {
             this.imageConfig.mode = mode;
@@ -66,6 +61,9 @@ public class VideoPicker {
             switch (directory) {
                 case DEFAULT:
                     this.imageConfig.directory = Environment.getExternalStorageDirectory() + VideoTags.Tags.IMAGE_PICKER_DIR;
+                    break;
+                default:
+                    break;
             }
             return this;
         }
@@ -75,18 +73,6 @@ public class VideoPicker {
             this.imageConfig.extension = extension;
             return this;
         }
-//        @Override
-//        public VideoPicker.Builder scale(int minWidth, int minHeight) {
-//            this.imageConfig.reqHeight = minHeight;
-//            this.imageConfig.reqWidth = minWidth;
-//            return this;
-//        }
-//        @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
-//        @Override
-//        public VideoPicker.Builder allowMultipleImages(boolean allowMultiple){
-//            this.imageConfig.allowMultiple = allowMultiple;
-//            return this;
-//        }
 
         @Override
         public VideoPicker.Builder enableDebuggingMode(boolean debug) {
@@ -121,24 +107,6 @@ public class VideoPicker {
         }
     }
 
-//    public enum ComperesLevel {
-//        HARD(20), MEDIUM(50), SOFT(80), NONE(100);
-//        private final int value;
-//
-//        ComperesLevel(int value) {
-//            this.value = value;
-//        }
-//
-//        public int getValue() {
-//            return value;
-//        }
-//
-//        public static VideoPicker.ComperesLevel getEnum(int value) {
-//            for (VideoPicker.ComperesLevel v : values())
-//                if (v.getValue() == value) return v;
-//            throw new IllegalArgumentException();
-//        }
-//    }
 
     public enum Mode {
         CAMERA(0), GALLERY(1), CAMERA_AND_GALLERY(2);

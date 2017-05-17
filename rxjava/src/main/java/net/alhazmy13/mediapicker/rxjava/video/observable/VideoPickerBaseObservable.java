@@ -38,8 +38,7 @@ abstract class VideoPickerBaseObservable implements Observable.OnSubscribe<List<
     public abstract void registerImagePickerObservable();
 
 
-    protected void onUnsubscribed() {
-    }
+    abstract protected void onUnsubscribed();
 
 
 

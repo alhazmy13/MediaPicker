@@ -195,6 +195,8 @@ public class VideoActivity extends AppCompatActivity {
                                 mVideoConfig, VideoActivity.this).execute();
                     }
                     break;
+                default:
+                    break;
             }
         } else {
             Intent intent = new Intent();
@@ -234,9 +236,7 @@ public class VideoActivity extends AppCompatActivity {
             List<String> permissionsNeeded = new ArrayList<String>();
 
             final List<String> permissionsList = new ArrayList<String>();
-            if(mVideoConfig.mode == VideoPicker.Mode.CAMERA || mVideoConfig.mode == VideoPicker.Mode.CAMERA_AND_GALLERY)
-
-                if (!addPermission(permissionsList, Manifest.permission.CAMERA))
+            if ((mVideoConfig.mode == VideoPicker.Mode.CAMERA || mVideoConfig.mode == VideoPicker.Mode.CAMERA_AND_GALLERY) && !addPermission(permissionsList, Manifest.permission.CAMERA))
                 permissionsNeeded.add(getString(R.string.media_picker_camera));
             if (!addPermission(permissionsList, Manifest.permission.WRITE_EXTERNAL_STORAGE))
                 permissionsNeeded.add(getString(R.string.media_picker_read_Write_external_storage));
