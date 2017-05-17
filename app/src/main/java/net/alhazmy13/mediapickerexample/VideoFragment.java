@@ -33,10 +33,6 @@ public class VideoFragment extends Fragment {
     private List<String> mPath;
 
 
-    public VideoFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

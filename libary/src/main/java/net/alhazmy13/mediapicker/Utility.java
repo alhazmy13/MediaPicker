@@ -7,7 +7,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
-import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.WorkerThread;
 import android.util.Log;
@@ -27,26 +26,26 @@ public class Utility {
 
     public static String compressImage(String path) throws IOException {
         File file = new File(path);
-        Bitmap bitmap=BitmapFactory.decodeFile(path);
+        Bitmap bitmap = BitmapFactory.decodeFile(path);
         OutputStream os = new BufferedOutputStream(new FileOutputStream(file));
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, os);
         os.close();
         return path;
     }
 
-    public static String getRandomString(){
-       // return SystemClock.currentThreadTimeMillis()+"";
+    public static String getRandomString() {
+        // return SystemClock.currentThreadTimeMillis()+"";
         return UUID.randomUUID().toString();
     }
 
-    public static void createFolder(String path){
+    public static void createFolder(String path) {
         try {
-            File dir = new File(path.substring(0,path.lastIndexOf("/")));
-            Log.d(TAG, "createFolder: "+dir.exists());
+            File dir = new File(path.substring(0, path.lastIndexOf("/")));
+            Log.d(TAG, "createFolder: " + dir.exists());
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-        }catch (Exception ex){
+        } catch (Exception ex) {
             Log.w(TAG, "creating file error: ", ex);
         }
 
@@ -55,8 +54,8 @@ public class Utility {
     public static String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
             assert cursor != null;
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
@@ -75,7 +74,7 @@ public class Utility {
 
         BitmapFactory.Options bounds = new BitmapFactory.Options();
         Bitmap bm;
-        if(reqHeight !=0 && reqWidth != 0) {
+        if (reqHeight != 0 && reqWidth != 0) {
             bounds.inJustDecodeBounds = true;
             bm = BitmapFactory.decodeFile(path, bounds);
             bounds.inSampleSize = calculateInSampleSize(bounds, reqWidth, reqHeight);
@@ -101,7 +100,7 @@ public class Utility {
         fos.close();
     }
 
-    public static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
+    private static int calculateInSampleSize(BitmapFactory.Options options, int reqWidth, int reqHeight) {
         // Raw height and width of image
         final int height = options.outHeight;
         final int width = options.outWidth;
@@ -124,7 +123,7 @@ public class Utility {
     }
 
     @WorkerThread
-    public static int getCameraPhotoOrientation(File file) throws IOException {
+    private static int getCameraPhotoOrientation(File file) throws IOException {
         ExifInterface exif = new ExifInterface(
                 file.getAbsolutePath());
         int orientation = exif.getAttributeInt(
@@ -142,6 +141,8 @@ public class Utility {
                 break;
             case ExifInterface.ORIENTATION_ROTATE_90:
                 rotate = 90;
+                break;
+            default:
                 break;
         }
 

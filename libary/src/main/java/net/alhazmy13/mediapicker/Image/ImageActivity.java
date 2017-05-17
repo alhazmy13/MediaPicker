@@ -84,6 +84,8 @@ public class ImageActivity extends AppCompatActivity {
             case CAMERA_AND_GALLERY:
                 showFromCameraOrGalleryAlert();
                 break;
+            default:
+                break;
         }
     }
 
@@ -197,6 +199,8 @@ public class ImageActivity extends AppCompatActivity {
                                 mImgConfig, ImageActivity.this).execute();
                     }
                     break;
+                default:
+                    break;
             }
         } else {
             Intent intent = new Intent();
@@ -231,9 +235,8 @@ public class ImageActivity extends AppCompatActivity {
             List<String> permissionsNeeded = new ArrayList<String>();
 
             final List<String> permissionsList = new ArrayList<String>();
-            if(mImgConfig.mode == ImagePicker.Mode.CAMERA || mImgConfig.mode == ImagePicker.Mode.CAMERA_AND_GALLERY)
-                if (!addPermission(permissionsList, Manifest.permission.CAMERA))
-                    permissionsNeeded.add(getString(R.string.media_picker_camera));
+            if((mImgConfig.mode == ImagePicker.Mode.CAMERA || mImgConfig.mode == ImagePicker.Mode.CAMERA_AND_GALLERY)  && !addPermission(permissionsList, Manifest.permission.CAMERA))
+                permissionsNeeded.add(getString(R.string.media_picker_camera));
             if (!addPermission(permissionsList, Manifest.permission.WRITE_EXTERNAL_STORAGE))
                 permissionsNeeded.add(getString(R.string.media_picker_read_Write_external_storage));
 
@@ -286,7 +289,7 @@ public class ImageActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case ImageTags.IntentCode.REQUEST_CODE_ASK_PERMISSIONS: {
+            case ImageTags.IntentCode.REQUEST_CODE_ASK_PERMISSIONS:
                 Map<String, Integer> perms = new HashMap<String, Integer>();
                 // Initial
                 perms.put(Manifest.permission.CAMERA, PackageManager.PERMISSION_GRANTED);
@@ -304,8 +307,8 @@ public class ImageActivity extends AppCompatActivity {
                     Toast.makeText(ImageActivity.this, getString(R.string.media_picker_some_permission_is_denied), Toast.LENGTH_SHORT)
                             .show();
                 }
-            }
-            break;
+
+                break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }

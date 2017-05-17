@@ -30,10 +30,6 @@ public class ImageFragment extends Fragment {
     private List<String> mPath;
 
 
-    public ImageFragment() {
-        // Required empty public constructor
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -55,7 +51,7 @@ public class ImageFragment extends Fragment {
     private void pickImage() {
         new ImagePickerHelper(
                 new ImagePicker.Builder(getActivity())
-                        .mode(ImagePicker.Mode.CAMERA)
+                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
                         .allowMultipleImages(true)
                         .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
                         .directory(ImagePicker.Directory.DEFAULT)

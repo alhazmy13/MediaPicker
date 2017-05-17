@@ -11,23 +11,21 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 public class MainActivity extends AppCompatActivity {
-    ViewPager viewPager;
-    PickerAdapter adapter;
-    Fragment videoFragment;
-    Fragment imageFragment;
+    private Fragment videoFragment;
+    private Fragment imageFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        adapter = new PickerAdapter(getFragmentManager());
-        viewPager = (ViewPager) findViewById(R.id.pager);
+        PickerAdapter adapter = new PickerAdapter(getFragmentManager());
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(adapter);
 
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        for(int i=0;i<adapter.getCount();i++) tabLayout.getTabAt(i).setText(adapter.getTitle(i));
+        for(int i = 0; i< adapter.getCount(); i++) tabLayout.getTabAt(i).setText(adapter.getTitle(i));
     }
 
     private class PickerAdapter extends FragmentPagerAdapter {

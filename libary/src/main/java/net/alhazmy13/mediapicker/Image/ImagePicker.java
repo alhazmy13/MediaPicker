@@ -67,6 +67,9 @@ public class ImagePicker {
             switch (directory) {
                 case DEFAULT:
                     this.imageConfig.directory = Environment.getExternalStorageDirectory() + ImageTags.Tags.IMAGE_PICKER_DIR;
+                    break;
+                default:
+                    break;
             }
             return this;
         }
