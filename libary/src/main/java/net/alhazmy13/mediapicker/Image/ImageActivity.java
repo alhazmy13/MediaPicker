@@ -123,7 +123,7 @@ public class ImageActivity extends AppCompatActivity {
     private void startActivityFromGallery() {
         mImgConfig.isImgFromCamera = false;
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+//        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, ImageTags.IntentCode.REQUEST_CODE_SELECT_PHOTO);
         if (mImgConfig.debug)
@@ -231,8 +231,9 @@ public class ImageActivity extends AppCompatActivity {
             List<String> permissionsNeeded = new ArrayList<String>();
 
             final List<String> permissionsList = new ArrayList<String>();
-            if (!addPermission(permissionsList, Manifest.permission.CAMERA))
-                permissionsNeeded.add(getString(R.string.media_picker_camera));
+            if(mImgConfig.mode == ImagePicker.Mode.CAMERA || mImgConfig.mode == ImagePicker.Mode.CAMERA_AND_GALLERY)
+                if (!addPermission(permissionsList, Manifest.permission.CAMERA))
+                    permissionsNeeded.add(getString(R.string.media_picker_camera));
             if (!addPermission(permissionsList, Manifest.permission.WRITE_EXTERNAL_STORAGE))
                 permissionsNeeded.add(getString(R.string.media_picker_read_Write_external_storage));
 
