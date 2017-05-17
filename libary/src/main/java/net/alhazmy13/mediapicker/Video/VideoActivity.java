@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import net.alhazmy13.camerapicker.R;
 import net.alhazmy13.mediapicker.FileProcessing;
+import net.alhazmy13.mediapicker.Image.ImagePicker;
 import net.alhazmy13.mediapicker.Utility;
 
 import java.io.File;
@@ -233,7 +234,9 @@ public class VideoActivity extends AppCompatActivity {
             List<String> permissionsNeeded = new ArrayList<String>();
 
             final List<String> permissionsList = new ArrayList<String>();
-            if (!addPermission(permissionsList, Manifest.permission.CAMERA))
+            if(mVideoConfig.mode == VideoPicker.Mode.CAMERA || mVideoConfig.mode == VideoPicker.Mode.CAMERA_AND_GALLERY)
+
+                if (!addPermission(permissionsList, Manifest.permission.CAMERA))
                 permissionsNeeded.add(getString(R.string.media_picker_camera));
             if (!addPermission(permissionsList, Manifest.permission.WRITE_EXTERNAL_STORAGE))
                 permissionsNeeded.add(getString(R.string.media_picker_read_Write_external_storage));

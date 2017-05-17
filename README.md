@@ -139,7 +139,7 @@ In order to receive the path of videos, you will need to override `onActivityRes
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-            List<String> mPaths = (List<String>) data.getSerializableExtra(ImagePicker.EXTRA_VIDEO_PATH);
+            List<String> mPaths = (List<String>) data.getSerializableExtra(VideoPicker.EXTRA_VIDEO_PATH);
             //Your Code
         }
     }

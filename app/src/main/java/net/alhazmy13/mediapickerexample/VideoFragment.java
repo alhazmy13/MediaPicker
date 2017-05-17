@@ -1,6 +1,7 @@
 package net.alhazmy13.mediapickerexample;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,8 @@ import net.alhazmy13.mediapicker.rxjava.video.VideoPickerHelper;
 import java.util.List;
 
 import rx.Subscriber;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by alhazmy13 on 3/13/17.
@@ -54,50 +57,32 @@ public class VideoFragment extends Fragment {
         view.findViewById(R.id.bt_pick).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                pickImage();
+                pickVideo();
             }
         });
     }
 
 
-    private void pickImage() {
-        new VideoPickerHelper(
-                new VideoPicker.Builder(getActivity())
-                        .directory(VideoPicker.Directory.DEFAULT)
-                        .mode(VideoPicker.Mode.CAMERA_AND_GALLERY)
-                        .extension(VideoPicker.Extension.MP4)
-
-        ).getObservable().subscribe(new Subscriber<List<String>>() {
-            @Override
-            public void onCompleted() {
-                Log.d(TAG, "onCompleted() called");
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                Log.d(TAG, "onError() called with: e = [" + e + "]");
-            }
-
-            @Override
-            public void onNext(List<String> paths) {
-                Log.d(TAG, "onNext() called with: strings = [" + paths + "]");
-                mPath = paths;
-                loadVideo();
-            }
-        });
+    private void pickVideo() {
+        new VideoPicker.Builder(getActivity())
+                .mode(VideoPicker.Mode.CAMERA_AND_GALLERY)
+                .directory(VideoPicker.Directory.DEFAULT)
+                .extension(VideoPicker.Extension.MP4)
+                .enableDebuggingMode(true)
+                .build();
     }
 
-//    //
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-//            mPath = (List<String>) data.getSerializableExtra(VideoPicker.EXTRA_VIDEO_PATH);
-//
-//            loadImage();
-//        }
-//    }
+    //
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+            mPath = (List<String>) data.getSerializableExtra(VideoPicker.EXTRA_VIDEO_PATH);
+
+            loadVideo();
+        }
+    }
 
     private void loadVideo() {
         if (mPath != null && mPath.size() > 0) {

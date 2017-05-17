@@ -57,7 +57,8 @@ public class ImageFragment extends Fragment {
     private void pickImage() {
         new ImagePickerHelper(
                 new ImagePicker.Builder(getActivity())
-                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
+                        .mode(ImagePicker.Mode.CAMERA)
+                        .allowMultipleImages(true)
                         .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
                         .directory(ImagePicker.Directory.DEFAULT)
                         .extension(ImagePicker.Extension.PNG)
