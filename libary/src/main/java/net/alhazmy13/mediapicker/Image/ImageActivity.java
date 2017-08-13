@@ -125,7 +125,7 @@ public class ImageActivity extends AppCompatActivity {
     private void startActivityFromGallery() {
         mImgConfig.isImgFromCamera = false;
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-//        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, ImageTags.IntentCode.REQUEST_CODE_SELECT_PHOTO);
         if (mImgConfig.debug)
