@@ -174,7 +174,8 @@ public class VideoActivity extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(VideoTags.Tags.TAG, "onActivityResult() called with: " + "requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
+        if (mVideoConfig.debug)
+            Log.d(VideoTags.Tags.TAG, "onActivityResult() called with: " + "requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case VideoTags.IntentCode.CAMERA_REQUEST:
@@ -201,7 +202,7 @@ public class VideoActivity extends AppCompatActivity {
         } else {
             Intent intent = new Intent();
             intent.setAction(VideoTags.Action.SERVICE_ACTION);
-            intent.putExtra(VideoTags.Tags.PICK_ERROR, "user did not select any image");
+            intent.putExtra(VideoTags.Tags.PICK_ERROR, "user did not select any videos");
             sendBroadcast(intent);
             finish();
         }
@@ -213,8 +214,14 @@ public class VideoActivity extends AppCompatActivity {
             String path = FileProcessing.getVideoPath(selectedImage, VideoActivity.this);
             new VideoActivity.CompressImageTask(path,
                     mVideoConfig, VideoActivity.this).execute();
+
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Intent intent = new Intent();
+            intent.setAction(VideoTags.Action.SERVICE_ACTION);
+            intent.putExtra(VideoTags.Tags.PICK_ERROR, "Issue with video path: " + ex.getMessage());
+            sendBroadcast(intent);
+            setResult(RESULT_CANCELED, intent);
+            finish();
         }
 
     }
