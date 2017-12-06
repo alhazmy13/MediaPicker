@@ -13,6 +13,7 @@ import android.support.v7.widget.Toolbar;
 public class MainActivity extends AppCompatActivity {
     private Fragment videoFragment;
     private Fragment imageFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +26,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar((Toolbar) findViewById(R.id.toolbar));
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        for(int i = 0; i< adapter.getCount(); i++) tabLayout.getTabAt(i).setText(adapter.getTitle(i));
+        for (int i = 0; i < adapter.getCount(); i++)
+            tabLayout.getTabAt(i).setText(adapter.getTitle(i));
     }
 
     private class PickerAdapter extends FragmentPagerAdapter {
@@ -45,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch(position) {
+            switch (position) {
                 case 0:
                     return videoFragment;
                 default:
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         int getTitle(int position) {
-            switch(position) {
+            switch (position) {
                 case 0:
                     return R.string.tab_title_video;
                 default:
@@ -67,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         //
-        videoFragment.onActivityResult(requestCode,resultCode,data);
+        videoFragment.onActivityResult(requestCode, resultCode, data);
+        imageFragment.onActivityResult(requestCode, resultCode, data);
     }
 }

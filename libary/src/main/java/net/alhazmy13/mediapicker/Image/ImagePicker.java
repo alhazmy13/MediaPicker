@@ -14,11 +14,22 @@ import java.lang.ref.WeakReference;
  */
 public class ImagePicker {
 
+    /**
+     * The constant IMAGE_PICKER_REQUEST_CODE.
+     */
     public static final int IMAGE_PICKER_REQUEST_CODE = 42141;
+    /**
+     * The constant EXTRA_IMAGE_PATH.
+     */
     public static final String EXTRA_IMAGE_PATH = "EXTRA_IMAGE_PATH";
 
     private final ImageConfig imageConfig;
 
+    /**
+     * Instantiates a new Image picker.
+     *
+     * @param builder the builder
+     */
     public ImagePicker(Builder builder) {
 
         // Required
@@ -32,6 +43,9 @@ public class ImagePicker {
     }
 
 
+    /**
+     * The type Builder.
+     */
     public static class Builder implements ImagePickerBuilderBase {
 
         // Required params
@@ -39,6 +53,11 @@ public class ImagePicker {
 
         private ImageConfig imageConfig;
 
+        /**
+         * Instantiates a new Builder.
+         *
+         * @param context the context
+         */
         public Builder(Activity context) {
             this.context = new WeakReference<>(context);
             this.imageConfig = new ImageConfig();
@@ -100,6 +119,12 @@ public class ImagePicker {
             return this;
         }
 
+        @Override
+        public Builder allowOnlineImages(boolean allowOnlineImages) {
+            this.imageConfig.allowOnlineImages = allowOnlineImages;
+            return this;
+        }
+
 
         @Override
         public ImagePicker build() {
@@ -107,6 +132,11 @@ public class ImagePicker {
         }
 
 
+        /**
+         * Gets context.
+         *
+         * @return the context
+         */
         public Activity getContext() {
             return context.get();
         }
@@ -114,31 +144,71 @@ public class ImagePicker {
     }
 
 
+    /**
+     * The enum Extension.
+     */
     public enum Extension {
-        PNG(".png"), JPG(".jpg");
+        /**
+         * Png extension.
+         */
+        PNG(".png"), /**
+         * Jpg extension.
+         */
+        JPG(".jpg");
         private final String value;
 
         Extension(String value) {
             this.value = value;
         }
 
+        /**
+         * Gets value.
+         *
+         * @return the value
+         */
         public String getValue() {
             return value;
         }
     }
 
+    /**
+     * The enum Comperes level.
+     */
     public enum ComperesLevel {
-        HARD(20), MEDIUM(50), SOFT(80), NONE(100);
+        /**
+         * Hard comperes level.
+         */
+        HARD(20), /**
+         * Medium comperes level.
+         */
+        MEDIUM(50), /**
+         * Soft comperes level.
+         */
+        SOFT(80), /**
+         * None comperes level.
+         */
+        NONE(100);
         private final int value;
 
         ComperesLevel(int value) {
             this.value = value;
         }
 
+        /**
+         * Gets value.
+         *
+         * @return the value
+         */
         public int getValue() {
             return value;
         }
 
+        /**
+         * Gets enum.
+         *
+         * @param value the value
+         * @return the enum
+         */
         public static ComperesLevel getEnum(int value) {
             for (ComperesLevel v : values())
                 if (v.getValue() == value) return v;
@@ -146,20 +216,43 @@ public class ImagePicker {
         }
     }
 
+    /**
+     * The enum Mode.
+     */
     public enum Mode {
-        CAMERA(0), GALLERY(1), CAMERA_AND_GALLERY(2);
+        /**
+         * Camera mode.
+         */
+        CAMERA(0), /**
+         * Gallery mode.
+         */
+        GALLERY(1), /**
+         * Camera and gallery mode.
+         */
+        CAMERA_AND_GALLERY(2);
         private final int value;
 
         Mode(int value) {
             this.value = value;
         }
 
+        /**
+         * Gets value.
+         *
+         * @return the value
+         */
         public int getValue() {
             return value;
         }
     }
 
+    /**
+     * The enum Directory.
+     */
     public enum Directory {
+        /**
+         * Default directory.
+         */
         DEFAULT(0);
         private final int value;
 
@@ -167,6 +260,11 @@ public class ImagePicker {
             this.value = value;
         }
 
+        /**
+         * Gets value.
+         *
+         * @return the value
+         */
         public int getValue() {
             return value;
         }

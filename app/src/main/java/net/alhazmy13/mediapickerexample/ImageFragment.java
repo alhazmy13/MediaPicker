@@ -1,6 +1,7 @@
 package net.alhazmy13.mediapickerexample;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,11 +13,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.alhazmy13.mediapicker.Image.ImagePicker;
+import net.alhazmy13.mediapicker.Video.VideoPicker;
 import net.alhazmy13.mediapicker.rxjava.image.ImagePickerHelper;
 
 import java.util.List;
 
 import rx.Subscriber;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by alhazmy13 on 3/13/17.
@@ -49,51 +53,51 @@ public class ImageFragment extends Fragment {
 
 
     private void pickImage() {
-        new ImagePickerHelper(
+//        new ImagePickerHelper(
                 new ImagePicker.Builder(getActivity())
                         .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
                         .allowMultipleImages(true)
                         .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
                         .directory(ImagePicker.Directory.DEFAULT)
                         .extension(ImagePicker.Extension.PNG)
+                        .allowOnlineImages(false)
                         .scale(600, 600)
                         .allowMultipleImages(true)
-                        .enableDebuggingMode(true))
-                .getObservable()
-                .subscribe(new Subscriber<List<String>>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "onCompleted() called with: " + "");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, "onError() called with: " + "e = [" + e + "]");
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(List<String> imagePath) {
-                        Log.d(TAG, "onNext() called with: " + "imagePath = [" + imagePath + "]");
-                        mPath = imagePath;
-                        loadImage();
-                    }
-                });
+                        .enableDebuggingMode(true)
+                        .build();
+//                .getObservable()
+//                .subscribe(new Subscriber<List<String>>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        Log.d(TAG, "onCompleted() called with: " + "");
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//                        Log.d(TAG, "onError() called with: " + "e = [" + e + "]");
+//                        e.printStackTrace();
+//                    }
+//
+//                    @Override
+//                    public void onNext(List<String> imagePath) {
+//                        Log.d(TAG, "onNext() called with: " + "imagePath = [" + imagePath + "]");
+//                        mPath = imagePath;
+//                        loadImage();
+//                    }
+//                });
     }
-//
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-//            videoPath = data.getStringExtra(VideoPicker.EXTRA_VIDEO_PATH);
-//            loadImage();
-//        }
-//        else if(requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-//            mPath = (List<String>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_PATH);
-//            loadImage();
-//        }
-//    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
+        if(requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+            mPath = (List<String>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_PATH);
+
+            loadImage();
+        }
+    }
 
     private void loadImage() {
         Log.d(TAG, "loadImage: " + mPath.size());
