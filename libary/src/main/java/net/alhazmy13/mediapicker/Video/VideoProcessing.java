@@ -21,7 +21,7 @@ class VideoProcessing {
     private static final String TAG = "ImageProcessing";
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    static List<String> processMultiImage(Context context, Intent data) {
+    static List<String> processMultiVideos(Context context, Intent data) {
         List<String> listOfImgs = new ArrayList<>();
         if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) && (null == data.getData())) {
             ClipData clipdata = data.getClipData();

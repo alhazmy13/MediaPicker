@@ -72,16 +72,18 @@ public class VideoFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
         if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
             mPath = (List<String>) data.getSerializableExtra(VideoPicker.EXTRA_VIDEO_PATH);
-
+            Log.d(TAG, "onActivityResult: ");
             loadVideo();
         }
     }
 
     private void loadVideo() {
+        Log.d(TAG, "loadVideo: "+ (mPath == null));
         if (mPath != null && mPath.size() > 0) {
+            Log.d(TAG, "loadVideo: ");
             Log.d(TAG, "loadImage: " + mPath.size());
             path.setText(mPath.get(0));
             videoView.setVideoURI(Uri.parse(mPath.get(0)));
