@@ -130,7 +130,7 @@ public class ImageActivity extends AppCompatActivity {
     private void startActivityFromGallery() {
         mImgConfig.isImgFromCamera = false;
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-//        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, !mImgConfig.allowOnlineImages);
+        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, !mImgConfig.allowOnlineImages);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, ImageTags.IntentCode.REQUEST_CODE_SELECT_PHOTO);
         if (mImgConfig.debug)
@@ -141,7 +141,7 @@ public class ImageActivity extends AppCompatActivity {
     private void startActivityFromGalleryMultiImg() {
         mImgConfig.isImgFromCamera = false;
         Intent photoPickerIntent = new Intent();
-//        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, !mImgConfig.allowOnlineImages);
+        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, !mImgConfig.allowOnlineImages);
         photoPickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         photoPickerIntent.setAction(Intent.ACTION_GET_CONTENT);
         photoPickerIntent.setType("image/*");

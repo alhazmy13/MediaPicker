@@ -21,7 +21,6 @@ import android.widget.Toast;
 
 import net.alhazmy13.camerapicker.R;
 import net.alhazmy13.mediapicker.FileProcessing;
-import net.alhazmy13.mediapicker.Image.ImagePicker;
 import net.alhazmy13.mediapicker.Utility;
 
 import java.io.File;
@@ -40,9 +39,9 @@ public class VideoActivity extends AppCompatActivity {
     private static final String TAG = "VideoActivity";
 
     private File destination;
-    private Uri mImageUri;
+    private Uri mVideoUri;
     private VideoConfig mVideoConfig;
-    private List<String> listOfImgs;
+    private List<String> mListOfVideos;
 
     public static Intent getCallingIntent(Context activity, VideoConfig videoConfig) {
         Intent intent = new Intent(activity, VideoActivity.class);
@@ -60,14 +59,14 @@ public class VideoActivity extends AppCompatActivity {
         }
 
         if (savedInstanceState == null) {
-            pickImageWrapper();
-            listOfImgs = new ArrayList<>();
+            pickVideoWrapper();
+            mListOfVideos = new ArrayList<>();
         }
         if (mVideoConfig.debug)
             Log.d(VideoTags.Tags.TAG, mVideoConfig.toString());
     }
 
-    private void pickImage() {
+    private void pickVideo() {
         Utility.createFolder(mVideoConfig.directory);
         destination = new File(mVideoConfig.directory, Utility.getRandomString() + mVideoConfig.extension.getValue());
         switch (mVideoConfig.mode) {
@@ -121,12 +120,12 @@ public class VideoActivity extends AppCompatActivity {
 
     private void startActivityFromGallery() {
         mVideoConfig.isImgFromCamera = false;
-        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+        Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
         photoPickerIntent.setType("video/*");
         startActivityForResult(photoPickerIntent, VideoTags.IntentCode.REQUEST_CODE_SELECT_PHOTO);
         if (mVideoConfig.debug)
-            Log.d(VideoTags.Tags.TAG, "Gallery Start with Single Image mode");
+            Log.d(VideoTags.Tags.TAG, "Gallery Start with Single video mode");
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
@@ -139,14 +138,14 @@ public class VideoActivity extends AppCompatActivity {
         photoPickerIntent.setType("video/*");
         startActivityForResult(Intent.createChooser(photoPickerIntent, "Select Picture"), VideoTags.IntentCode.REQUEST_CODE_SELECT_MULTI_PHOTO);
         if (mVideoConfig.debug)
-            Log.d(VideoTags.Tags.TAG, "Gallery Start with Multiple Images mode");
+            Log.d(VideoTags.Tags.TAG, "Gallery Start with Multiple videos mode");
     }
 
     private void startActivityFromCamera() {
         mVideoConfig.isImgFromCamera = true;
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        mImageUri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", destination);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, mImageUri);
+        mVideoUri = FileProvider.getUriForFile(this, this.getApplicationContext().getPackageName() + ".provider", destination);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, mVideoUri);
         startActivityForResult(Intent.createChooser(intent, "Select Video"), VideoTags.IntentCode.CAMERA_REQUEST);
         if (mVideoConfig.debug)
             Log.d(VideoTags.Tags.TAG, "Camera Start");
@@ -155,8 +154,8 @@ public class VideoActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mImageUri != null) {
-            outState.putString(VideoTags.Tags.CAMERA_IMAGE_URI, mImageUri.toString());
+        if (mVideoUri != null) {
+            outState.putString(VideoTags.Tags.CAMERA_IMAGE_URI, mVideoUri.toString());
             outState.putSerializable(VideoTags.Tags.IMG_CONFIG, mVideoConfig);
         }
     }
@@ -165,13 +164,12 @@ public class VideoActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState.containsKey(VideoTags.Tags.CAMERA_IMAGE_URI)) {
-            mImageUri = Uri.parse(savedInstanceState.getString(VideoTags.Tags.CAMERA_IMAGE_URI));
-            destination = new File(mImageUri.getPath());
+            mVideoUri = Uri.parse(savedInstanceState.getString(VideoTags.Tags.CAMERA_IMAGE_URI));
+            destination = new File(mVideoUri.getPath());
             mVideoConfig = (VideoConfig) savedInstanceState.getSerializable(VideoTags.Tags.IMG_CONFIG);
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (mVideoConfig.debug)
@@ -208,11 +206,11 @@ public class VideoActivity extends AppCompatActivity {
         }
     }
 
-    private void processOneImage(Intent data) {
+    private void processOneVideo(Intent data) {
         try {
-            Uri selectedImage = data.getData();
-            String path = FileProcessing.getVideoPath(selectedImage, VideoActivity.this);
-            new VideoActivity.CompressImageTask(path,
+            Uri selectedVideo = data.getData();
+            String path = FileProcessing.getVideoPath(selectedVideo, VideoActivity.this);
+            new VideoActivity.CompresVideoTask(path,
                     mVideoConfig, VideoActivity.this).execute();
 
         } catch (Exception ex) {
@@ -238,7 +236,7 @@ public class VideoActivity extends AppCompatActivity {
         finish();
     }
 
-    private void pickImageWrapper() {
+    private void pickVideoWrapper() {
         if (Build.VERSION.SDK_INT >= 23) {
             List<String> permissionsNeeded = new ArrayList<String>();
 
@@ -269,9 +267,9 @@ public class VideoActivity extends AppCompatActivity {
                 return;
             }
 
-            pickImage();
+            pickVideo();
         } else {
-            pickImage();
+            pickVideo();
         }
     }
 
@@ -309,7 +307,7 @@ public class VideoActivity extends AppCompatActivity {
                 if (perms.get(Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
                         && perms.get(Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                     // All Permissions Granted
-                    pickImage();
+                    pickVideo();
                 } else {
                     // Permission Denied
                     Toast.makeText(VideoActivity.this, getString(R.string.media_picker_some_permission_is_denied), Toast.LENGTH_SHORT)
@@ -322,7 +320,7 @@ public class VideoActivity extends AppCompatActivity {
         }
     }
 
-    private static class CompressImageTask extends AsyncTask<Void, Void, Void> {
+    private static class CompresVideoTask extends AsyncTask<Void, Void, Void> {
 
         private final VideoConfig mVideoConfig;
         private final List<String> listOfImgs;
@@ -330,14 +328,14 @@ public class VideoActivity extends AppCompatActivity {
         private WeakReference<VideoActivity> mContext;
 
 
-        public CompressImageTask(List<String> listOfImgs, VideoConfig videoConfig, VideoActivity context) {
+        public CompresVideoTask(List<String> listOfImgs, VideoConfig videoConfig, VideoActivity context) {
             this.listOfImgs = listOfImgs;
             this.mContext = new WeakReference<>(context);
             this.mVideoConfig = videoConfig;
             this.destinationPaths = new ArrayList<>();
         }
 
-        public CompressImageTask(String absolutePath, VideoConfig videoConfig, VideoActivity context) {
+        public CompresVideoTask(String absolutePath, VideoConfig videoConfig, VideoActivity context) {
             List<String> list = new ArrayList<>();
             list.add(absolutePath);
             this.listOfImgs = list;

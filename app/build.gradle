@@ -8,7 +8,7 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 25
-        applicationId 'net.alhazmy13.mediapicker'
+        applicationId 'net.alhazmy13.mediapickerexample'
         versionCode 1
         versionName "1.0"
     }
