@@ -122,6 +122,13 @@ In order to receive the path of image, you will need to override `onActivityResu
 	.enableDebuggingMode(true)
 ```
 
+* `allowOnlineImages` an option to allow the user to select any image from online resource ex: Google Drive **(KNOWN ISSUE) if you enable this option then you cannot select multiple images**
+
+```java
+	.allowOnlineImages(true)
+```
+
+
 ### Create an `VideoPicker`
 You will need to create a new instance of `VideoPicker`. Once the instance are configured, you can call `build()`.
 

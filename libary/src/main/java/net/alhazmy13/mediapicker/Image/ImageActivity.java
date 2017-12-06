@@ -3,6 +3,7 @@ package net.alhazmy13.mediapicker.Image;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,8 +24,13 @@ import net.alhazmy13.camerapicker.R;
 import net.alhazmy13.mediapicker.FileProcessing;
 import net.alhazmy13.mediapicker.Utility;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
@@ -37,7 +43,6 @@ import java.util.Map;
  * MediaPicker
  */
 public class ImageActivity extends AppCompatActivity {
-    private static final String TAG = "ImageActivity";
 
 
     private File destination;
@@ -76,7 +81,7 @@ public class ImageActivity extends AppCompatActivity {
                 startActivityFromCamera();
                 break;
             case GALLERY:
-                if (mImgConfig.allowMultiple)
+                if (mImgConfig.allowMultiple && mImgConfig.allowOnlineImages)
                     startActivityFromGalleryMultiImg();
                 else
                     startActivityFromGallery();
@@ -125,7 +130,7 @@ public class ImageActivity extends AppCompatActivity {
     private void startActivityFromGallery() {
         mImgConfig.isImgFromCamera = false;
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, !mImgConfig.allowOnlineImages);
         photoPickerIntent.setType("image/*");
         startActivityForResult(photoPickerIntent, ImageTags.IntentCode.REQUEST_CODE_SELECT_PHOTO);
         if (mImgConfig.debug)
@@ -136,7 +141,7 @@ public class ImageActivity extends AppCompatActivity {
     private void startActivityFromGalleryMultiImg() {
         mImgConfig.isImgFromCamera = false;
         Intent photoPickerIntent = new Intent();
-        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+        photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, !mImgConfig.allowOnlineImages);
         photoPickerIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         photoPickerIntent.setAction(Intent.ACTION_GET_CONTENT);
         photoPickerIntent.setType("image/*");
@@ -177,7 +182,9 @@ public class ImageActivity extends AppCompatActivity {
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.d(ImageTags.Tags.TAG, "onActivityResult() called with: " + "requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
+        if (mImgConfig.debug)
+            Log.d(ImageTags.Tags.TAG, "onActivityResult() called with: " + "requestCode = [" + requestCode + "]," +
+                    " resultCode = [" + resultCode + "], data = [" + data + "]");
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case ImageTags.IntentCode.CAMERA_REQUEST:
@@ -189,15 +196,7 @@ public class ImageActivity extends AppCompatActivity {
                     processOneImage(data);
                     break;
                 case ImageTags.IntentCode.REQUEST_CODE_SELECT_MULTI_PHOTO:
-                    //Check if the intent contain only one image
-                    if (data.getClipData() == null) {
-                        processOneImage(data);
-                    } else {
-                        //intent has multi images
-                        listOfImgs = ImageProcessing.processMultiImage(this, data);
-                        new CompressImageTask(listOfImgs,
-                                mImgConfig, ImageActivity.this).execute();
-                    }
+                    processMutliPhoto(data);
                     break;
                 default:
                     break;
@@ -211,12 +210,47 @@ public class ImageActivity extends AppCompatActivity {
         }
     }
 
-    private void processOneImage(Intent data) {
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    private void processMutliPhoto(Intent data) {
+        //Check if the intent contain only one image
+        if (data.getClipData() == null) {
+            processOneImage(data);
+        } else {
+            //intent has multi images
+            listOfImgs = ImageProcessing.processMultiImage(this, data);
+            if (listOfImgs != null && listOfImgs.size() > 0) {
+                new CompressImageTask(listOfImgs, mImgConfig, ImageActivity.this).execute();
+            } else {
+                //For 'Select pic from Google Photos - app Crash' fix
+                String check = data.getClipData().toString();
+                if (check != null && check.contains("com.google.android.apps.photos")) {
+                    ClipData clipdata = data.getClipData();
+                    for (int i = 0; i < clipdata.getItemCount(); i++) {
+                        Uri selectedImage = clipdata.getItemAt(i).getUri();
+                        String selectedImagePath = FileProcessing.getPath(ImageActivity.this, selectedImage);
+                        listOfImgs.add(selectedImagePath);
+                    }
+                    new CompressImageTask(listOfImgs, mImgConfig, ImageActivity.this).execute();
+                }
+            }
+        }
+    }
+
+    public void processOneImage(Intent data) {
         try {
             Uri selectedImage = data.getData();
-            String selectedImagePath = FileProcessing.getPath(this, selectedImage);
-            new CompressImageTask(selectedImagePath,
-                    mImgConfig, ImageActivity.this).execute();
+            String rawPath = selectedImage.toString();
+            if (rawPath != null) {
+                //For 'Select pic from Google Drive - app Crash' fix
+                if (rawPath.contains("com.google.android.apps.docs.storage")) {
+                    String fileTempPath = getCacheDir().getPath();
+                    new ImageActivity.SaveImageFromGoogleDriveTask(fileTempPath, mImgConfig, selectedImage, ImageActivity.this).execute();
+                } else {
+                    String selectedImagePath = FileProcessing.getPath(this, selectedImage);
+                    new ImageActivity.CompressImageTask(selectedImagePath,
+                            mImgConfig, ImageActivity.this).execute();
+                }
+            }
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -232,10 +266,10 @@ public class ImageActivity extends AppCompatActivity {
 
     private void pickImageWrapper() {
         if (Build.VERSION.SDK_INT >= 23) {
-            List<String> permissionsNeeded = new ArrayList<String>();
+            List<String> permissionsNeeded = new ArrayList<>();
 
-            final List<String> permissionsList = new ArrayList<String>();
-            if((mImgConfig.mode == ImagePicker.Mode.CAMERA || mImgConfig.mode == ImagePicker.Mode.CAMERA_AND_GALLERY)  && !addPermission(permissionsList, Manifest.permission.CAMERA))
+            final List<String> permissionsList = new ArrayList<>();
+            if ((mImgConfig.mode == ImagePicker.Mode.CAMERA || mImgConfig.mode == ImagePicker.Mode.CAMERA_AND_GALLERY) && !addPermission(permissionsList, Manifest.permission.CAMERA))
                 permissionsNeeded.add(getString(R.string.media_picker_camera));
             if (!addPermission(permissionsList, Manifest.permission.WRITE_EXTERNAL_STORAGE))
                 permissionsNeeded.add(getString(R.string.media_picker_read_Write_external_storage));
@@ -290,7 +324,7 @@ public class ImageActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
             case ImageTags.IntentCode.REQUEST_CODE_ASK_PERMISSIONS:
-                Map<String, Integer> perms = new HashMap<String, Integer>();
+                Map<String, Integer> perms = new HashMap<>();
                 // Initial
                 perms.put(Manifest.permission.CAMERA, PackageManager.PERMISSION_GRANTED);
                 perms.put(Manifest.permission.WRITE_EXTERNAL_STORAGE, PackageManager.PERMISSION_GRANTED);
@@ -322,14 +356,14 @@ public class ImageActivity extends AppCompatActivity {
         private WeakReference<ImageActivity> mContext;
 
 
-        public CompressImageTask(List<String> listOfImgs, ImageConfig imageConfig, ImageActivity context) {
+        CompressImageTask(List<String> listOfImgs, ImageConfig imageConfig, ImageActivity context) {
             this.listOfImgs = listOfImgs;
             this.mContext = new WeakReference<>(context);
             this.mImgConfig = imageConfig;
             this.destinationPaths = new ArrayList<>();
         }
 
-        public CompressImageTask(String absolutePath, ImageConfig imageConfig, ImageActivity context) {
+        CompressImageTask(String absolutePath, ImageConfig imageConfig, ImageActivity context) {
             List<String> list = new ArrayList<>();
             list.add(absolutePath);
             this.listOfImgs = list;
@@ -343,7 +377,7 @@ public class ImageActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             for (String mPath : listOfImgs) {
                 File file = new File(mPath);
-                File destinationFile = null;
+                File destinationFile;
                 if (mImgConfig.isImgFromCamera) {
                     destinationFile = file;
                 } else {
@@ -376,4 +410,92 @@ public class ImageActivity extends AppCompatActivity {
         }
     }
 
+
+    private static class SaveImageFromGoogleDriveTask extends AsyncTask<Void, Void, Void> {
+
+        private final ImageConfig mImgConfig;
+        private final List<String> listOfImgs;
+        private List<String> destinationPaths;
+        private List<Uri> destinationUris;
+        private WeakReference<ImageActivity> mContext;
+
+
+        SaveImageFromGoogleDriveTask(String absolutePath, ImageConfig imageConfig, Uri uri, ImageActivity context) {
+            List<String> list = new ArrayList<>();
+            list.add(absolutePath);
+            this.listOfImgs = list;
+
+            List<Uri> uris = new ArrayList<>();
+            uris.add(uri);
+            destinationUris = uris;
+
+            this.mContext = new WeakReference<>(context);
+            this.destinationPaths = new ArrayList<>();
+            this.mImgConfig = imageConfig;
+        }
+
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            for (int i = 0; i < listOfImgs.size(); i++) {
+                String path = listOfImgs.get(i);
+                Uri uriPath = destinationUris.get(i);
+                try {
+                    String fileName = "drive_img_" + System.currentTimeMillis() + ".jpg";
+                    String fullImagePath = path + "/" + fileName;
+                    boolean isFileSaved = saveFile(uriPath, fullImagePath);
+                    if (isFileSaved) {
+                        destinationPaths.add(fullImagePath);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            new CompressImageTask(destinationPaths, mImgConfig, mContext.get()).execute();
+        }
+
+        boolean filenotfoundexecption = false;
+
+        //For Google Drive
+        boolean saveFile(Uri sourceuri, String destination) throws IOException {
+            filenotfoundexecption = false;
+            int originalsize;
+            InputStream input = null;
+            try {
+                input = mContext.get().getContentResolver().openInputStream(sourceuri);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                filenotfoundexecption = true;
+            }
+
+            try {
+                originalsize = input.available();
+                BufferedInputStream bis;
+                BufferedOutputStream bos;
+                try {
+                    bis = new BufferedInputStream(input);
+                    bos = new BufferedOutputStream(new FileOutputStream(destination, false));
+                    byte[] buf = new byte[originalsize];
+                    bis.read(buf);
+                    do {
+                        bos.write(buf);
+                    } while (bis.read(buf) != -1);
+                } catch (IOException e) {
+                    filenotfoundexecption = true;
+                    return false;
+                }
+            } catch (NullPointerException e) {
+                filenotfoundexecption = true;
+            }
+            return true;
+        }
+
+    }
 }
