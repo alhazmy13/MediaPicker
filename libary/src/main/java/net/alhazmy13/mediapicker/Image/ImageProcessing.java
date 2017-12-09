@@ -18,7 +18,6 @@ import java.util.List;
  */
 class ImageProcessing {
 
-    private static final String TAG = "ImageProcessing";
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     public static List<String> processMultiImage(Context context, Intent data) {
         List<String> listOfImgs = new ArrayList<>();

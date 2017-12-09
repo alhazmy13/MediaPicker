@@ -8,17 +8,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.alhazmy13.mediapicker.Image.ImagePicker;
-import net.alhazmy13.mediapicker.Video.VideoPicker;
-import net.alhazmy13.mediapicker.rxjava.image.ImagePickerHelper;
-
 import java.util.List;
 
-import rx.Subscriber;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -54,17 +49,17 @@ public class ImageFragment extends Fragment {
 
     private void pickImage() {
 //        new ImagePickerHelper(
-                new ImagePicker.Builder(getActivity())
-                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
-                        .allowMultipleImages(true)
-                        .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
-                        .directory(ImagePicker.Directory.DEFAULT)
-                        .extension(ImagePicker.Extension.PNG)
-                        .allowOnlineImages(false)
-                        .scale(600, 600)
-                        .allowMultipleImages(true)
-                        .enableDebuggingMode(true)
-                        .build();
+        new ImagePicker.Builder(getActivity())
+                .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
+                .allowMultipleImages(true)
+                .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
+                .directory(ImagePicker.Directory.DEFAULT)
+                .extension(ImagePicker.Extension.PNG)
+                .allowOnlineImages(false)
+                .scale(600, 600)
+                .allowMultipleImages(true)
+                .enableDebuggingMode(true)
+                .build();
 //                .getObservable()
 //                .subscribe(new Subscriber<List<String>>() {
 //                    @Override
@@ -92,7 +87,7 @@ public class ImageFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
-        if(requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
             mPath = (List<String>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_PATH);
 
             loadImage();

@@ -461,7 +461,7 @@ public class ImageActivity extends AppCompatActivity {
             new CompressImageTask(destinationPaths, mImgConfig, mContext.get()).execute();
         }
 
-        boolean filenotfoundexecption = false;
+        boolean filenotfoundexecption;
 
         //For Google Drive
         boolean saveFile(Uri sourceuri, String destination) throws IOException {

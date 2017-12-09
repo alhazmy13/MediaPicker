@@ -17,9 +17,7 @@ import java.util.List;
  * MediaPicker
  */
 class VideoProcessing {
-
-    private static final String TAG = "ImageProcessing";
-
+    
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     static List<String> processMultiVideos(Context context, Intent data) {
         List<String> listOfImgs = new ArrayList<>();

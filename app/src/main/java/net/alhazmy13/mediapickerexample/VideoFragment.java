@@ -13,11 +13,8 @@ import android.widget.TextView;
 import android.widget.VideoView;
 
 import net.alhazmy13.mediapicker.Video.VideoPicker;
-import net.alhazmy13.mediapicker.rxjava.video.VideoPickerHelper;
 
 import java.util.List;
-
-import rx.Subscriber;
 
 import static android.app.Activity.RESULT_OK;
 

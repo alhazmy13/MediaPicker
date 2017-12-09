@@ -13,6 +13,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
@@ -36,7 +37,6 @@ import java.util.Map;
  * MediaPicker
  */
 public class VideoActivity extends AppCompatActivity {
-    private static final String TAG = "VideoActivity";
 
     private File destination;
     private Uri mVideoUri;
@@ -81,6 +81,8 @@ public class VideoActivity extends AppCompatActivity {
                 break;
             case CAMERA_AND_GALLERY:
                 showFromCameraOrGalleryAlert();
+                break;
+            default:
                 break;
         }
     }
@@ -170,6 +172,7 @@ public class VideoActivity extends AppCompatActivity {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (mVideoConfig.debug)
@@ -177,20 +180,20 @@ public class VideoActivity extends AppCompatActivity {
         if (resultCode == RESULT_OK) {
             switch (requestCode) {
                 case VideoTags.IntentCode.CAMERA_REQUEST:
-                    new VideoActivity.CompressImageTask(destination.getAbsolutePath(), mVideoConfig
+                    new VideoActivity.CompresVideoTask(destination.getAbsolutePath(), mVideoConfig
                             , VideoActivity.this).execute();
                     break;
                 case VideoTags.IntentCode.REQUEST_CODE_SELECT_PHOTO:
-                    processOneImage(data);
+                    processOneVideo(data);
                     break;
                 case VideoTags.IntentCode.REQUEST_CODE_SELECT_MULTI_PHOTO:
                     //Check if the intent contain only one image
                     if (data.getClipData() == null) {
-                        processOneImage(data);
+                        processOneVideo(data);
                     } else {
                         //intent has multi images
-                        listOfImgs = VideoProcessing.processMultiImage(this, data);
-                        new VideoActivity.CompressImageTask(listOfImgs,
+                        mListOfVideos = VideoProcessing.processMultiVideos(this, data);
+                        new VideoActivity.CompresVideoTask(mListOfVideos,
                                 mVideoConfig, VideoActivity.this).execute();
                     }
                     break;
@@ -295,7 +298,7 @@ public class VideoActivity extends AppCompatActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case VideoTags.IntentCode.REQUEST_CODE_ASK_PERMISSIONS: {
+            case VideoTags.IntentCode.REQUEST_CODE_ASK_PERMISSIONS:
                 Map<String, Integer> perms = new HashMap<String, Integer>();
                 // Initial
                 perms.put(Manifest.permission.CAMERA, PackageManager.PERMISSION_GRANTED);
@@ -313,8 +316,8 @@ public class VideoActivity extends AppCompatActivity {
                     Toast.makeText(VideoActivity.this, getString(R.string.media_picker_some_permission_is_denied), Toast.LENGTH_SHORT)
                             .show();
                 }
-            }
-            break;
+
+                break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
