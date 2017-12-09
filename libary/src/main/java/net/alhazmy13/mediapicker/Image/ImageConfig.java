@@ -18,6 +18,7 @@ class ImageConfig implements Serializable {
     protected int reqWidth;
     protected boolean allowMultiple;
     protected boolean isImgFromCamera;
+    protected boolean allowOnlineImages;
     protected boolean debug;
 
     public ImageConfig() {
@@ -28,6 +29,7 @@ class ImageConfig implements Serializable {
         this.reqHeight = 0;
         this.reqWidth = 0;
         this.allowMultiple = false;
+        this.allowOnlineImages = false;
     }
 
     @Override
@@ -41,6 +43,7 @@ class ImageConfig implements Serializable {
                 ", reqWidth=" + reqWidth +
                 ", allowMultiple=" + allowMultiple +
                 ", isImgFromCamera=" + isImgFromCamera +
+                ", allowOnlineImages="+ allowOnlineImages +
                 ", debug=" + debug +
                 '}';
     }

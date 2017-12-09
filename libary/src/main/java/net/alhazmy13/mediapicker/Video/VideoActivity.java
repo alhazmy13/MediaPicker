@@ -172,49 +172,37 @@ public class VideoActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (Build.VERSION.SDK_INT == 21 || Build.VERSION.SDK_INT == 22) {
-            processVideo(requestCode, resultCode, data);
-        } else {
-            if (resultCode == RESULT_OK) {
-                processVideo(requestCode, resultCode, data);
-            } else {
-                onVideoError();
+        if (mVideoConfig.debug)
+            Log.d(VideoTags.Tags.TAG, "onActivityResult() called with: " + "requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
+        if (resultCode == RESULT_OK) {
+            switch (requestCode) {
+                case VideoTags.IntentCode.CAMERA_REQUEST:
+                    new VideoActivity.CompressImageTask(destination.getAbsolutePath(), mVideoConfig
+                            , VideoActivity.this).execute();
+                    break;
+                case VideoTags.IntentCode.REQUEST_CODE_SELECT_PHOTO:
+                    processOneImage(data);
+                    break;
+                case VideoTags.IntentCode.REQUEST_CODE_SELECT_MULTI_PHOTO:
+                    //Check if the intent contain only one image
+                    if (data.getClipData() == null) {
+                        processOneImage(data);
+                    } else {
+                        //intent has multi images
+                        listOfImgs = VideoProcessing.processMultiImage(this, data);
+                        new VideoActivity.CompressImageTask(listOfImgs,
+                                mVideoConfig, VideoActivity.this).execute();
+                    }
+                    break;
+                default:
+                    break;
             }
-        }
-
-    }
-
-    private void onVideoError() {
-        Intent intent = new Intent();
-        intent.setAction(VideoTags.Action.SERVICE_ACTION);
-        intent.putExtra(VideoTags.Tags.PICK_ERROR, "user did not select any video");
-        sendBroadcast(intent);
-        finish();
-    }
-
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private void processVideo(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case VideoTags.IntentCode.CAMERA_REQUEST:
-                new VideoActivity.CompresVideoTask(destination.getAbsolutePath(), mVideoConfig
-                        , VideoActivity.this).execute();
-                break;
-            case VideoTags.IntentCode.REQUEST_CODE_SELECT_PHOTO:
-                processOneVideo(data);
-                break;
-            case VideoTags.IntentCode.REQUEST_CODE_SELECT_MULTI_PHOTO:
-                //Check if the intent contain only one video
-                if (data.getClipData() == null) {
-                    processOneVideo(data);
-                } else {
-                    //intent has multi video
-                    mListOfVideos = VideoProcessing.processMultiVideos(this, data);
-                    new VideoActivity.CompresVideoTask(mListOfVideos,
-                            mVideoConfig, VideoActivity.this).execute();
-                }
-                break;
-            default:
-                onVideoError();
+        } else {
+            Intent intent = new Intent();
+            intent.setAction(VideoTags.Action.SERVICE_ACTION);
+            intent.putExtra(VideoTags.Tags.PICK_ERROR, "user did not select any videos");
+            sendBroadcast(intent);
+            finish();
         }
     }
 
@@ -224,8 +212,14 @@ public class VideoActivity extends AppCompatActivity {
             String path = FileProcessing.getVideoPath(selectedVideo, VideoActivity.this);
             new VideoActivity.CompresVideoTask(path,
                     mVideoConfig, VideoActivity.this).execute();
+
         } catch (Exception ex) {
-            ex.printStackTrace();
+            Intent intent = new Intent();
+            intent.setAction(VideoTags.Action.SERVICE_ACTION);
+            intent.putExtra(VideoTags.Tags.PICK_ERROR, "Issue with video path: " + ex.getMessage());
+            sendBroadcast(intent);
+            setResult(RESULT_CANCELED, intent);
+            finish();
         }
 
     }
