@@ -6,6 +6,7 @@
 ![](https://img.shields.io/badge/Platform-Android-brightgreen.svg)
 ![](https://img.shields.io/hexpm/l/plug.svg)
 ![](https://img.shields.io/badge/version-2.3.3-blue.svg)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/ea51407d60d04c938c263de206095abf)](https://www.codacy.com/app/me_101/MediaPicker?utm_source=github.com&utm_medium=referral&utm_content=alhazmy13/MediaPicker&utm_campaign=badger)
 [![ghit.me](https://ghit.me/badge.svg?repo=Alhazmy13/MediaPicker)](https://ghit.me/repo/Alhazmy13/MediaPicker)
 
 **[Please let me know if your application go to production via this link](https://docs.google.com/forms/d/e/1FAIpQLSe4Y5Fwn1mlEoD4RxjXQzTvL4mofhESuBlTkAPQhI7J_WqMDQ/viewform?c=0&w=1)**
