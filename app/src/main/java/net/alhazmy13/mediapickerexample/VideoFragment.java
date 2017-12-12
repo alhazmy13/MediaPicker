@@ -80,8 +80,6 @@ public class VideoFragment extends Fragment {
     private void loadVideo() {
         Log.d(TAG, "loadVideo: "+ (mPath == null));
         if (mPath != null && mPath.size() > 0) {
-            Log.d(TAG, "loadVideo: ");
-            Log.d(TAG, "loadImage: " + mPath.size());
             path.setText(mPath.get(0));
             videoView.setVideoURI(Uri.parse(mPath.get(0)));
             videoView.start();
