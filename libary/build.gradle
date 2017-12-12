@@ -1,18 +1,18 @@
 apply plugin: 'com.android.library'
-//apply plugin: 'com.novoda.bintray-release'
+apply plugin: 'com.novoda.bintray-release'
 //apply from: '../deps.gradle'
 
-////./gradlew bintrayUpload
-//publish {
-//    userOrg = 'alhazmy13'
-//    groupId = 'net.alhazmy13.MediaPicker'
-//    artifactId = 'libary'
-//    uploadName = 'MediaPicker'
-//    publishVersion = '2.3.3'
-//    desc = 'MediaPickerRx'
-//    dryRun = false
-//    website = 'https://github.com/alhzmy13/MediaPicker'
-//}
+//./gradlew bintrayUpload
+publish {
+    userOrg = 'alhazmy13'
+    groupId = 'net.alhazmy13.MediaPicker'
+    artifactId = 'libary'
+    uploadName = 'MediaPicker'
+    publishVersion = '2.4.0'
+    desc = 'MediaPickerRx'
+    dryRun = false
+    website = 'https://github.com/alhzmy13/MediaPicker'
+}
 
 android {
     compileSdkVersion 25
@@ -41,5 +41,5 @@ android {
 
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:25.4.0'
 }
