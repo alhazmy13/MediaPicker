@@ -34,7 +34,7 @@ class ImageConfig implements Serializable {
 
     @Override
     public String toString() {
-        return "ImageConfig{" +
+        return "GifConfig{" +
                 "extension=" + extension +
                 ", compressLevel=" + compressLevel +
                 ", mode=" + mode +
@@ -43,7 +43,7 @@ class ImageConfig implements Serializable {
                 ", reqWidth=" + reqWidth +
                 ", allowMultiple=" + allowMultiple +
                 ", isImgFromCamera=" + isImgFromCamera +
-                ", allowOnlineImages="+ allowOnlineImages +
+                ", allowOnlineGifs="+ allowOnlineImages +
                 ", debug=" + debug +
                 '}';
     }

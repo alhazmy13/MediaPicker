@@ -13,16 +13,17 @@
         <ImageView
             android:id="@+id/iv_image"
             android:layout_width="match_parent"
-            android:layout_height="400dp"/>
+            android:layout_height="400dp"
+            android:contentDescription="@string/image" />
         <Button
             android:id="@+id/bt_pick"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Pick" />
+            android:text="@string/pick" />
         <TextView
             android:id="@+id/tv_path"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="PATH: ..." />
+            android:text="@string/path" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

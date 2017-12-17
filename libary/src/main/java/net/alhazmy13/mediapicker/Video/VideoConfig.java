@@ -11,7 +11,6 @@ import java.io.Serializable;
 class VideoConfig implements Serializable {
 
     protected VideoPicker.Extension extension;
-    //    protected VideoPicker.ComperesLevel compressLevel;
     protected VideoPicker.Mode mode;
     protected String directory;
     protected int reqHeight;
@@ -22,7 +21,6 @@ class VideoConfig implements Serializable {
 
     public VideoConfig() {
         this.extension = VideoPicker.Extension.MP4;
-//        this.compressLevel = VideoPicker.ComperesLevel.NONE;
         this.mode = VideoPicker.Mode.CAMERA;
         this.directory = Environment.getExternalStorageDirectory() + VideoTags.Tags.IMAGE_PICKER_DIR;
         this.reqHeight = 0;
@@ -32,9 +30,8 @@ class VideoConfig implements Serializable {
 
     @Override
     public String toString() {
-        return "ImageConfig{" +
+        return "GifConfig{" +
                 "extension=" + extension +
-//                ", compressLevel=" + compressLevel +
                 ", mode=" + mode +
                 ", directory='" + directory + '\'' +
                 ", reqHeight=" + reqHeight +

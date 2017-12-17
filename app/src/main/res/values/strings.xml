@@ -2,4 +2,7 @@
     <string name="app_name">MediaPicker</string>
     <string name="tab_title_video">Video</string>
     <string name="tab_title_image">Image</string>
+    <string name="pick">Pick</string>
+    <string name="path">PATH: ...</string>
+    <string name="image">Image</string>
 </resources>

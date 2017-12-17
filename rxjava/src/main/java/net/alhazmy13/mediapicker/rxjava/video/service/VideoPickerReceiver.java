@@ -18,7 +18,6 @@ import rx.Observer;
  */
 public class VideoPickerReceiver extends BroadcastReceiver {
 
-    private static final String TAG = "VideoPickerReceiver";
     private Observer<List<String>> observer;
 
     public VideoPickerReceiver(Observer<List<String>> observer) {
@@ -26,11 +25,11 @@ public class VideoPickerReceiver extends BroadcastReceiver {
     }
 
     public void onReceive(Context context, Intent intent) {
-        Log.d(TAG, "Received message " + intent);
         List<String> imagePath = (List<String>) intent.getSerializableExtra(VideoTags.Tags.VIDEO_PATH);
-        if (imagePath != null && imagePath.size() > 0)
+        if (imagePath != null && imagePath.size() > 0) {
             observer.onNext(imagePath);
-        else
+        } else {
             observer.onError(new Throwable(intent.getStringExtra(VideoTags.Tags.PICK_ERROR)));
+        }
     }
 }

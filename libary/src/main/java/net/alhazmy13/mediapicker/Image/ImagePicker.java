@@ -15,7 +15,7 @@ import java.lang.ref.WeakReference;
 public class ImagePicker {
 
     /**
-     * The constant IMAGE_PICKER_REQUEST_CODE.
+     * The constant GIF_PICKER_REQUEST_CODE.
      */
     public static final int IMAGE_PICKER_REQUEST_CODE = 42141;
     /**
@@ -154,7 +154,10 @@ public class ImagePicker {
         PNG(".png"), /**
          * Jpg extension.
          */
-        JPG(".jpg");
+        JPG(".jpg"),
+
+        GIF(".gif");
+
         private final String value;
 
         Extension(String value) {

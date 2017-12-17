@@ -2,7 +2,7 @@ package net.alhazmy13.mediapicker.Image;
 
 public class ImageTags {
     public static final class Tags{
-        public static final String TAG = "ImagePicker";
+        public static final String TAG = "GifPicker";
         public static final String LEVEL = "level";
         public static final String EXTENSION = "extension";
         public static final String MODE = "mode";
@@ -11,11 +11,11 @@ public class ImageTags {
         public static final String COMPRESS_LEVEL = "COMPRESS_LEVEL";
         public static final String REQUESTED_WIDTH = "REQUESTED_WIDTH";
         public static final String REQUESTED_HEIGHT = "REQUESTED_HEIGHT";
-        public static final String IMAGE_PATH = "IMAGE_PATH";
+        public static final String IMAGE_PATH = "GIF_PATH";
         public static final String ALLOW_MULTIPLE = "ALLOW_MULTIPLE";
         public static final String DEBUG = "DEBUG";
         public static final String IMAGE_PICKER_DIR = "/mediapicker/images/";
-        public static final String IMG_CONFIG = "IMG_CONFIG";
+        public static final String IMG_CONFIG = "GIF_CONFIG";
         public static final String PICK_ERROR = "PICK_ERROR";
     }
 

@@ -16,7 +16,6 @@ import rx.subscriptions.Subscriptions;
  */
 abstract class ImagePickerBaseObservable implements Observable.OnSubscribe<List<String>> {
 
-    private static final String TAG = "ImagePicker";
     public Context context;
 
     public ImagePickerBaseObservable(Context context) {
@@ -25,7 +24,6 @@ abstract class ImagePickerBaseObservable implements Observable.OnSubscribe<List<
 
     @Override
     public void call(final Subscriber subscriber) {
-        Log.d(TAG, "call() called with: " + "subscriber = [" + subscriber + "]");
         subscriber.add(Subscriptions.create(new Action0() {
             @Override
             public void call() {

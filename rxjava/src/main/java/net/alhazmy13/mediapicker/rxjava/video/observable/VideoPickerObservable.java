@@ -18,7 +18,6 @@ import rx.subscriptions.Subscriptions;
  */
 public class VideoPickerObservable extends VideoPickerBaseObservable {
 
-    private static final String TAG = "VideoPickerObservable";
     private VideoPicker.Builder mVideoPicker;
     private VideoPickerReceiver mReceiver;
 
@@ -46,14 +45,12 @@ public class VideoPickerObservable extends VideoPickerBaseObservable {
 
     @Override
     public void registerImagePickerObservable() {
-        //PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, new Intent(RECEIVER_ACTION), 0);
         context.registerReceiver(mReceiver, new IntentFilter(VideoTags.Action.SERVICE_ACTION));
 
     }
 
     @Override
     public void onUnsubscribed() {
-        Log.d(TAG, "onUnsubscribed() called with: " + "");
         try {
             context.unregisterReceiver(mReceiver);
         } catch (IllegalArgumentException ignored) {

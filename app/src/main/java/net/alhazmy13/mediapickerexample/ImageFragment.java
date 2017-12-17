@@ -53,10 +53,10 @@ public class ImageFragment extends Fragment {
         new ImagePickerHelper(
         new ImagePicker.Builder(getActivity())
                 .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
-                .allowMultipleImages(true)
+                .allowMultipleImages(false)
                 .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
                 .directory(ImagePicker.Directory.DEFAULT)
-                .extension(ImagePicker.Extension.PNG)
+                .extension(ImagePicker.Extension.GIF)
                 .allowOnlineImages(false)
                 .scale(600, 600)
                 .allowMultipleImages(true)
@@ -88,8 +88,8 @@ public class ImageFragment extends Fragment {
 //    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 //        super.onActivityResult(requestCode, resultCode, data);
 //        Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
-//        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-//            mPath = (List<String>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_PATH);
+//        if (requestCode == GifPicker.GIF_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+//            mPath = (List<String>) data.getSerializableExtra(GifPicker.EXTRA_IMAGE_PATH);
 //
 //            loadImage();
 //        }

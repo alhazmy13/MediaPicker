@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.media.Image;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -131,7 +132,7 @@ public class ImageActivity extends AppCompatActivity {
         mImgConfig.isImgFromCamera = false;
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
         photoPickerIntent.putExtra(Intent.EXTRA_LOCAL_ONLY, !mImgConfig.allowOnlineImages);
-        photoPickerIntent.setType("image/*");
+        photoPickerIntent.setType("image/gif");
         startActivityForResult(photoPickerIntent, ImageTags.IntentCode.REQUEST_CODE_SELECT_PHOTO);
         if (mImgConfig.debug)
             Log.d(ImageTags.Tags.TAG, "Gallery Start with Single Image mode");
@@ -203,7 +204,7 @@ public class ImageActivity extends AppCompatActivity {
             }
         } else {
             Intent intent = new Intent();
-            intent.setAction("net.alhazmy13.mediapicker.rxjava.image.service");
+            intent.setAction(ImageTags.Action.SERVICE_ACTION);
             intent.putExtra(ImageTags.Tags.PICK_ERROR, "user did not select any image");
             sendBroadcast(intent);
             finish();
@@ -403,7 +404,7 @@ public class ImageActivity extends AppCompatActivity {
             if (context != null) {
                 context.finishActivity(destinationPaths);
                 Intent intent = new Intent();
-                intent.setAction("net.alhazmy13.mediapicker.rxjava.image.service");
+                intent.setAction(ImageTags.Action.SERVICE_ACTION);
                 intent.putExtra(ImageTags.Tags.IMAGE_PATH, (Serializable) destinationPaths);
                 context.sendBroadcast(intent);
             }
