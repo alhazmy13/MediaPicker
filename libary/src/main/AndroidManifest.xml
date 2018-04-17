@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="net.alhazmy13.camerapicker">
+    package="net.alhazmy13.mediapicker">
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -7,10 +7,10 @@
 
     <application>
         <activity
-            android:name="net.alhazmy13.mediapicker.Image.ImageActivity"
+            android:name=".Image.ImageActivity"
             android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
-            android:name="net.alhazmy13.mediapicker.Video.VideoActivity"
+            android:name=".Video.VideoActivity"
             android:theme="@style/Theme.AppCompat.Translucent" />
 
         <provider
