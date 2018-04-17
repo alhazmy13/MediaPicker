@@ -15,8 +15,6 @@ import net.alhazmy13.mediapicker.Image.ImagePicker;
 
 import java.util.List;
 
-import io.reactivex.Observable;
-
 import static android.app.Activity.RESULT_OK;
 
 
