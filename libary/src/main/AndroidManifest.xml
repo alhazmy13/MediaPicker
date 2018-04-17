@@ -8,11 +8,9 @@
     <application>
         <activity
             android:name="net.alhazmy13.mediapicker.Image.ImageActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent" />
         <activity
             android:name="net.alhazmy13.mediapicker.Video.VideoActivity"
-            android:screenOrientation="portrait"
             android:theme="@style/Theme.AppCompat.Translucent" />
 
         <provider
