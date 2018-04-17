@@ -15,8 +15,7 @@ import net.alhazmy13.mediapicker.rxjava.image.ImagePickerHelper;
 
 import java.util.List;
 
-
-import rx.Subscriber;
+import io.reactivex.functions.Consumer;
 
 
 /**
@@ -51,36 +50,33 @@ public class ImageFragment extends Fragment {
 
     private void pickImage() {
         new ImagePickerHelper(
-        new ImagePicker.Builder(getActivity())
-                .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
-                .allowMultipleImages(true)
-                .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
-                .directory(ImagePicker.Directory.DEFAULT)
-                .extension(ImagePicker.Extension.PNG)
-                .allowOnlineImages(false)
-                .scale(600, 600)
-                .allowMultipleImages(true)
-                .enableDebuggingMode(true))
+                new ImagePicker.Builder(getActivity())
+                        .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
+                        .allowMultipleImages(true)
+                        .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
+                        .directory(ImagePicker.Directory.DEFAULT)
+                        .extension(ImagePicker.Extension.PNG)
+                        .allowOnlineImages(false)
+                        .scale(600, 600)
+                        .allowMultipleImages(true)
+                        .enableDebuggingMode(true))
                 .getObservable()
-                .subscribe(new Subscriber<List<String>>() {
+                .doOnNext(new Consumer<List<String>>() {
                     @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "onCompleted() called with: " + "");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, "onError() called with: " + "e = [" + e + "]");
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(List<String> imagePath) {
+                    public void accept(List<String> imagePath) throws Exception {
                         Log.d(TAG, "onNext() called with: " + "imagePath = [" + imagePath + "]");
                         mPath = imagePath;
                         loadImage();
                     }
-                });
+                })
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+                        Log.d(TAG, "onError() called with: " + "e = [" + throwable + "]");
+                        throwable.printStackTrace();
+                    }
+                }).subscribe();
+
     }
 
 

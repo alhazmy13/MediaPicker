@@ -9,7 +9,7 @@ import net.alhazmy13.mediapicker.Image.ImageTags;
 
 import java.util.List;
 
-import rx.Observer;
+import io.reactivex.ObservableEmitter;
 
 
 /**
@@ -19,9 +19,9 @@ import rx.Observer;
 public class ImagePickerReceiver extends BroadcastReceiver {
 
     private static final String TAG = "VideoPickerReceiver";
-    private Observer<List<String>> observer;
+    private ObservableEmitter<List<String>> observer;
 
-    public ImagePickerReceiver(Observer<List<String>> observer) {
+    public ImagePickerReceiver(ObservableEmitter<List<String>> observer) {
         this.observer = observer;
     }
 

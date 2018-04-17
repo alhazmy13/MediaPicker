@@ -21,8 +21,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import net.alhazmy13.camerapicker.R;
 import net.alhazmy13.mediapicker.FileProcessing;
+import net.alhazmy13.mediapicker.R;
 import net.alhazmy13.mediapicker.Utility;
 
 import java.io.File;

@@ -8,9 +8,11 @@ import net.alhazmy13.mediapicker.Video.VideoPicker;
 import net.alhazmy13.mediapicker.Video.VideoTags;
 import net.alhazmy13.mediapicker.rxjava.video.service.VideoPickerReceiver;
 
-import rx.Subscriber;
-import rx.functions.Action0;
-import rx.subscriptions.Subscriptions;
+import org.reactivestreams.Subscriber;
+
+import java.util.List;
+
+import io.reactivex.ObservableEmitter;
 
 /**
  * Created by Alhazmy13 on 8/7/16.
@@ -29,37 +31,13 @@ public class VideoPickerObservable extends VideoPickerBaseObservable {
     }
 
 
-    @Override
-    public void call(final Subscriber subscriber) {
-        super.call(subscriber);
-        mReceiver = new VideoPickerReceiver(subscriber);
-        mVideoPicker.build();
-        registerImagePickerObservable();
-        subscriber.add(Subscriptions.create(new Action0() {
-            @Override
-            public void call() {
-                subscriber.unsubscribe();
-                onUnsubscribed();
-            }
-        }));
-    }
+
 
     @Override
-    public void registerImagePickerObservable() {
-        //PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, new Intent(RECEIVER_ACTION), 0);
+    public void subscribe(ObservableEmitter<List<String>> emitter) {
         context.registerReceiver(mReceiver, new IntentFilter(VideoTags.Action.SERVICE_ACTION));
+        mReceiver = new VideoPickerReceiver(emitter);
+        mVideoPicker.build();
 
     }
-
-    @Override
-    public void onUnsubscribed() {
-        Log.d(TAG, "onUnsubscribed() called with: " + "");
-        try {
-            context.unregisterReceiver(mReceiver);
-        } catch (IllegalArgumentException ignored) {
-        }
-
-    }
-
-
 }

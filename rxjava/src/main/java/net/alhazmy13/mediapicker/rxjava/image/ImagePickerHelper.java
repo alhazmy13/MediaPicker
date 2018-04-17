@@ -4,7 +4,8 @@ import net.alhazmy13.mediapicker.rxjava.image.observable.ImagePickerObservable;
 
 import java.util.List;
 
-import rx.Observable;
+import io.reactivex.Observable;
+
 
 /**
  * Created by Alhazmy13 on 8/7/16.

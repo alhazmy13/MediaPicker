@@ -5,12 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import net.alhazmy13.mediapicker.Image.ImageTags;
 import net.alhazmy13.mediapicker.Video.VideoTags;
 
 import java.util.List;
 
-import rx.Observer;
+import io.reactivex.ObservableEmitter;
 
 /**
  * Created by Alhazmy13 on 8/7/16.
@@ -19,9 +18,9 @@ import rx.Observer;
 public class VideoPickerReceiver extends BroadcastReceiver {
 
     private static final String TAG = "VideoPickerReceiver";
-    private Observer<List<String>> observer;
+    private ObservableEmitter<List<String>> observer;
 
-    public VideoPickerReceiver(Observer<List<String>> observer) {
+    public VideoPickerReceiver(ObservableEmitter<List<String>> observer) {
         this.observer = observer;
     }
 
