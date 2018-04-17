@@ -15,7 +15,9 @@ import net.alhazmy13.mediapicker.rxjava.image.ImagePickerHelper;
 
 import java.util.List;
 
-import io.reactivex.functions.Consumer;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 
 /**
@@ -49,7 +51,7 @@ public class ImageFragment extends Fragment {
 
 
     private void pickImage() {
-        new ImagePickerHelper(
+        Observable<List<String>> x = new ImagePickerHelper(
                 new ImagePicker.Builder(getActivity())
                         .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
                         .allowMultipleImages(true)
@@ -60,36 +62,34 @@ public class ImageFragment extends Fragment {
                         .scale(600, 600)
                         .allowMultipleImages(true)
                         .enableDebuggingMode(true))
-                .getObservable()
-                .doOnNext(new Consumer<List<String>>() {
-                    @Override
-                    public void accept(List<String> imagePath) throws Exception {
-                        Log.d(TAG, "onNext() called with: " + "imagePath = [" + imagePath + "]");
-                        mPath = imagePath;
-                        loadImage();
-                    }
-                })
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        Log.d(TAG, "onError() called with: " + "e = [" + throwable + "]");
-                        throwable.printStackTrace();
-                    }
-                }).subscribe();
+                .getObservable();
+
+        x.subscribe(new Observer<List<String>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(List<String> imagePath) {
+                Log.d(TAG, "onNext() called with: " + "imagePath = [" + imagePath + "]");
+                mPath = imagePath;
+                loadImage();
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                Log.d(TAG, "onError() called with: " + "e = [" + e + "]");
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
 
     }
-
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
-//        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-//            mPath = (List<String>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_PATH);
-//
-//            loadImage();
-//        }
-//    }
 
     private void loadImage() {
         Log.d(TAG, "loadImage: " + mPath.size());

@@ -7,7 +7,6 @@ import android.content.ClipData;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -50,6 +49,7 @@ public class ImageActivity extends AppCompatActivity {
     private Uri mImageUri;
     private ImageConfig mImgConfig;
     private List<String> listOfImgs;
+    private AlertDialog alertDialog;
 
     public static Intent getCallingIntent(Context activity, ImageConfig imageConfig) {
         Intent intent = new Intent(activity, ImageActivity.class);
@@ -60,7 +60,6 @@ public class ImageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         Intent intent = getIntent();
         if (intent != null) {
             mImgConfig = (ImageConfig) intent.getSerializableExtra(ImageTags.Tags.IMG_CONFIG);
@@ -72,6 +71,13 @@ public class ImageActivity extends AppCompatActivity {
         }
         if (mImgConfig.debug)
             Log.d(ImageTags.Tags.TAG, mImgConfig.toString());
+    }
+
+    @Override
+    protected void onPause() {
+        if (alertDialog != null)
+            alertDialog.dismiss();
+        super.onPause();
     }
 
     private void pickImage() {
@@ -96,7 +102,7 @@ public class ImageActivity extends AppCompatActivity {
     }
 
     private void showFromCameraOrGalleryAlert() {
-        new AlertDialog.Builder(this)
+        alertDialog = new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.media_picker_select_from))
                 .setPositiveButton(getString(R.string.media_picker_camera), new DialogInterface.OnClickListener() {
                     @Override
@@ -104,6 +110,7 @@ public class ImageActivity extends AppCompatActivity {
                         if (mImgConfig.debug)
                             Log.d(ImageTags.Tags.TAG, "Alert Dialog - Start From Camera");
                         startActivityFromCamera();
+                        alertDialog.dismiss();
                     }
                 })
                 .setNegativeButton(getString(R.string.media_picker_gallery), new DialogInterface.OnClickListener() {
@@ -115,6 +122,7 @@ public class ImageActivity extends AppCompatActivity {
                             startActivityFromGalleryMultiImg();
                         else
                             startActivityFromGallery();
+                        alertDialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -122,10 +130,14 @@ public class ImageActivity extends AppCompatActivity {
                     public void onCancel(DialogInterface dialogInterface) {
                         if (mImgConfig.debug)
                             Log.d(ImageTags.Tags.TAG, "Alert Dialog - Canceled");
+                        alertDialog.dismiss();
                         finish();
                     }
                 })
-                .show();
+                .create();
+        if (alertDialog != null)
+            alertDialog.show();
+
     }
 
     private void startActivityFromGallery() {

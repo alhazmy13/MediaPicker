@@ -1,6 +1,5 @@
 package net.alhazmy13.mediapicker.rxjava.image;
 import net.alhazmy13.mediapicker.Image.ImagePicker;
-import net.alhazmy13.mediapicker.rxjava.image.observable.ImagePickerObservable;
 
 import java.util.List;
 

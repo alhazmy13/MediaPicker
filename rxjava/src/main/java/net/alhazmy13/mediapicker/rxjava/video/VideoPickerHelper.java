@@ -1,7 +1,6 @@
 package net.alhazmy13.mediapicker.rxjava.video;
 
 import net.alhazmy13.mediapicker.Video.VideoPicker;
-import net.alhazmy13.mediapicker.rxjava.video.observable.VideoPickerObservable;
 
 import java.util.List;
 

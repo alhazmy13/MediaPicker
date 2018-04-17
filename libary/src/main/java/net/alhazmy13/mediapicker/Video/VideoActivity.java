@@ -6,7 +6,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -43,6 +42,7 @@ public class VideoActivity extends AppCompatActivity {
     private Uri mVideoUri;
     private VideoConfig mVideoConfig;
     private List<String> mListOfVideos;
+    private AlertDialog alertDialog;
 
     public static Intent getCallingIntent(Context activity, VideoConfig videoConfig) {
         Intent intent = new Intent(activity, VideoActivity.class);
@@ -53,8 +53,6 @@ public class VideoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-
         Intent intent = getIntent();
         if (intent != null) {
             mVideoConfig = (VideoConfig) intent.getSerializableExtra(VideoTags.Tags.IMG_CONFIG);
@@ -68,6 +66,12 @@ public class VideoActivity extends AppCompatActivity {
             Log.d(VideoTags.Tags.TAG, mVideoConfig.toString());
     }
 
+    @Override
+    protected void onPause() {
+        if (alertDialog != null)
+            alertDialog.dismiss();
+        super.onPause();
+    }
     private void pickVideo() {
         Utility.createFolder(mVideoConfig.directory);
         destination = new File(mVideoConfig.directory, Utility.getRandomString() + mVideoConfig.extension.getValue());
@@ -90,7 +94,7 @@ public class VideoActivity extends AppCompatActivity {
     }
 
     private void showFromCameraOrGalleryAlert() {
-        new AlertDialog.Builder(this)
+        alertDialog = new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.media_picker_select_from))
                 .setPositiveButton(getString(R.string.media_picker_camera), new DialogInterface.OnClickListener() {
                     @Override
@@ -98,6 +102,7 @@ public class VideoActivity extends AppCompatActivity {
                         if (mVideoConfig.debug)
                             Log.d(VideoTags.Tags.TAG, "Alert Dialog - Start From Camera");
                         startActivityFromCamera();
+                        alertDialog.dismiss();
                     }
                 })
                 .setNegativeButton(getString(R.string.media_picker_gallery), new DialogInterface.OnClickListener() {
@@ -109,6 +114,7 @@ public class VideoActivity extends AppCompatActivity {
                             startActivityFromGalleryMultiImg();
                         else
                             startActivityFromGallery();
+                        alertDialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -116,10 +122,12 @@ public class VideoActivity extends AppCompatActivity {
                     public void onCancel(DialogInterface dialogInterface) {
                         if (mVideoConfig.debug)
                             Log.d(VideoTags.Tags.TAG, "Alert Dialog - Canceled");
+                        alertDialog.dismiss();
                         finish();
                     }
-                })
-                .show();
+                }).create();
+        alertDialog.show();
+
     }
 
     private void startActivityFromGallery() {
