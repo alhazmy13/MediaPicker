@@ -17,6 +17,7 @@ public class ImageTags {
         public static final String IMAGE_PICKER_DIR = "/mediapicker/images/";
         public static final String IMG_CONFIG = "IMG_CONFIG";
         public static final String PICK_ERROR = "PICK_ERROR";
+        public static final String IS_ALERT_SHOWING = "IS_ALERT_SHOWING";
     }
 
     public static final class Action{

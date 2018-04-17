@@ -44,7 +44,6 @@ import java.util.Map;
  */
 public class ImageActivity extends AppCompatActivity {
 
-
     private File destination;
     private Uri mImageUri;
     private ImageConfig mImgConfig;
@@ -74,10 +73,10 @@ public class ImageActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onPause() {
+    protected void onStop() {
         if (alertDialog != null)
             alertDialog.dismiss();
-        super.onPause();
+        super.onStop();
     }
 
     private void pickImage() {
@@ -180,6 +179,8 @@ public class ImageActivity extends AppCompatActivity {
             outState.putString(ImageTags.Tags.CAMERA_IMAGE_URI, mImageUri.toString());
             outState.putSerializable(ImageTags.Tags.IMG_CONFIG, mImgConfig);
         }
+        outState.putBoolean(ImageTags.Tags.IS_ALERT_SHOWING, alertDialog.isShowing());
+
     }
 
     @Override
@@ -189,6 +190,12 @@ public class ImageActivity extends AppCompatActivity {
             mImageUri = Uri.parse(savedInstanceState.getString(ImageTags.Tags.CAMERA_IMAGE_URI));
             destination = new File(mImageUri.getPath());
             mImgConfig = (ImageConfig) savedInstanceState.getSerializable(ImageTags.Tags.IMG_CONFIG);
+        }
+        if (savedInstanceState.getBoolean(ImageTags.Tags.IS_ALERT_SHOWING, false)) {
+            if (alertDialog == null)
+                pickImage();
+            else
+                alertDialog.show();
         }
     }
 
@@ -252,8 +259,8 @@ public class ImageActivity extends AppCompatActivity {
     public void processOneImage(Intent data) {
         try {
             Uri selectedImage = data.getData();
-            String rawPath = selectedImage.toString();
-            if (rawPath != null) {
+            if (selectedImage != null) {
+                String rawPath = selectedImage.toString();
                 //For 'Select pic from Google Drive - app Crash' fix
                 if (rawPath.contains("com.google.android.apps.docs.storage")) {
                     String fileTempPath = getCacheDir().getPath();
@@ -290,10 +297,10 @@ public class ImageActivity extends AppCompatActivity {
             if (permissionsList.size() > 0) {
                 if (permissionsNeeded.size() > 0) {
                     // Need Rationale
-                    String message = getString(R.string.media_picker_you_need_to_grant_access_to) + permissionsNeeded.get(0);
+                    StringBuilder message = new StringBuilder(getString(R.string.media_picker_you_need_to_grant_access_to) + permissionsNeeded.get(0));
                     for (int i = 1; i < permissionsNeeded.size(); i++)
-                        message = message + ", " + permissionsNeeded.get(i);
-                    showMessageOKCancel(message,
+                        message.append(", ").append(permissionsNeeded.get(i));
+                    showMessageOKCancel(message.toString(),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -327,8 +334,7 @@ public class ImageActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(ImageActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
             permissionsList.add(permission);
             // Check for Rationale Option
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(ImageActivity.this, permission))
-                return false;
+            return ActivityCompat.shouldShowRequestPermissionRationale(ImageActivity.this, permission);
         }
         return true;
     }
