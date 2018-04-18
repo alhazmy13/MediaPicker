@@ -26,7 +26,7 @@ public class VideoPickerReceiver extends BroadcastReceiver {
 
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Received message " + intent);
-        List<String> imagePath = (List<String>) intent.getSerializableExtra(VideoTags.Tags.VIDEO_PATH);
+        List<String> imagePath = intent.getStringArrayListExtra(VideoTags.Tags.VIDEO_PATH);
         if (imagePath != null && imagePath.size() > 0)
             observer.onNext(imagePath);
         else

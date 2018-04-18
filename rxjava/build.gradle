@@ -9,7 +9,7 @@ publish {
     groupId = 'net.alhazmy13.MediaPicker'
     artifactId = 'rxjava'
     uploadName = 'MediaPickerRx'
-    publishVersion = '2.4.1-beta'
+    publishVersion = '2.4.2-beta'
     desc = 'MediaPickerRx'
     dryRun = false
     website = 'https://github.com/alhzmy13/MediaPicker'

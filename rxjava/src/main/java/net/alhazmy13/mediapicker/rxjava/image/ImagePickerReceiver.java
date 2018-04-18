@@ -27,7 +27,7 @@ public class ImagePickerReceiver extends BroadcastReceiver {
 
     public void onReceive(Context context, Intent intent) {
         Log.d(TAG, "Received message " + intent);
-        List<String> imagePath = (List<String>) intent.getSerializableExtra(ImageTags.Tags.IMAGE_PATH);
+        List<String> imagePath = intent.getStringArrayListExtra(ImageTags.Tags.IMAGE_PATH);
         if (imagePath != null && imagePath.size() > 0) {
             emitter.onNext(imagePath);
             emitter.onComplete();

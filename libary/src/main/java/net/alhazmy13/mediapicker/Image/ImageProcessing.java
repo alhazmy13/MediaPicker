@@ -24,7 +24,7 @@ class ImageProcessing {
         if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) && (null == data.getData()))
         {
             ClipData clipdata = data.getClipData();
-            for (int i=0; i<clipdata.getItemCount();i++)
+            for (int i = 0; i< (clipdata != null ? clipdata.getItemCount() : 0); i++)
             {
                 Uri selectedImage = clipdata.getItemAt(i).getUri();
                 String selectedImagePath = FileProcessing.getPath(context, selectedImage);

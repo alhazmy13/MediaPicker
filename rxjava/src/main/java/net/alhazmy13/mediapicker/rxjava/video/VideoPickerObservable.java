@@ -4,10 +4,8 @@ package net.alhazmy13.mediapicker.rxjava.video;
 import android.content.Context;
 import android.content.IntentFilter;
 
-import net.alhazmy13.mediapicker.Image.ImageTags;
 import net.alhazmy13.mediapicker.Video.VideoPicker;
 import net.alhazmy13.mediapicker.Video.VideoTags;
-import net.alhazmy13.mediapicker.rxjava.image.ImagePickerReceiver;
 
 import java.lang.ref.WeakReference;
 import java.util.List;

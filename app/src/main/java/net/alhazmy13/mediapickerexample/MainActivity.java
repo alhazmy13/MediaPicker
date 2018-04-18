@@ -14,16 +14,14 @@ import android.support.v7.app.AppCompatActivity;
 public class MainActivity extends AppCompatActivity {
     private Fragment videoFragment = new VideoFragment();
     private Fragment imageFragment = new ImageFragment();
-    private ViewPager mPager;
-    private PagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mPager = findViewById(R.id.pager);
-        mPagerAdapter = new PickerAdapter(getSupportFragmentManager());
+        ViewPager mPager = findViewById(R.id.pager);
+        PagerAdapter mPagerAdapter = new PickerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         TabLayout tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mPager);
