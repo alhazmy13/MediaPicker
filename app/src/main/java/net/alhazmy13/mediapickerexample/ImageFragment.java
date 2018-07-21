@@ -1,6 +1,7 @@
 package net.alhazmy13.mediapickerexample;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +19,8 @@ import java.util.List;
 
 import rx.Subscriber;
 
+import static android.app.Activity.RESULT_OK;
+
 
 /**
  * Created by alhazmy13 on 3/13/17.
@@ -30,6 +33,7 @@ public class ImageFragment extends Fragment {
     private static final String TAG = "MainActivity";
     private List<String> mPath;
 
+    public static int CUSTOM_REQUEST_CODE = 9876;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -54,6 +58,7 @@ public class ImageFragment extends Fragment {
         new ImagePicker.Builder(getActivity())
                 .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
                 .allowMultipleImages(true)
+                .requestCode(CUSTOM_REQUEST_CODE)
                 .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
                 .directory(ImagePicker.Directory.DEFAULT)
                 .extension(ImagePicker.Extension.PNG)
@@ -84,16 +89,15 @@ public class ImageFragment extends Fragment {
     }
 
 
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
-//        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-//            mPath = (List<String>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_PATH);
-//
-//            loadImage();
-//        }
-//    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
+        // testing custom request code
+        if (requestCode == CUSTOM_REQUEST_CODE && resultCode == RESULT_OK) {
+            mPath = (List<String>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_PATH);
+        }
+    }
 
     private void loadImage() {
         Log.d(TAG, "loadImage: " + mPath.size());
