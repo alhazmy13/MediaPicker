@@ -42,11 +42,11 @@ public class VideoFragment extends Fragment {
 
     private void init(View view) {
         // Find our View instances
-        videoView = (VideoView) view.findViewById(R.id.iv_video);
+        videoView = view.findViewById(R.id.iv_video);
         MediaController mediaController = new MediaController(getActivity());
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
-        path = (TextView) view.findViewById(R.id.tv_path);
+        path = view.findViewById(R.id.tv_path);
         view.findViewById(R.id.bt_pick).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

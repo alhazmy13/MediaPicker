@@ -18,6 +18,7 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
+
 /**
  * Created by alhazmy13 on 3/13/17.
  */
@@ -37,8 +38,8 @@ public class ImageFragment extends Fragment {
         View view = inflater.inflate(R.layout.image_layout, container, false);
 
         // Find our View instances
-        imageView = (ImageView) view.findViewById(R.id.iv_image);
-        path = (TextView) view.findViewById(R.id.tv_path);
+        imageView = view.findViewById(R.id.iv_image);
+        path = view.findViewById(R.id.tv_path);
         view.findViewById(R.id.bt_pick).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
