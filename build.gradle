@@ -6,10 +6,11 @@ buildscript {
             url 'https://maven.google.com/'
             name 'Google'
         }
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.3'
-        classpath 'com.novoda:bintray-release:0.5.0'
+        classpath 'com.android.tools.build:gradle:3.1.1'
+        classpath 'com.novoda:bintray-release:0.8.0'
     }
 }
 

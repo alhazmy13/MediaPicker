@@ -25,7 +25,7 @@ class ImageConfig implements Serializable {
 
     protected int requestCode = VideoPicker.VIDEO_PICKER_REQUEST_CODE;
 
-    public ImageConfig() {
+    ImageConfig() {
         this.extension = ImagePicker.Extension.PNG;
         this.compressLevel = ImagePicker.ComperesLevel.NONE;
         this.mode = ImagePicker.Mode.CAMERA;

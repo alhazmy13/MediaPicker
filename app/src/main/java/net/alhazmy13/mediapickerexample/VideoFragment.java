@@ -1,9 +1,10 @@
 package net.alhazmy13.mediapickerexample;
 
-import android.app.Fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,7 +32,7 @@ public class VideoFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.video_layout, container, false);
         init(view);
@@ -45,7 +46,6 @@ public class VideoFragment extends Fragment {
         MediaController mediaController = new MediaController(getActivity());
         mediaController.setAnchorView(videoView);
         videoView.setMediaController(mediaController);
-        videoView.start();
         path = (TextView) view.findViewById(R.id.tv_path);
         view.findViewById(R.id.bt_pick).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,14 +71,12 @@ public class VideoFragment extends Fragment {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
         if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-            mPath = (List<String>) data.getSerializableExtra(VideoPicker.EXTRA_VIDEO_PATH);
-            Log.d(TAG, "onActivityResult: ");
+            mPath = data.getStringArrayListExtra(VideoPicker.EXTRA_VIDEO_PATH);
             loadVideo();
         }
     }
 
     private void loadVideo() {
-        Log.d(TAG, "loadVideo: "+ (mPath == null));
         if (mPath != null && mPath.size() > 0) {
             path.setText(mPath.get(0));
             videoView.setVideoURI(Uri.parse(mPath.get(0)));

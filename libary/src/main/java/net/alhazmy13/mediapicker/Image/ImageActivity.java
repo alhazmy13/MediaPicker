@@ -20,8 +20,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import net.alhazmy13.camerapicker.R;
 import net.alhazmy13.mediapicker.FileProcessing;
+import net.alhazmy13.mediapicker.R;
 import net.alhazmy13.mediapicker.Utility;
 
 import java.io.BufferedInputStream;
@@ -44,11 +44,11 @@ import java.util.Map;
  */
 public class ImageActivity extends AppCompatActivity {
 
-
     private File destination;
     private Uri mImageUri;
     private ImageConfig mImgConfig;
     private List<String> listOfImgs;
+    private AlertDialog alertDialog;
 
     public static Intent getCallingIntent(Context activity, ImageConfig imageConfig) {
         Intent intent = new Intent(activity, ImageActivity.class);
@@ -59,7 +59,6 @@ public class ImageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Intent intent = getIntent();
         if (intent != null) {
             mImgConfig = (ImageConfig) intent.getSerializableExtra(ImageTags.Tags.IMG_CONFIG);
@@ -71,6 +70,13 @@ public class ImageActivity extends AppCompatActivity {
         }
         if (mImgConfig.debug)
             Log.d(ImageTags.Tags.TAG, mImgConfig.toString());
+    }
+
+    @Override
+    protected void onStop() {
+        if (alertDialog != null)
+            alertDialog.dismiss();
+        super.onStop();
     }
 
     private void pickImage() {
@@ -95,7 +101,7 @@ public class ImageActivity extends AppCompatActivity {
     }
 
     private void showFromCameraOrGalleryAlert() {
-        new AlertDialog.Builder(this)
+        alertDialog = new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.media_picker_select_from))
                 .setPositiveButton(getString(R.string.media_picker_camera), new DialogInterface.OnClickListener() {
                     @Override
@@ -103,6 +109,7 @@ public class ImageActivity extends AppCompatActivity {
                         if (mImgConfig.debug)
                             Log.d(ImageTags.Tags.TAG, "Alert Dialog - Start From Camera");
                         startActivityFromCamera();
+                        alertDialog.dismiss();
                     }
                 })
                 .setNegativeButton(getString(R.string.media_picker_gallery), new DialogInterface.OnClickListener() {
@@ -114,6 +121,7 @@ public class ImageActivity extends AppCompatActivity {
                             startActivityFromGalleryMultiImg();
                         else
                             startActivityFromGallery();
+                        alertDialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -121,10 +129,14 @@ public class ImageActivity extends AppCompatActivity {
                     public void onCancel(DialogInterface dialogInterface) {
                         if (mImgConfig.debug)
                             Log.d(ImageTags.Tags.TAG, "Alert Dialog - Canceled");
+                        alertDialog.dismiss();
                         finish();
                     }
                 })
-                .show();
+                .create();
+        if (alertDialog != null)
+            alertDialog.show();
+
     }
 
     private void startActivityFromGallery() {
@@ -167,6 +179,8 @@ public class ImageActivity extends AppCompatActivity {
             outState.putString(ImageTags.Tags.CAMERA_IMAGE_URI, mImageUri.toString());
             outState.putSerializable(ImageTags.Tags.IMG_CONFIG, mImgConfig);
         }
+        outState.putBoolean(ImageTags.Tags.IS_ALERT_SHOWING, alertDialog.isShowing());
+
     }
 
     @Override
@@ -176,6 +190,12 @@ public class ImageActivity extends AppCompatActivity {
             mImageUri = Uri.parse(savedInstanceState.getString(ImageTags.Tags.CAMERA_IMAGE_URI));
             destination = new File(mImageUri.getPath());
             mImgConfig = (ImageConfig) savedInstanceState.getSerializable(ImageTags.Tags.IMG_CONFIG);
+        }
+        if (savedInstanceState.getBoolean(ImageTags.Tags.IS_ALERT_SHOWING, false)) {
+            if (alertDialog == null)
+                pickImage();
+            else
+                alertDialog.show();
         }
     }
 
@@ -239,8 +259,8 @@ public class ImageActivity extends AppCompatActivity {
     public void processOneImage(Intent data) {
         try {
             Uri selectedImage = data.getData();
-            String rawPath = selectedImage.toString();
-            if (rawPath != null) {
+            if (selectedImage != null) {
+                String rawPath = selectedImage.toString();
                 //For 'Select pic from Google Drive - app Crash' fix
                 if (rawPath.contains("com.google.android.apps.docs.storage")) {
                     String fileTempPath = getCacheDir().getPath();
@@ -277,10 +297,10 @@ public class ImageActivity extends AppCompatActivity {
             if (permissionsList.size() > 0) {
                 if (permissionsNeeded.size() > 0) {
                     // Need Rationale
-                    String message = getString(R.string.media_picker_you_need_to_grant_access_to) + permissionsNeeded.get(0);
+                    StringBuilder message = new StringBuilder(getString(R.string.media_picker_you_need_to_grant_access_to) + permissionsNeeded.get(0));
                     for (int i = 1; i < permissionsNeeded.size(); i++)
-                        message = message + ", " + permissionsNeeded.get(i);
-                    showMessageOKCancel(message,
+                        message.append(", ").append(permissionsNeeded.get(i));
+                    showMessageOKCancel(message.toString(),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -314,8 +334,7 @@ public class ImageActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(ImageActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
             permissionsList.add(permission);
             // Check for Rationale Option
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(ImageActivity.this, permission))
-                return false;
+            return ActivityCompat.shouldShowRequestPermissionRationale(ImageActivity.this, permission);
         }
         return true;
     }

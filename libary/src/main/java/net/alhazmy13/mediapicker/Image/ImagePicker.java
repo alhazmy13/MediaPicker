@@ -23,20 +23,18 @@ public class ImagePicker {
      */
     public static final String EXTRA_IMAGE_PATH = "EXTRA_IMAGE_PATH";
 
-    private final ImageConfig imageConfig;
-
     /**
      * Instantiates a new Image picker.
      *
      * @param builder the builder
      */
-    public ImagePicker(Builder builder) {
+    ImagePicker(Builder builder) {
 
         // Required
         WeakReference<Activity> context = builder.context;
 
         // Optional
-        imageConfig = builder.imageConfig;
+        ImageConfig imageConfig = builder.imageConfig;
         Intent callingIntent = ImageActivity.getCallingIntent(context.get(), imageConfig);
 
         int requestCode = imageConfig.requestCode;
@@ -210,17 +208,6 @@ public class ImagePicker {
             return value;
         }
 
-        /**
-         * Gets enum.
-         *
-         * @param value the value
-         * @return the enum
-         */
-        public static ComperesLevel getEnum(int value) {
-            for (ComperesLevel v : values())
-                if (v.getValue() == value) return v;
-            throw new IllegalArgumentException();
-        }
     }
 
     /**

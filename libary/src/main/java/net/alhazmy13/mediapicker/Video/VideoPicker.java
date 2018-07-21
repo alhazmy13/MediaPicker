@@ -16,15 +16,13 @@ public class VideoPicker {
     public static final int VIDEO_PICKER_REQUEST_CODE = 53213;
     public static final String EXTRA_VIDEO_PATH = "EXTRA_VIDEO_PATH";
 
-    private final VideoConfig imageConfig;
-
     VideoPicker(VideoPicker.Builder builder) {
 
         // Required
         WeakReference<Activity> context = builder.context;
 
         // Optional
-        imageConfig = builder.imageConfig;
+        VideoConfig imageConfig = builder.imageConfig;
         Intent callingIntent = VideoActivity.getCallingIntent(context.get(), imageConfig);
 
         int requestCode = imageConfig.requestCode;
