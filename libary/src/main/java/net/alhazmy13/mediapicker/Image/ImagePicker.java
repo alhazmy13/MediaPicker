@@ -39,7 +39,8 @@ public class ImagePicker {
         imageConfig = builder.imageConfig;
         Intent callingIntent = ImageActivity.getCallingIntent(context.get(), imageConfig);
 
-        context.get().startActivityForResult(callingIntent, IMAGE_PICKER_REQUEST_CODE);
+        int requestCode = imageConfig.requestCode;
+        context.get().startActivityForResult(callingIntent, requestCode > 0 ? requestCode : IMAGE_PICKER_REQUEST_CODE);
     }
 
 
@@ -122,6 +123,12 @@ public class ImagePicker {
         @Override
         public Builder allowOnlineImages(boolean allowOnlineImages) {
             this.imageConfig.allowOnlineImages = allowOnlineImages;
+            return this;
+        }
+
+        @Override
+        public Builder requestCode(int requestCode) {
+            this.imageConfig.requestCode = requestCode;
             return this;
         }
 

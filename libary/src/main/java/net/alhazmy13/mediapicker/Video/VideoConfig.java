@@ -20,6 +20,8 @@ class VideoConfig implements Serializable {
     protected boolean isImgFromCamera;
     protected boolean debug;
 
+    protected int requestCode = VideoPicker.VIDEO_PICKER_REQUEST_CODE;
+
     public VideoConfig() {
         this.extension = VideoPicker.Extension.MP4;
 //        this.compressLevel = VideoPicker.ComperesLevel.NONE;

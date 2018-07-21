@@ -1,5 +1,7 @@
 package net.alhazmy13.mediapicker.Image;
 
+import net.alhazmy13.mediapicker.Video.VideoPicker;
+
 /**
  * Created by Alhazmy13 on 8/7/16.
  * MediaPicker
@@ -77,6 +79,13 @@ public interface ImagePickerBuilderBase {
      * @return the image picker . builder
      */
     ImagePicker.Builder allowOnlineImages(boolean allowOnlineImages);
+
+    /**
+     * Setup custom request code
+     * @param requestCode the code that will be return on Activity result
+     * @return the image picker . builder
+     */
+    ImagePicker.Builder requestCode(int requestCode);
 
     /**
      * Build image picker.

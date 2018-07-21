@@ -2,6 +2,8 @@ package net.alhazmy13.mediapicker.Image;
 
 import android.os.Environment;
 
+import net.alhazmy13.mediapicker.Video.VideoPicker;
+
 import java.io.Serializable;
 
 /**
@@ -20,6 +22,8 @@ class ImageConfig implements Serializable {
     protected boolean isImgFromCamera;
     protected boolean allowOnlineImages;
     protected boolean debug;
+
+    protected int requestCode = VideoPicker.VIDEO_PICKER_REQUEST_CODE;
 
     public ImageConfig() {
         this.extension = ImagePicker.Extension.PNG;
