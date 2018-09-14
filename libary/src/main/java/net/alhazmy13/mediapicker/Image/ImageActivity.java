@@ -179,8 +179,7 @@ public class ImageActivity extends AppCompatActivity {
             outState.putString(ImageTags.Tags.CAMERA_IMAGE_URI, mImageUri.toString());
             outState.putSerializable(ImageTags.Tags.IMG_CONFIG, mImgConfig);
         }
-        outState.putBoolean(ImageTags.Tags.IS_ALERT_SHOWING, alertDialog.isShowing());
-
+        outState.putBoolean(ImageTags.Tags.IS_ALERT_SHOWING, (alertDialog == null ? false : alertDialog.isShowing()));
     }
 
     @Override
