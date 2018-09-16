@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.TextUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -40,6 +41,8 @@ public class FileProcessing {
 
         // DocumentProvider
         if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
+            String filePath = "";
+
             // ExternalStorageProvider
             if (isExternalStorageDocument(uri)) {
                 final String docId = DocumentsContract.getDocumentId(uri);
@@ -49,13 +52,29 @@ public class FileProcessing {
                 if ("primary".equalsIgnoreCase(type)) {
                     return Environment.getExternalStorageDirectory() + "/" + split[1];
                 }
-
-                // TODO handle non-primary volumes
+                else {
+                    if (Build.VERSION.SDK_INT > 20) {
+                        //getExternalMediaDirs() added in API 21
+                        File external[] = context.getExternalMediaDirs();
+                        if (external.length > 1) {
+                            filePath = external[1].getAbsolutePath();
+                            filePath = filePath.substring(0, filePath.indexOf("Android")) + split[1];
+                        }
+                    }else{
+                        filePath = "/storage/" + type + "/" + split[1];
+                    }
+                    return filePath;
+                }
             }
             // DownloadsProvider
             else if (isDownloadsDocument(uri)) {
 
                 final String id = DocumentsContract.getDocumentId(uri);
+                if (!TextUtils.isEmpty(id)) {
+                    if (id.startsWith("raw:")) {
+                        return id.replaceFirst("raw:", "");
+                    }
+                }
                 final Uri contentUri = ContentUris.withAppendedId(
                         Uri.parse("content://downloads/public_downloads"), Long.valueOf(id));
 
