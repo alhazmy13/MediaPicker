@@ -25,7 +25,8 @@ public class VideoPicker {
         VideoConfig imageConfig = builder.imageConfig;
         Intent callingIntent = VideoActivity.getCallingIntent(context.get(), imageConfig);
 
-        context.get().startActivityForResult(callingIntent, VIDEO_PICKER_REQUEST_CODE);
+        int requestCode = imageConfig.requestCode;
+        context.get().startActivityForResult(callingIntent, requestCode > 0 ? requestCode : VIDEO_PICKER_REQUEST_CODE);
     }
 
 
@@ -75,6 +76,12 @@ public class VideoPicker {
         @Override
         public VideoPicker.Builder enableDebuggingMode(boolean debug) {
             this.imageConfig.debug = debug;
+            return this;
+        }
+
+        @Override
+        public Builder requestCode(int requestCode) {
+            this.imageConfig.requestCode = requestCode;
             return this;
         }
 
