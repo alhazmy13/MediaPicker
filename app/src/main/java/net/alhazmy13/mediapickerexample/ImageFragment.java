@@ -1,8 +1,10 @@
 package net.alhazmy13.mediapickerexample;
 
-import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,12 +13,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import net.alhazmy13.mediapicker.Image.ImagePicker;
-import net.alhazmy13.mediapicker.rxjava.image.ImagePickerHelper;
 
 import java.util.List;
 
-
-import rx.Subscriber;
+import static android.app.Activity.RESULT_OK;
 
 
 /**
@@ -32,13 +32,13 @@ public class ImageFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.image_layout, container, false);
 
         // Find our View instances
-        imageView = (ImageView) view.findViewById(R.id.iv_image);
-        path = (TextView) view.findViewById(R.id.tv_path);
+        imageView = view.findViewById(R.id.iv_image);
+        path = view.findViewById(R.id.tv_path);
         view.findViewById(R.id.bt_pick).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,7 +50,6 @@ public class ImageFragment extends Fragment {
 
 
     private void pickImage() {
-        new ImagePickerHelper(
         new ImagePicker.Builder(getActivity())
                 .mode(ImagePicker.Mode.CAMERA_AND_GALLERY)
                 .allowMultipleImages(true)
@@ -60,45 +59,27 @@ public class ImageFragment extends Fragment {
                 .allowOnlineImages(false)
                 .scale(600, 600)
                 .allowMultipleImages(true)
-                .enableDebuggingMode(true))
-                .getObservable()
-                .subscribe(new Subscriber<List<String>>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "onCompleted() called with: " + "");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, "onError() called with: " + "e = [" + e + "]");
-                        e.printStackTrace();
-                    }
-
-                    @Override
-                    public void onNext(List<String> imagePath) {
-                        Log.d(TAG, "onNext() called with: " + "imagePath = [" + imagePath + "]");
-                        mPath = imagePath;
-                        loadImage();
-                    }
-                });
+                .enableDebuggingMode(true)
+                .build();
     }
 
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
-//        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-//            mPath = (List<String>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_PATH);
-//
-//            loadImage();
-//        }
-//    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d(TAG, "onActivityResult() called with: requestCode = [" + requestCode + "], resultCode = [" + resultCode + "], data = [" + data + "]");
+        if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
+            mPath = data.getStringArrayListExtra(ImagePicker.EXTRA_IMAGE_PATH);
+            Log.d(TAG, "onActivityResult: ");
+            loadImage();
+        }
+    }
 
     private void loadImage() {
         Log.d(TAG, "loadImage: " + mPath.size());
-        path.setText(mPath.get(0));
-        imageView.setImageBitmap(BitmapFactory.decodeFile(mPath.get(0)));
+        if (mPath != null && mPath.size() > 0) {
+            path.setText(mPath.get(0));
+            imageView.setImageBitmap(BitmapFactory.decodeFile(mPath.get(0)));
+        }
     }
 
 }

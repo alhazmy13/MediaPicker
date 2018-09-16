@@ -2,12 +2,12 @@ apply plugin: 'com.android.application'
 //apply from: '../deps.gradle'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 27
         applicationId 'net.alhazmy13.mediapickerexample'
         versionCode 1
         versionName "1.0"
@@ -21,13 +21,14 @@ android {
     lintOptions {
         abortOnError false
     }
-    buildToolsVersion '25.0.2'
 }
 
 dependencies {
-    compile "com.android.support:appcompat-v7:25.4.0"
-    compile "com.android.support:design:25.4.0"
-    compile "com.android.support:support-v13:25.4.0"
-    compile project(':libary')
-    compile project(':rxjava')
+    implementation "com.android.support:appcompat-v7:27.1.1"
+    implementation "com.android.support:design:27.1.1"
+    implementation "com.android.support:support-v13:27.1.1"
+    implementation project(':libary')
+    implementation project(':rxjava')
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.12'
 }

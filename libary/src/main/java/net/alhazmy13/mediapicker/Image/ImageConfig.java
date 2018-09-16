@@ -21,7 +21,7 @@ class ImageConfig implements Serializable {
     protected boolean allowOnlineImages;
     protected boolean debug;
 
-    public ImageConfig() {
+    ImageConfig() {
         this.extension = ImagePicker.Extension.PNG;
         this.compressLevel = ImagePicker.ComperesLevel.NONE;
         this.mode = ImagePicker.Mode.CAMERA;

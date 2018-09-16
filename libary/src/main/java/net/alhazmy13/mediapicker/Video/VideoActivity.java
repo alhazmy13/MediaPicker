@@ -20,8 +20,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
-import net.alhazmy13.camerapicker.R;
 import net.alhazmy13.mediapicker.FileProcessing;
+import net.alhazmy13.mediapicker.R;
 import net.alhazmy13.mediapicker.Utility;
 
 import java.io.File;
@@ -42,6 +42,7 @@ public class VideoActivity extends AppCompatActivity {
     private Uri mVideoUri;
     private VideoConfig mVideoConfig;
     private List<String> mListOfVideos;
+    private AlertDialog alertDialog;
 
     public static Intent getCallingIntent(Context activity, VideoConfig videoConfig) {
         Intent intent = new Intent(activity, VideoActivity.class);
@@ -52,7 +53,6 @@ public class VideoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         Intent intent = getIntent();
         if (intent != null) {
             mVideoConfig = (VideoConfig) intent.getSerializableExtra(VideoTags.Tags.IMG_CONFIG);
@@ -64,6 +64,13 @@ public class VideoActivity extends AppCompatActivity {
         }
         if (mVideoConfig.debug)
             Log.d(VideoTags.Tags.TAG, mVideoConfig.toString());
+    }
+
+    @Override
+    protected void onPause() {
+        if (alertDialog != null)
+            alertDialog.dismiss();
+        super.onPause();
     }
 
     private void pickVideo() {
@@ -88,7 +95,7 @@ public class VideoActivity extends AppCompatActivity {
     }
 
     private void showFromCameraOrGalleryAlert() {
-        new AlertDialog.Builder(this)
+        alertDialog = new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.media_picker_select_from))
                 .setPositiveButton(getString(R.string.media_picker_camera), new DialogInterface.OnClickListener() {
                     @Override
@@ -96,6 +103,7 @@ public class VideoActivity extends AppCompatActivity {
                         if (mVideoConfig.debug)
                             Log.d(VideoTags.Tags.TAG, "Alert Dialog - Start From Camera");
                         startActivityFromCamera();
+                        alertDialog.dismiss();
                     }
                 })
                 .setNegativeButton(getString(R.string.media_picker_gallery), new DialogInterface.OnClickListener() {
@@ -107,6 +115,7 @@ public class VideoActivity extends AppCompatActivity {
                             startActivityFromGalleryMultiImg();
                         else
                             startActivityFromGallery();
+                        alertDialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -114,10 +123,12 @@ public class VideoActivity extends AppCompatActivity {
                     public void onCancel(DialogInterface dialogInterface) {
                         if (mVideoConfig.debug)
                             Log.d(VideoTags.Tags.TAG, "Alert Dialog - Canceled");
+                        alertDialog.dismiss();
                         finish();
                     }
-                })
-                .show();
+                }).create();
+        alertDialog.show();
+
     }
 
     private void startActivityFromGallery() {
@@ -241,9 +252,9 @@ public class VideoActivity extends AppCompatActivity {
 
     private void pickVideoWrapper() {
         if (Build.VERSION.SDK_INT >= 23) {
-            List<String> permissionsNeeded = new ArrayList<String>();
+            List<String> permissionsNeeded = new ArrayList<>();
 
-            final List<String> permissionsList = new ArrayList<String>();
+            final List<String> permissionsList = new ArrayList<>();
             if ((mVideoConfig.mode == VideoPicker.Mode.CAMERA || mVideoConfig.mode == VideoPicker.Mode.CAMERA_AND_GALLERY) && !addPermission(permissionsList, Manifest.permission.CAMERA))
                 permissionsNeeded.add(getString(R.string.media_picker_camera));
             if (!addPermission(permissionsList, Manifest.permission.WRITE_EXTERNAL_STORAGE))
@@ -252,10 +263,10 @@ public class VideoActivity extends AppCompatActivity {
             if (permissionsList.size() > 0) {
                 if (permissionsNeeded.size() > 0) {
                     // Need Rationale
-                    String message = getString(R.string.media_picker_you_need_to_grant_access_to) + permissionsNeeded.get(0);
+                    StringBuilder message = new StringBuilder(getString(R.string.media_picker_you_need_to_grant_access_to) + permissionsNeeded.get(0));
                     for (int i = 1; i < permissionsNeeded.size(); i++)
-                        message = message + ", " + permissionsNeeded.get(i);
-                    showMessageOKCancel(message,
+                        message.append(", ").append(permissionsNeeded.get(i));
+                    showMessageOKCancel(message.toString(),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -289,8 +300,7 @@ public class VideoActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(VideoActivity.this, permission) != PackageManager.PERMISSION_GRANTED) {
             permissionsList.add(permission);
             // Check for Rationale Option
-            if (!ActivityCompat.shouldShowRequestPermissionRationale(VideoActivity.this, permission))
-                return false;
+            return ActivityCompat.shouldShowRequestPermissionRationale(VideoActivity.this, permission);
         }
         return true;
     }
@@ -331,14 +341,14 @@ public class VideoActivity extends AppCompatActivity {
         private WeakReference<VideoActivity> mContext;
 
 
-        public CompresVideoTask(List<String> listOfImgs, VideoConfig videoConfig, VideoActivity context) {
+        CompresVideoTask(List<String> listOfImgs, VideoConfig videoConfig, VideoActivity context) {
             this.listOfImgs = listOfImgs;
             this.mContext = new WeakReference<>(context);
             this.mVideoConfig = videoConfig;
             this.destinationPaths = new ArrayList<>();
         }
 
-        public CompresVideoTask(String absolutePath, VideoConfig videoConfig, VideoActivity context) {
+        CompresVideoTask(String absolutePath, VideoConfig videoConfig, VideoActivity context) {
             List<String> list = new ArrayList<>();
             list.add(absolutePath);
             this.listOfImgs = list;
@@ -360,11 +370,6 @@ public class VideoActivity extends AppCompatActivity {
                     FileProcessing.copyDirectory(file, destinationFile);
                 }
                 destinationPaths.add(destinationFile.getAbsolutePath());
-//                try {
-//                    Utility.compressAndRotateIfNeeded(file, destinationFile, mVideoConfig.compressLevel.getValue(), mVideoConfig.reqWidth, mVideoConfig.reqHeight);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
 
             }
 

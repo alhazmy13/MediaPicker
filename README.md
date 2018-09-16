@@ -5,7 +5,7 @@
 # Media Picker
 ![](https://img.shields.io/badge/Platform-Android-brightgreen.svg)
 ![](https://img.shields.io/hexpm/l/plug.svg)
-![](https://img.shields.io/badge/version-2.4.0-blue.svg)
+![](https://img.shields.io/badge/version-2.4.1_beta-blue.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ea51407d60d04c938c263de206095abf)](https://www.codacy.com/app/me_101/MediaPicker?utm_source=github.com&utm_medium=referral&utm_content=alhazmy13/MediaPicker&utm_campaign=badger)
 
 
@@ -25,7 +25,7 @@ This build `2.x.x` will break backward compatibility and there are a lot of chan
 <dependency>
 <groupId>net.alhazmy13.MediaPicker</groupId>
 <artifactId>libary</artifactId>
-<version>2.4.0</version>
+<version>2.4.1-beta</version>
 </dependency>
 ```
 
@@ -34,7 +34,7 @@ This build `2.x.x` will break backward compatibility and there are a lot of chan
 
 ```gradle
 dependencies {
-	compile 'net.alhazmy13.MediaPicker:libary:2.4.0'
+	implementation 'net.alhazmy13.MediaPicker:libary:2.4.1-beta'
 }
 ```
 
@@ -71,7 +71,7 @@ In order to receive the path of image, you will need to override `onActivityResu
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == ImagePicker.IMAGE_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-            List<String> mPaths = (List<String>) data.getSerializableExtra(ImagePicker.EXTRA_IMAGE_PATH);
+            List<String> mPaths = data.getStringArrayListExtra(ImagePicker.EXTRA_IMAGE_PATH);
             //Your Code
         }
     }
@@ -150,7 +150,7 @@ In order to receive the path of videos, you will need to override `onActivityRes
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == VideoPicker.VIDEO_PICKER_REQUEST_CODE && resultCode == RESULT_OK) {
-            List<String> mPaths = (List<String>) data.getSerializableExtra(VideoPicker.EXTRA_VIDEO_PATH);
+            List<String> mPaths =  data.getStringArrayListExtra(VideoPicker.EXTRA_VIDEO_PATH);
             //Your Code
         }
     }
@@ -186,7 +186,7 @@ In order to receive the path of videos, you will need to override `onActivityRes
 	.enableDebuggingMode(true)
 ```
 
-### RxJava for MediaPicker
+### RxJava 2 for MediaPicker
 
 It's an extenstion that allow you to return an observable from `ImagePickerBuilder` or `VideoPickerBuilder`, all you need is to add below dependency and then return the observable from `ImagePickerHelper` || `VideoPickerHelper` class.
 
@@ -195,7 +195,9 @@ It's an extenstion that allow you to return an observable from `ImagePickerBuild
 
 ```gradle
 dependencies {
-	compile 'net.alhazmy13.MediaPicker:rxjava:(Last_version)'
+  implementation 'io.reactivex.rxjava2:rxandroid:(Last_version)'
+  implementation 'io.reactivex.rxjava2:rxjava:(Last_version)'
+	implementation 'net.alhazmy13.MediaPicker:rxjava:(Last_version)'
 }
 ```
 
@@ -204,22 +206,7 @@ dependencies {
         new ImagePicker.Builder(Context)
                 ...)
                 .getObservable()
-                .subscribe(new Subscriber<List<String>>() {
-                    @Override
-                    public void onCompleted() {
-                        Log.d(TAG, "onCompleted() called with: " + "");
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        Log.d(TAG, "onError()");
-                    }
-
-                    @Override
-                    public void onNext(List<String> imagePaths) {
-                        Log.d(TAG, "onNext() ");
-                    }
-                });
+                .subscribe(....);
 ```
 
 ------

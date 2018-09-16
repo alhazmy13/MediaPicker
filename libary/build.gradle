@@ -8,19 +8,19 @@ publish {
     groupId = 'net.alhazmy13.MediaPicker'
     artifactId = 'libary'
     uploadName = 'MediaPicker'
-    publishVersion = '2.4.0'
-    desc = 'MediaPickerRx'
+    publishVersion = '2.4.2-beta'
+    desc = 'MediaPicker'
     dryRun = false
     website = 'https://github.com/alhzmy13/MediaPicker'
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 25
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
     }
@@ -36,10 +36,9 @@ android {
         }
 
     }
-    buildToolsVersion '25.0.2'
 }
 
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.4.0'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
 }
