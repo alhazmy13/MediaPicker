@@ -5,7 +5,7 @@
 # Media Picker
 ![](https://img.shields.io/badge/Platform-Android-brightgreen.svg)
 ![](https://img.shields.io/hexpm/l/plug.svg)
-![](https://img.shields.io/badge/version-2.4.1_beta-blue.svg)
+![](https://img.shields.io/badge/version-2.4.4-blue.svg)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ea51407d60d04c938c263de206095abf)](https://www.codacy.com/app/me_101/MediaPicker?utm_source=github.com&utm_medium=referral&utm_content=alhazmy13/MediaPicker&utm_campaign=badger)
 
 
@@ -25,7 +25,7 @@ This build `2.x.x` will break backward compatibility and there are a lot of chan
 <dependency>
 <groupId>net.alhazmy13.MediaPicker</groupId>
 <artifactId>libary</artifactId>
-<version>2.4.1-beta</version>
+<version>2.4.4</version>
 </dependency>
 ```
 
@@ -34,7 +34,7 @@ This build `2.x.x` will break backward compatibility and there are a lot of chan
 
 ```gradle
 dependencies {
-	implementation 'net.alhazmy13.MediaPicker:libary:2.4.1-beta'
+	implementation 'net.alhazmy13.MediaPicker:libary:2.4.4'
 }
 ```
 
