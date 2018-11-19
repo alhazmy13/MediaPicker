@@ -38,6 +38,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static android.content.DialogInterface.BUTTON_NEGATIVE;
+import static android.content.DialogInterface.BUTTON_POSITIVE;
+
 /**
  * Created by Alhazmy13 on 10/26/15.
  * MediaPicker
@@ -296,15 +299,26 @@ public class ImageActivity extends AppCompatActivity {
             if (permissionsList.size() > 0) {
                 if (permissionsNeeded.size() > 0) {
                     // Need Rationale
-                    StringBuilder message = new StringBuilder(getString(R.string.media_picker_you_need_to_grant_access_to) + permissionsNeeded.get(0));
+                    StringBuilder message = new StringBuilder(getString(R.string.media_picker_you_need_to_grant_access_to) + " " + permissionsNeeded.get(0));
                     for (int i = 1; i < permissionsNeeded.size(); i++)
                         message.append(", ").append(permissionsNeeded.get(i));
                     showMessageOKCancel(message.toString(),
                             new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    ActivityCompat.requestPermissions(ImageActivity.this, permissionsList.toArray(new String[permissionsList.size()]),
-                                            ImageTags.IntentCode.REQUEST_CODE_ASK_PERMISSIONS);
+                                    switch (which) {
+                                        case BUTTON_POSITIVE:
+                                            ActivityCompat.requestPermissions(ImageActivity.this, permissionsList.toArray(new String[permissionsList.size()]),
+                                                    ImageTags.IntentCode.REQUEST_CODE_ASK_PERMISSIONS);
+                                            break;
+
+                                        default:
+                                            onBackPressed();
+                                            break;
+
+                                    }
+
+
                                 }
                             });
                     return;
@@ -321,10 +335,10 @@ public class ImageActivity extends AppCompatActivity {
     }
 
     private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(ImageActivity.this)
+        new AlertDialog.Builder(this)
                 .setMessage(message)
                 .setPositiveButton(getString(R.string.media_picker_ok), okListener)
-                .setNegativeButton(getString(R.string.media_picker_cancel), null)
+                .setNegativeButton(getString(R.string.media_picker_cancel), okListener)
                 .create()
                 .show();
     }
@@ -358,6 +372,7 @@ public class ImageActivity extends AppCompatActivity {
                     // Permission Denied
                     Toast.makeText(ImageActivity.this, getString(R.string.media_picker_some_permission_is_denied), Toast.LENGTH_SHORT)
                             .show();
+                    onBackPressed();
                 }
 
                 break;
