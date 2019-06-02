@@ -141,6 +141,12 @@ public class ImageActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        super.onBackPressed();
+    }
+
     private void startActivityFromGallery() {
         mImgConfig.isImgFromCamera = false;
         Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
