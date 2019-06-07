@@ -325,12 +325,19 @@ public class VideoActivity extends AppCompatActivity {
                     // Permission Denied
                     Toast.makeText(VideoActivity.this, getString(R.string.media_picker_some_permission_is_denied), Toast.LENGTH_SHORT)
                             .show();
+                    onBackPressed();
                 }
 
                 break;
             default:
                 super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        setResult(RESULT_CANCELED);
+        super.onBackPressed();
     }
 
     private static class CompresVideoTask extends AsyncTask<Void, Void, Void> {
