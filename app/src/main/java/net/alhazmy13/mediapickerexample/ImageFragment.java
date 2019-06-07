@@ -56,7 +56,7 @@ public class ImageFragment extends Fragment {
                 .compressLevel(ImagePicker.ComperesLevel.MEDIUM)
                 .directory(ImagePicker.Directory.DEFAULT)
                 .extension(ImagePicker.Extension.PNG)
-                .allowOnlineImages(false)
+                .allowOnlineImages(true)
                 .scale(600, 600)
                 .allowMultipleImages(true)
                 .enableDebuggingMode(true)

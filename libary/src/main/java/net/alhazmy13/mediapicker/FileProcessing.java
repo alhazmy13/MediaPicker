@@ -14,9 +14,12 @@ import android.text.TextUtils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.UUID;
 
 /**
  * Created by Alhazmy13 on 8/15/16.
@@ -139,7 +142,11 @@ public class FileProcessing {
                     null);
             if (cursor != null && cursor.moveToFirst()) {
                 final int column_index = cursor.getColumnIndexOrThrow(column);
-                return cursor.getString(column_index);
+                String data = cursor.getString(column_index);
+                if(data != null){
+                    return data;
+                }
+                return downloadAndSaveImage(uri, context);
             }
         } finally {
             if (cursor != null)
@@ -148,6 +155,62 @@ public class FileProcessing {
         return null;
     }
 
+    private static String downloadAndSaveImage(Uri uri, Context context){
+        InputStream inputStream = null;
+        String filePath = null;
+
+        if (uri.getAuthority() != null) {
+            try {
+                inputStream = context.getContentResolver().openInputStream(uri); // context needed
+                File photoFile = createTemporalFileFrom(inputStream, context);
+
+                filePath = photoFile.getPath();
+
+            } catch (FileNotFoundException e) {
+                // log
+            } catch (IOException e) {
+                // log
+            }finally {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return filePath;
+    }
+
+    private static File createTemporalFileFrom(InputStream inputStream, Context context) throws IOException {
+        File targetFile = null;
+
+        if (inputStream != null) {
+            int read;
+            byte[] buffer = new byte[8 * 1024];
+
+            targetFile = createTemporalFile(context);
+            OutputStream outputStream = new FileOutputStream(targetFile);
+
+            while ((read = inputStream.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, read);
+            }
+            outputStream.flush();
+
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        return targetFile;
+    }
+
+
+    private static File createTemporalFile(Context context) {
+        return new File(context.getExternalCacheDir(), String.format("%s.jpg", UUID.randomUUID())); // context needed
+    }
 
     /**
      * @param uri The Uri to check.
