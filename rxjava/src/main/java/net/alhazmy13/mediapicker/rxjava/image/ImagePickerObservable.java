@@ -13,6 +13,8 @@ import java.util.List;
 import io.reactivex.ObservableEmitter;
 import io.reactivex.ObservableOnSubscribe;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.disposables.Disposables;
+import io.reactivex.functions.Action;
 
 /**
  * Created by Alhazmy13 on 8/7/16.
@@ -34,6 +36,12 @@ public class ImagePickerObservable implements ObservableOnSubscribe<List<String>
 
     @Override
     public void subscribe(ObservableEmitter<List<String>> emitter) {
+        emitter.setDisposable(Disposables.fromAction(new Action() {
+            @Override
+            public void run() {
+                dispose();
+            }
+        }));
         broadcastReceiver = new ImagePickerReceiver(emitter);
         imagePicker.build();
         contextWeakReference.get().registerReceiver(broadcastReceiver, new IntentFilter(ImageTags.Action.SERVICE_ACTION));
